@@ -1,0 +1,72 @@
+package client;
+
+import data.Log;
+import org.webbitserver.WebSocketConnection;
+import protobuf.ProtobufMessageHandler;
+import protobuf.RBHproto;
+
+/**
+ * Created by Peter Mösenthin.
+ *
+ * This is the representaion of a RaspberryHomeClient using a Websocket
+ * connection.
+ */
+public class WebSocketClient extends RaspberryHomeClient{
+    public static final String DEBUG_TAG = "WebSocketClient";
+
+    private WebSocketConnection connection;
+    private final ProtobufMessageHandler messageHandler =
+            new ProtobufMessageHandler(this);
+
+    public WebSocketClient(WebSocketConnection connection){
+        this.connection = connection;
+    }
+
+
+    //==========================================================================
+    // Connection state handling
+    //==========================================================================
+    @Override
+    protected void onConnectionClosed() {
+        //TODO implement
+    }
+
+    @Override
+    protected void onConnectionDenied(String reason) {
+        //TODO implement
+    }
+
+    @Override
+    protected void onConnectionAccepted() {
+        //TODO implement
+    }
+
+    //==========================================================================
+    // Message handling
+    //==========================================================================
+
+    @Override
+    public void sendMessage(RBHproto.RBHMessage message) {
+        if(message != null) {
+            connection.send(message.toByteArray());
+        }else {
+            Log.add(DEBUG_TAG, "Message was empty. ID=" + getId());
+        }
+    }
+
+    //@Override
+    public void readMessage(RBHproto.RBHMessage message){
+            messageHandler.handleMessage(message);
+    }
+
+    //==========================================================================
+    // Getter & Setter
+    //==========================================================================
+
+
+    public WebSocketConnection getWebSocketConnection(){
+        return connection;
+    }
+
+
+}
