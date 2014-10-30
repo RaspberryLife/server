@@ -12,7 +12,7 @@ import java.net.ServerSocket;
  *
  * Server class that is created by the main method.
  */
-public class RBHServer {
+public class RBLServer {
 
     private ServerSocket serverAcceptSocket;
     private static ClientHandler clientHandler = new ClientHandler();
@@ -20,7 +20,7 @@ public class RBHServer {
     private int port = 0;
     private boolean serverRunning = false;
 
-    private static final String DEBUG_TAG = "RBHServer";
+    private static final String DEBUG_TAG = "RBLServer";
 
     public void start(int port){
         serverRunning = true;

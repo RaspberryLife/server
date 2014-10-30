@@ -3,8 +3,7 @@ package client;
 import data.Log;
 import interfaces.ConnectionListener;
 import org.webbitserver.WebSocketConnection;
-import protobuf.RBHproto.RBHMessage;
-import server.NoAuth;
+import message.RBHproto.RBHMessage;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class ClientHandler {
 
-    private static List<RaspberryHomeClient> clientList = new ArrayList<RaspberryHomeClient>();
+    private static List<RaspberryLifeClient> clientList = new ArrayList<RaspberryLifeClient>();
 
     public static final String DEBUG_TAG = "ClientHandler";
 
@@ -32,8 +31,8 @@ public class ClientHandler {
         Thread handleThread = new Thread(new Runnable() {
             @Override
             public void run() {
-            final RaspberryHomeClient client =
-                    new DirectSocketClient(clientSocket);
+            final RaspberryLifeClient client =
+                    new SocketClient(clientSocket);
             setUpConnectionListener(client);
             clientList.add(client);
             }
@@ -47,7 +46,7 @@ public class ClientHandler {
      * ClientHandlers client list.
      * @param client
      */
-    private void setUpConnectionListener(final RaspberryHomeClient client){
+    private void setUpConnectionListener(final RaspberryLifeClient client){
         client.setConnectionListener(new ConnectionListener() {
             @Override
             public void denied(String reason) {
@@ -83,7 +82,7 @@ public class ClientHandler {
      * @param connection
      */
     public void handleWebSocketClient(final WebSocketConnection connection){
-        final RaspberryHomeClient client = new WebSocketClient(connection);
+        final RaspberryLifeClient client = new WebSocketClient(connection);
         setUpConnectionListener(client);
         clientList.add(client);
     }
@@ -95,7 +94,7 @@ public class ClientHandler {
      * @return
      */
     public WebSocketClient getWebSocketClient(WebSocketConnection connection){
-        for(RaspberryHomeClient client : clientList){
+        for(RaspberryLifeClient client : clientList){
             if(client instanceof WebSocketClient){
                WebSocketConnection clientConn =
                        ((WebSocketClient) client).getWebSocketConnection();
@@ -111,7 +110,7 @@ public class ClientHandler {
      * Closes all connections of all clients in the clientlist
      */
     public void closeAllConnections() {
-        for(RaspberryHomeClient client : clientList){
+        for(RaspberryLifeClient client : clientList){
             client.closeConnection();
         }
     }
@@ -132,8 +131,8 @@ public class ClientHandler {
      * @param id
      * @return
      */
-    public static RaspberryHomeClient getClientWithID(String id){
-        for(RaspberryHomeClient client : clientList){
+    public static RaspberryLifeClient getClientWithID(String id){
+        for(RaspberryLifeClient client : clientList){
             if(client.getId().equals(id)){return client;}
         }
         return null;
@@ -144,7 +143,7 @@ public class ClientHandler {
      * @param message
      */
     public static void broadcastMessage(RBHMessage message){
-        for(RaspberryHomeClient client : clientList){
+        for(RaspberryLifeClient client : clientList){
            client.sendMessage(message);
         }
     }

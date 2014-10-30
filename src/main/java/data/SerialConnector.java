@@ -5,7 +5,7 @@ import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
-import protobuf.ProtoFactory;
+import message.ProtoFactory;
 import util.Config;
 
 /**

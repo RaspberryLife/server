@@ -1,9 +1,9 @@
 package client;
 
 import data.Log;
-import protobuf.ProtoFactory;
-import protobuf.ProtobufMessageHandler;
-import protobuf.RBHproto;
+import message.ProtoFactory;
+import message.ProtobufMessageHandler;
+import message.RBHproto;
 import util.Config;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,19 +16,19 @@ import java.net.Socket;
  * This is the representaion of a RaspberryHomeClient using a Java socket
  * connection.
  */
-public class DirectSocketClient extends RaspberryHomeClient {
+public class SocketClient extends RaspberryLifeClient {
 
     private Socket socket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     protected final ProtobufMessageHandler messageHandler =
             new ProtobufMessageHandler(this);
-    public static final String DEBUG_TAG = "DirectSocketClient";
+    public static final String DEBUG_TAG = "SocketClient";
     private Thread readThread = null;
 
 
 
-    public DirectSocketClient(Socket socket){
+    public SocketClient(Socket socket){
         this.socket = socket;
         try {
             outputStream = new ObjectOutputStream(socket.getOutputStream());

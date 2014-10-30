@@ -1,14 +1,14 @@
 package client;
 
 import interfaces.ConnectionListener;
-import protobuf.RBHproto;
+import message.RBHproto;
 
 /**
  * Created by Peter Mösenthin.
  *
  * Abstract class for Client connections.
  */
-public abstract class RaspberryHomeClient {
+public abstract class RaspberryLifeClient {
 
     private String id = "";
     public boolean isAccepted = false;

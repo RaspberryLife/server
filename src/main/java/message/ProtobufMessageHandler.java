@@ -1,12 +1,12 @@
-package protobuf;
+package message;
 
-import client.RaspberryHomeClient;
+import client.RaspberryLifeClient;
 import data.DataBaseHelper;
 import data.Log;
 import data.SerialConnector;
 import server.NoAuth;
 import util.Config;
-import protobuf.RBHproto.*;
+import message.RBHproto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -14,10 +14,12 @@ import protobuf.RBHproto.*;
  * Handles all incoming messages for a RaspberryHomeClient.
  */
 public class ProtobufMessageHandler {
-    private RaspberryHomeClient client;
-    public static final String DEBUG_TAG = "ProtoBufMessageHandler";
 
-    public ProtobufMessageHandler(RaspberryHomeClient client){
+    private RaspberryLifeClient client;
+    public static final String DEBUG_TAG = "ProtoBufMessageHandler";
+    private SerialMessageHandler serialHandler;
+
+    public ProtobufMessageHandler(RaspberryLifeClient client){
         this.client = client;
     }
 
@@ -45,7 +47,10 @@ public class ProtobufMessageHandler {
             if(client.isAccepted){
                 // Check for instrunction trigger "module"
                 if(text.startsWith("module")){
-                    handleModuleInstruction(text);
+                    if(serialHandler == null){
+                        serialHandler = new SerialMessageHandler();
+                    }
+                    serialHandler.handleModuleInstruction(client, text);
                 }
             }
         }
@@ -72,47 +77,5 @@ public class ProtobufMessageHandler {
         }
     }
 
-    /**
-     * Handles instructions for modules in form of strings
-     * A instruction is defined as follows:
-     * command0:command1:command2
-     * @param instruction
-     */
-    private void handleModuleInstruction(String instruction){
-        Log.add(DEBUG_TAG, "Received module instruction");
-        String[] commands = instruction.split(":");
-        RBHMessage serialFailed = ProtoFactory.buildPlainTextMessage(Config
-                .SERVER_ID,"Could not deliver instrction.");
-        //Base
-        if(commands[0].equalsIgnoreCase("module")){
 
-            // Socket module
-            if(commands[1].equalsIgnoreCase("socket")){
-                if(commands[2].equalsIgnoreCase("on")){
-                    Log.add(DEBUG_TAG, "Turning module:socket on");
-                    SerialConnector.send("0\n");
-                } else if(commands[2].equalsIgnoreCase("off")){
-                    Log.add(DEBUG_TAG, "Turning module:socket off");
-                    SerialConnector.send("1\n");
-                }else{
-                    Log.add(DEBUG_TAG, "No instruction set for module:socket");
-                    client.sendMessage(serialFailed);
-                }
-            // Reed Switch
-            }else if(commands[1].equalsIgnoreCase("reed")){
-                if(commands[2].equalsIgnoreCase("switch")){
-                    Log.add(DEBUG_TAG, "Switching reed");
-                    SerialConnector.send("3\n");
-                }else {
-                    Log.add(DEBUG_TAG, "No instruction set for module:reed");
-                    client.sendMessage(serialFailed);
-                }
-            // Temp request
-            } else if(commands[1].equalsIgnoreCase("temp")){
-                Log.add(DEBUG_TAG, "Requesting module:temp");
-                SerialConnector.send("2\n");
-            }
-
-        }
-    }
 }

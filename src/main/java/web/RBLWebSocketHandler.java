@@ -5,22 +5,22 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import data.Log;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
-import protobuf.RBHproto.RBHMessage;
-import server.RBHServer;
+import message.RBHproto.RBHMessage;
+import server.RBLServer;
 
 /**
  * Created by Peter Mösenthin.
  *
- * Websockethandler for the webbit Webserver. First instance to handle
- * websocketconnections.
+ * WebSocketHandler for the webbit webserver. First instance to handle
+ * websocket connections.
  */
-public class RBHWebSocketHandler extends BaseWebSocketHandler{
+public class RBLWebSocketHandler extends BaseWebSocketHandler{
 
-    public static final String DEBUG_TAG = "RBHWebSockethandler";
+    public static final String DEBUG_TAG = "RBLWebSocketHandler";
 
     @Override
     public void onOpen(WebSocketConnection connection) {
-        RBHServer.getClientHandler().handleWebSocketClient(connection);
+        RBLServer.getClientHandler().handleWebSocketClient(connection);
         Log.add(DEBUG_TAG,
                 "WebSocketConnection opened. Connection hashcode: "
                         + connection.hashCode());
@@ -28,7 +28,7 @@ public class RBHWebSocketHandler extends BaseWebSocketHandler{
 
     @Override
     public void onClose(WebSocketConnection connection) {
-        RBHServer.getClientHandler().getWebSocketClient(connection)
+        RBLServer.getClientHandler().getWebSocketClient(connection)
                 .closeConnection();
         Log.add(DEBUG_TAG,
                 "WebSocketConnection closed. Connection hashcode: "
@@ -48,7 +48,7 @@ public class RBHWebSocketHandler extends BaseWebSocketHandler{
         }
         //pass message to receiving client
         if(parsedMessage != null) {
-                WebSocketClient client = RBHServer.getClientHandler()
+                WebSocketClient client = RBLServer.getClientHandler()
                         .getWebSocketClient(connection);
                 if(client != null) {
                     client.readMessage(parsedMessage);

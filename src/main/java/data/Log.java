@@ -11,10 +11,6 @@ public class Log {
 
     private static final String DEBUG_TAG = "Log";
 
-
-
-
-
     public static void add(String tag,String message){
        switch(Config.DEBUG_LEVEL){
            case 0:

@@ -1,7 +1,7 @@
-package protobuf;
+package message;
 
 import java.util.List;
-import protobuf.RBHproto.*;
+import message.RBHproto.*;
 
 /**
  * Created by Peter Mösenthin.

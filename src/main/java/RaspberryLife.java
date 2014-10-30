@@ -1,13 +1,12 @@
 
 import data.Log;
-import data.MySQLConnection;
 import data.SerialConnector;
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 import org.webbitserver.handler.StaticFileHandler;
-import server.RBHServer;
+import server.RBLServer;
 import util.Config;
-import web.RBHWebSocketHandler;
+import web.RBLWebSocketHandler;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -17,7 +16,7 @@ import java.net.UnknownHostException;
  *
  * Main class for the RaspberryHome server application.
  */
-public class RaspberryHome {
+public class RaspberryLife {
 
     public static final String DEBUG_TAG = "RaspberryHome";
     public static Thread serverThread = null;
@@ -26,7 +25,7 @@ public class RaspberryHome {
     public static void main(String[] args){
         Log.add(DEBUG_TAG,"RaspberryHome " + Config.VERSION_ID);
         try {
-            Log.add(DEBUG_TAG, "Starting RBHServer on IP: " +
+            Log.add(DEBUG_TAG, "Starting RBLServer on IP: " +
                     InetAddress.getLocalHost().getHostAddress());
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -40,12 +39,11 @@ public class RaspberryHome {
                 WebServer webServer =
                         WebServers.createWebServer(Config.WEBSOCKET_PORT);
                 webServer.add(new StaticFileHandler("/static-files"));
-                webServer.add("/websocket-echo", new RBHWebSocketHandler());
+                webServer.add("/websocket-echo", new RBLWebSocketHandler());
                 webServer.start();
                 Log.add(DEBUG_TAG,
                         "WebSocketServer listens on port "
                                 + webServer.getPort());
-
             }
         });
         webServerThread.start();
@@ -54,7 +52,7 @@ public class RaspberryHome {
             @Override
             public void run() {
                 Log.add(DEBUG_TAG, "Starting Java socket server");
-                RBHServer server = new RBHServer();
+                RBLServer server = new RBLServer();
                 server.start(Config.JAVA_SOCKET_PORT);
             }
         });

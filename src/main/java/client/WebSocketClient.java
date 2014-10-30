@@ -2,8 +2,8 @@ package client;
 
 import data.Log;
 import org.webbitserver.WebSocketConnection;
-import protobuf.ProtobufMessageHandler;
-import protobuf.RBHproto;
+import message.ProtobufMessageHandler;
+import message.RBHproto;
 
 /**
  * Created by Peter Mösenthin.
@@ -11,7 +11,7 @@ import protobuf.RBHproto;
  * This is the representaion of a RaspberryHomeClient using a Websocket
  * connection.
  */
-public class WebSocketClient extends RaspberryHomeClient{
+public class WebSocketClient extends RaspberryLifeClient {
     public static final String DEBUG_TAG = "WebSocketClient";
 
     private WebSocketConnection connection;
