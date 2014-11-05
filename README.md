@@ -1,3 +1,3 @@
 # RaspberryLife Server
 
-See https://github.com/RaspberryLife/server/wiki
+See [Wiki](https://github.com/RaspberryLife/server/wiki)
