@@ -12,13 +12,14 @@ import java.net.ServerSocket;
  *
  * Server class that is created by the main method.
  */
-public class RBLServer {
+public class RBLSocketServer {
 
     private ServerSocket serverAcceptSocket;
-    private static ClientHandler clientHandler = new ClientHandler();
+
     private boolean acceptClients = true;
     private int port = 0;
     private boolean serverRunning = false;
+    private ClientHandler clientHandler = ClientHandler.getInstance();
 
     private static final String DEBUG_TAG = "RBLServer";
 
@@ -48,9 +49,5 @@ public class RBLServer {
 
     public void setAcceptClients(boolean acceptClients){
         this.acceptClients = acceptClients;
-    }
-
-    public static ClientHandler getClientHandler(){
-        return clientHandler;
     }
 }

@@ -1,5 +1,6 @@
 package server;
 
+import client.ClientHandler;
 import client.WebSocketClient;
 import com.google.protobuf.InvalidProtocolBufferException;
 import data.Log;
@@ -16,10 +17,11 @@ import protobuf.RBLproto.*;
 public class RBLWebSocketHandler extends BaseWebSocketHandler{
 
     public static final String DEBUG_TAG = "RBLWebSocketHandler";
+    private ClientHandler clientHandler = ClientHandler.getInstance();
 
     @Override
     public void onOpen(WebSocketConnection connection) {
-        RBLServer.getClientHandler().handleWebSocketClient(connection);
+        clientHandler.handleWebSocketClient(connection);
         Log.add(DEBUG_TAG,
                 "WebSocketConnection opened. Connection hashcode: "
                         + connection.hashCode());
@@ -27,7 +29,7 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
 
     @Override
     public void onClose(WebSocketConnection connection) {
-        RBLServer.getClientHandler().getWebSocketClient(connection)
+        clientHandler.getWebSocketClient(connection)
                 .closeConnection();
         Log.add(DEBUG_TAG,
                 "WebSocketConnection closed. Connection hashcode: "
@@ -47,8 +49,7 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
         }
         //pass message to receiving client
         if(parsedMessage != null) {
-                WebSocketClient client = RBLServer.getClientHandler()
-                        .getWebSocketClient(connection);
+                WebSocketClient client = clientHandler.getWebSocketClient(connection);
                 if(client != null) {
                     client.readMessage(parsedMessage);
                 }else {

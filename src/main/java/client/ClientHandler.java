@@ -20,7 +20,16 @@ public class ClientHandler {
 
     private static List<RaspberryLifeClient> clientList = new ArrayList<RaspberryLifeClient>();
 
+    private static ClientHandler instance = null;
+
     public static final String DEBUG_TAG = "ClientHandler";
+
+    public static ClientHandler getInstance() {
+        if(instance == null){
+            instance = new ClientHandler();
+        }
+        return instance;
+    }
 
 
     /**

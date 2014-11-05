@@ -1,7 +1,7 @@
 
 import data.Log;
 import data.SerialConnector;
-import server.RBLServer;
+import server.RBLSocketServer;
 import server.RBLWebSocketServer;
 import util.Config;
 
@@ -18,6 +18,7 @@ public class RaspberryLife {
     public static final String DEBUG_TAG = "RaspberryHome";
     public static Thread serverThread = null;
     public static Thread webServerThread = null;
+
 
     public static void main(String[] args){
         Log.add(DEBUG_TAG,"RaspberryHome " + Config.VERSION_ID);
@@ -44,7 +45,7 @@ public class RaspberryLife {
             @Override
             public void run() {
                 Log.add(DEBUG_TAG, "Starting Java socket server");
-                RBLServer server = new RBLServer();
+                RBLSocketServer server = new RBLSocketServer();
                 server.start(Config.JAVA_SOCKET_PORT);
             }
         });
