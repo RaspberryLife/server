@@ -1,7 +1,7 @@
 package client;
 
 import interfaces.ConnectionListener;
-import message.RBHproto;
+import protobuf.RBLproto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -102,7 +102,7 @@ public abstract class RaspberryLifeClient {
      * Sends a message over the network.
      * @param message
      */
-    public abstract void sendMessage(RBHproto.RBHMessage message);
+    public abstract void sendMessage(RBLMessage message);
 
-    //public abstract void readMessage(RBHproto.RBHMessage message);
+    //public abstract void readMessage(RBLMessage message);
 }

@@ -1,12 +1,9 @@
 
 import data.Log;
 import data.SerialConnector;
-import org.webbitserver.WebServer;
-import org.webbitserver.WebServers;
-import org.webbitserver.handler.StaticFileHandler;
 import server.RBLServer;
+import server.RBLWebSocketServer;
 import util.Config;
-import web.RBLWebSocketHandler;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -30,23 +27,18 @@ public class RaspberryLife {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+
         // RaspberryHome WebSocketServer
         webServerThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Log.add(DEBUG_TAG,
                         "Starting WebSocketServer");
-                WebServer webServer =
-                        WebServers.createWebServer(Config.WEBSOCKET_PORT);
-                webServer.add(new StaticFileHandler("/static-files"));
-                webServer.add("/websocket-echo", new RBLWebSocketHandler());
+                RBLWebSocketServer webServer = new RBLWebSocketServer();
                 webServer.start();
-                Log.add(DEBUG_TAG,
-                        "WebSocketServer listens on port "
-                                + webServer.getPort());
             }
         });
-        webServerThread.start();
+
         // RaspberryHome Application Server
         serverThread = new Thread(new Runnable() {
             @Override
@@ -56,9 +48,11 @@ public class RaspberryLife {
                 server.start(Config.JAVA_SOCKET_PORT);
             }
         });
-        serverThread.start();
 
-        // Initialize the serialconnector for module communication
+        // Start threads
+        webServerThread.start();
+        serverThread.start();
+        // Initialize the serial connector for module communication
         SerialConnector.init();
     }
 }

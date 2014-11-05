@@ -3,7 +3,7 @@ package client;
 import data.Log;
 import interfaces.ConnectionListener;
 import org.webbitserver.WebSocketConnection;
-import message.RBHproto.RBHMessage;
+import protobuf.RBLproto.*;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class ClientHandler {
      * Sends a message to all clients
      * @param message
      */
-    public static void broadcastMessage(RBHMessage message){
+    public static void broadcastMessage(RBLMessage message){
         for(RaspberryLifeClient client : clientList){
            client.sendMessage(message);
         }

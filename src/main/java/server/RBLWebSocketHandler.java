@@ -1,12 +1,11 @@
-package web;
+package server;
 
 import client.WebSocketClient;
 import com.google.protobuf.InvalidProtocolBufferException;
 import data.Log;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
-import message.RBHproto.RBHMessage;
-import server.RBLServer;
+import protobuf.RBLproto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -40,9 +39,9 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
         Log.add(DEBUG_TAG,
                 "WebSocketConnection received message. Connection hashcode: "
                         + connection.hashCode());
-        RBHMessage parsedMessage = null;
+        RBLMessage parsedMessage = null;
         try {
-            parsedMessage = RBHMessage.parseFrom(message);
+            parsedMessage = RBLMessage.parseFrom(message);
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }

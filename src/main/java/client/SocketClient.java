@@ -1,9 +1,9 @@
 package client;
 
 import data.Log;
-import message.ProtoFactory;
+import protobuf.ProtoFactory;
 import message.ProtobufMessageHandler;
-import message.RBHproto;
+import protobuf.RBLproto.*;
 import util.Config;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -51,13 +51,14 @@ public class SocketClient extends RaspberryLifeClient {
      */
     public void startReadThread(){
         readThread = new Thread(new Runnable() {
+
             @Override
             public void run() {
-                RBHproto.RBHMessage message;
+                RBLMessage message;
                 boolean read = true;
                 while (read) {
                     try {
-                        if ((message =  (RBHproto.RBHMessage)
+                        if ((message =  (RBLMessage)
                                 inputStream.readObject()) != null) {
                             if(getId().isEmpty()) {
                                 // Do nothing
@@ -98,7 +99,7 @@ public class SocketClient extends RaspberryLifeClient {
     }
 
     @Override
-    public void sendMessage(RBHproto.RBHMessage message){
+    public void sendMessage(RBLMessage message){
         try {
             outputStream.writeObject(message);
         } catch (IOException e) {
@@ -134,7 +135,7 @@ public class SocketClient extends RaspberryLifeClient {
 
     @Override
     public void onConnectionDenied(String reason){
-        RBHproto.RBHMessage m =
+        RBLMessage m =
                 ProtoFactory.buildAuthDeniedMessage(Config.SERVER_ID,
                         "REASON=" + reason);
         sendMessage(m);
@@ -142,7 +143,7 @@ public class SocketClient extends RaspberryLifeClient {
 
     @Override
     public void onConnectionAccepted(){
-        RBHproto.RBHMessage m =
+        RBLMessage m =
                 ProtoFactory.buildAuthAcceptMessage(Config.SERVER_ID,
                         "Accepted client with id: "
                                 + getId()

@@ -14,6 +14,5 @@ dependencies {
             'org.scream3r:jssc:2.8.0',
             'mysql:mysql-connector-java:5.1.33',
             'org.webbitserver:webbit:0.4.15',
-            'com.google.protobuf:protobuf-java:2.6.0'
     )
 }

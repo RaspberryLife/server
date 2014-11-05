@@ -3,7 +3,7 @@ package client;
 import data.Log;
 import org.webbitserver.WebSocketConnection;
 import message.ProtobufMessageHandler;
-import message.RBHproto;
+import protobuf.RBLproto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -46,7 +46,7 @@ public class WebSocketClient extends RaspberryLifeClient {
     //==========================================================================
 
     @Override
-    public void sendMessage(RBHproto.RBHMessage message) {
+    public void sendMessage(RBLMessage message) {
         if(message != null) {
             connection.send(message.toByteArray());
         }else {
@@ -55,7 +55,7 @@ public class WebSocketClient extends RaspberryLifeClient {
     }
 
     //@Override
-    public void readMessage(RBHproto.RBHMessage message){
+    public void readMessage(RBLMessage message){
             messageHandler.handleMessage(message);
     }
 

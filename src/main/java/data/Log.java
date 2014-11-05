@@ -5,7 +5,7 @@ import util.Config;
 /**
  * Created by Peter Mösenthin.
  *
- * The log handles any console or logging output.
+ * The log handles any console or logging output and will later be used to write log files.
  */
 public class Log {
 

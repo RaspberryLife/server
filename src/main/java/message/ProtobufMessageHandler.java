@@ -3,10 +3,10 @@ package message;
 import client.RaspberryLifeClient;
 import data.DataBaseHelper;
 import data.Log;
-import data.SerialConnector;
-import server.NoAuth;
+import protobuf.ProtoFactory;
+import util.NoAuth;
 import util.Config;
-import message.RBHproto.*;
+import protobuf.RBLproto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -25,12 +25,12 @@ public class ProtobufMessageHandler {
 
 
     /**
-     * Handle the actual RBHMessage.
+     * Handle the actual RBLMessage.
      * @param message
      */
-    public void handleMessage(RBHproto.RBHMessage message){
+    public void handleMessage(RBLMessage message){
         // Auth message
-        if(message.getMType() == RBHMessage.MessageType.AUTH_REQUEST){
+        if(message.getMType() == RBLMessage.MessageType.AUTH_REQUEST){
             String key = message.getPlainText().getText();
             boolean accepted = NoAuth.verify(key);
             client.setId(message.getId());
@@ -42,7 +42,7 @@ public class ProtobufMessageHandler {
         }
 
         // Plaintext message
-        else if(message.getMType() == RBHMessage.MessageType.PLAIN_TEXT) {
+        else if(message.getMType() == RBLMessage.MessageType.PLAIN_TEXT) {
             String text = message.getPlainText().getText();
             if(client.isAccepted){
                 // Check for instrunction trigger "module"
@@ -56,10 +56,10 @@ public class ProtobufMessageHandler {
         }
 
         // GetDataSet message
-        else if(message.getMType() == RBHMessage.MessageType.GET_DATA_SET){
+        else if(message.getMType() == RBLMessage.MessageType.GET_DATA_SET){
             if(client.isAccepted) {
                 DataBaseHelper dbh = new DataBaseHelper();
-                RBHproto.RBHMessage m =
+                RBLMessage m =
                         ProtoFactory.buildDataSetMessage(
                                 Config.SERVER_ID,
                                 "livingroom_sensormodule",

@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Created by Peter Mösenthin.
  *
- * Class to handle the actual MySQL Database
+ * Class to handle the actual MySQL Database.
  */
 public class MySQLConnection {
 

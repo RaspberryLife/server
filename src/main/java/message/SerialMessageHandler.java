@@ -3,7 +3,9 @@ package message;
 import client.RaspberryLifeClient;
 import data.Log;
 import data.SerialConnector;
+import protobuf.ProtoFactory;
 import util.Config;
+import protobuf.RBLproto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -23,8 +25,8 @@ public class SerialMessageHandler {
     public void handleModuleInstruction(RaspberryLifeClient client, String instruction){
         Log.add(DEBUG_TAG, "Received module instruction");
         String[] commands = instruction.split(":");
-        RBHproto.RBHMessage serialFailed = ProtoFactory.buildPlainTextMessage(Config
-                .SERVER_ID,"Could not deliver instrction.");
+        RBLMessage serialFailed = ProtoFactory.buildPlainTextMessage(Config
+                .SERVER_ID, "Could not deliver instrction.");
         //Base
         if(commands[0].equalsIgnoreCase("module")){
 
