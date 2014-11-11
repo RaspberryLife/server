@@ -3,8 +3,6 @@ package message;
 import client.RaspberryLifeClient;
 import data.Log;
 import data.SerialConnector;
-import protobuf.ProtoFactory;
-import util.Config;
 import protobuf.RblProto.*;
 
 import java.util.List;
@@ -53,9 +51,14 @@ public class SerialMessageHandler {
             }
 
             serialMessage = getZeroPaddedString(serialMessage, 32, false);
-            SerialConnector.send(serialMessage);
-        }
 
+            sendSerialMessage(serialMessage);
+        }
+    }
+
+    private void sendSerialMessage(String message){
+        Log.add(DEBUG_TAG, "Sending serial message " + message);
+        SerialConnector.send(message);
     }
 
     private int getMessageSeq(){
