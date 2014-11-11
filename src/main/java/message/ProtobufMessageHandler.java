@@ -6,7 +6,7 @@ import data.Log;
 import protobuf.ProtoFactory;
 import util.NoAuth;
 import util.Config;
-import protobuf.RBLproto.*;
+import protobuf.RblProto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -16,7 +16,7 @@ import protobuf.RBLproto.*;
 public class ProtobufMessageHandler {
 
     private RaspberryLifeClient client;
-    public static final String DEBUG_TAG = "ProtoBufMessageHandler";
+    public static final String DEBUG_TAG = ProtobufMessageHandler.class.getSimpleName();
     private SerialMessageHandler serialHandler;
 
     public ProtobufMessageHandler(RaspberryLifeClient client){
@@ -45,13 +45,17 @@ public class ProtobufMessageHandler {
         else if(message.getMType() == RBLMessage.MessageType.PLAIN_TEXT) {
             String text = message.getPlainText().getText();
             if(client.isAccepted){
-                // Check for instrunction trigger "module"
-                if(text.startsWith("module")){
-                    if(serialHandler == null){
-                        serialHandler = new SerialMessageHandler();
-                    }
-                    serialHandler.handleModuleInstruction(client, text);
+                Log.add(DEBUG_TAG, "Client " + client.getId() + " says " + text);
+            }
+        }
+
+        // RunInstruction message
+        else if(message.getMType() == RBLMessage.MessageType.RUN_INSTRUCTION) {
+            if(client.isAccepted){
+                if(serialHandler == null){
+                    serialHandler = new SerialMessageHandler();
                 }
+                serialHandler.handleModuleRunInstruction(client, message);
             }
         }
 
@@ -75,6 +79,7 @@ public class ProtobufMessageHandler {
                 );
             }
         }
+
     }
 
 

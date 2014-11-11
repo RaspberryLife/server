@@ -16,7 +16,7 @@ import java.util.Random;
  * The DataBaseHelper is basically a wrapper to access the MySQL Database.
  */
 public class DataBaseHelper {
-    public static final String DEBUG_TAG = "DataBaseHelper";
+    public static final String DEBUG_TAG = DataBaseHelper.class.getSimpleName();
 
 
     public List<? super Object> getDataList(int length){

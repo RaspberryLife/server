@@ -3,7 +3,7 @@ package client;
 import data.Log;
 import interfaces.ConnectionListener;
 import org.webbitserver.WebSocketConnection;
-import protobuf.RBLproto.*;
+import protobuf.RblProto.*;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class ClientHandler {
 
     private static ClientHandler instance = null;
 
-    public static final String DEBUG_TAG = "ClientHandler";
+    public static final String DEBUG_TAG = ClientHandler.class.getSimpleName();
 
     public static ClientHandler getInstance() {
         if(instance == null){
@@ -38,7 +38,6 @@ public class ClientHandler {
      */
     public void handleSocketClient(final Socket clientSocket){
         Thread handleThread = new Thread(new Runnable() {
-            @Override
             public void run() {
             final RaspberryLifeClient client =
                     new SocketClient(clientSocket);
@@ -57,7 +56,6 @@ public class ClientHandler {
      */
     private void setUpConnectionListener(final RaspberryLifeClient client){
         client.setConnectionListener(new ConnectionListener() {
-            @Override
             public void denied(String reason) {
                 Log.add(DEBUG_TAG,
                         "Client denied."
@@ -67,7 +65,6 @@ public class ClientHandler {
                 clientList.remove(client);
             }
 
-            @Override
             public void accepted() {
                 Log.add(DEBUG_TAG,
                         "Client accepted with ID="
@@ -75,7 +72,6 @@ public class ClientHandler {
                 );
             }
 
-            @Override
             public void closed() {
                 Log.add(DEBUG_TAG,
                         "Removing client after closed connection "

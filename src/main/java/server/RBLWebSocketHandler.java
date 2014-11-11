@@ -6,7 +6,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import data.Log;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
-import protobuf.RBLproto.*;
+import protobuf.RblProto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -16,7 +16,7 @@ import protobuf.RBLproto.*;
  */
 public class RBLWebSocketHandler extends BaseWebSocketHandler{
 
-    public static final String DEBUG_TAG = "RBLWebSocketHandler";
+    public static final String DEBUG_TAG = RBLWebSocketHandler.class.getSimpleName();
     private ClientHandler clientHandler = ClientHandler.getInstance();
 
     @Override

@@ -9,7 +9,7 @@ import data.Log;
  * authentication
  */
 public class NoAuth {
-    private static final String DEBUG_TAG = "NoAuth";
+    private static final String DEBUG_TAG = NoAuth.class.getSimpleName();
     private static final String key = "abc12345";
 
     public static boolean verify(String keyToVerify){

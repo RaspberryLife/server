@@ -1,5 +1,7 @@
 package data;
 
+import util.Config;
+
 import java.sql.*;
 
 /**
@@ -9,19 +11,15 @@ import java.sql.*;
  */
 public class MySQLConnection {
 
-    private String host = "jdbc:mysql://localhost:3306/";
-    private String dbName = "testSerial";
-    private String username = "root";
-    private String password = "";
+
     private Connection conn;
 
-
-    public static final String DEBUG_TAG = "MySQLConnection";
+    public static final String DEBUG_TAG = MySQLConnection.class.getSimpleName();
 
     public void open(){
-        String url = host + dbName
-                + "?user=" + username
-                + "?password=" + password;
+        String url = Config.MYSQL_HOST + Config.MYSQL_DBNAME
+                + "?user=" + Config.MYSQL_USER
+                + "?password=" + Config.MYSQL_PASSWORD;
         Log.add(DEBUG_TAG,"MySQLConn with: " + url);
         try {
             Class.forName("com.mysql.jdbc.Driver");

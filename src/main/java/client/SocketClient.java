@@ -3,7 +3,7 @@ package client;
 import data.Log;
 import protobuf.ProtoFactory;
 import message.ProtobufMessageHandler;
-import protobuf.RBLproto.*;
+import protobuf.RblProto.*;
 import util.Config;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,7 +23,7 @@ public class SocketClient extends RaspberryLifeClient {
     private ObjectInputStream inputStream;
     protected final ProtobufMessageHandler messageHandler =
             new ProtobufMessageHandler(this);
-    public static final String DEBUG_TAG = "SocketClient";
+    public static final String DEBUG_TAG = SocketClient.class.getSimpleName();
     private Thread readThread = null;
 
 
@@ -52,7 +52,6 @@ public class SocketClient extends RaspberryLifeClient {
     public void startReadThread(){
         readThread = new Thread(new Runnable() {
 
-            @Override
             public void run() {
                 RBLMessage message;
                 boolean read = true;

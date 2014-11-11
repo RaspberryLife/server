@@ -9,7 +9,7 @@ import util.Config;
  */
 public class Log {
 
-    private static final String DEBUG_TAG = "Log";
+    private static final String DEBUG_TAG = Log.class.getSimpleName();
 
     public static void add(String tag,String message){
        switch(Config.DEBUG_LEVEL){

@@ -1,7 +1,7 @@
 package client;
 
 import interfaces.ConnectionListener;
-import protobuf.RBLproto.*;
+import protobuf.RblProto.*;
 
 /**
  * Created by Peter Mösenthin.

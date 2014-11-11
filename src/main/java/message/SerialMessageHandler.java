@@ -5,7 +5,9 @@ import data.Log;
 import data.SerialConnector;
 import protobuf.ProtoFactory;
 import util.Config;
-import protobuf.RBLproto.*;
+import protobuf.RblProto.*;
+
+import java.util.List;
 
 /**
  * Created by Peter Mösenthin.
@@ -14,50 +16,67 @@ import protobuf.RBLproto.*;
  */
 public class SerialMessageHandler {
 
-    public static final String DEBUG_TAG = "SerialMessageHandler";
+    public static final String DEBUG_TAG = SerialMessageHandler.class.getSimpleName();
 
-    /**
-     * Handles instructions for modules in form of strings
-     * A instruction is defined as follows:
-     * command0:command1:command2
-     * @param instruction
-     */
-    public void handleModuleInstruction(RaspberryLifeClient client, String instruction){
-        Log.add(DEBUG_TAG, "Received module instruction");
-        String[] commands = instruction.split(":");
-        RBLMessage serialFailed = ProtoFactory.buildPlainTextMessage(Config
-                .SERVER_ID, "Could not deliver instrction.");
-        //Base
-        if(commands[0].equalsIgnoreCase("module")){
+    private static int messageSeq = 0;
 
-            // Socket module
-            if(commands[1].equalsIgnoreCase("socket")){
-                if(commands[2].equalsIgnoreCase("on")){
-                    Log.add(DEBUG_TAG, "Turning module:socket on");
-                    SerialConnector.send("0\n");
-                } else if(commands[2].equalsIgnoreCase("off")){
-                    Log.add(DEBUG_TAG, "Turning module:socket off");
-                    SerialConnector.send("1\n");
-                }else{
-                    Log.add(DEBUG_TAG, "No instruction set for module:socket");
-                    client.sendMessage(serialFailed);
-                }
-                // Reed Switch
-            }else if(commands[1].equalsIgnoreCase("reed")){
-                if(commands[2].equalsIgnoreCase("switch")){
-                    Log.add(DEBUG_TAG, "Switching reed");
-                    SerialConnector.send("3\n");
-                }else {
-                    Log.add(DEBUG_TAG, "No instruction set for module:reed");
-                    client.sendMessage(serialFailed);
-                }
-                // Temp request
-            } else if(commands[1].equalsIgnoreCase("temp")){
-                Log.add(DEBUG_TAG, "Requesting module:temp");
-                SerialConnector.send("2\n");
+    public void handleModuleRunInstruction(RaspberryLifeClient client, RBLMessage message) {
+        Log.add(DEBUG_TAG, "Sending module instruction");
+        RBLMessage.RunInstruction rI = message.getRunInstruction();
+        String serialMessage = "";
+        if(rI != null){
+            int modelType = rI.getModeltype().getNumber();
+            int targetModuleId = rI.getTargetModulID();
+            int instructionId = rI.getInstruction().getInstructionID();
+            List<Integer> intParams = rI.getInstruction().getIntParametersList();
+            List<String> stringParams = rI.getInstruction().getStringParametersList();
+
+            // Model type
+            serialMessage += getZeroPaddedString(String.valueOf(modelType), 3, true);
+
+            //Target module id
+            serialMessage += ":";
+            serialMessage += getZeroPaddedString(String.valueOf(targetModuleId), 2, true);
+
+            // Message number
+            serialMessage += ":";
+            serialMessage += getZeroPaddedString(String.valueOf(getMessageSeq()), 2, true);
+
+            // Instruction id
+            serialMessage += ":";
+            serialMessage += getZeroPaddedString(String.valueOf(instructionId), 2, true);
+
+            // Parameters
+            if(intParams != null && intParams.size() > 0){
+                serialMessage += ":";
+                serialMessage += getZeroPaddedString(String.valueOf(intParams.get(0)), 4, true);
             }
 
+            serialMessage = getZeroPaddedString(serialMessage, 32, false);
+            SerialConnector.send(serialMessage);
         }
+
     }
 
+    private int getMessageSeq(){
+        messageSeq++;
+        if(messageSeq > 99) {
+            messageSeq = 0;
+        }
+        return messageSeq;
+    }
+
+    private String getZeroPaddedString(String content, int maxLength, boolean padLeft){
+        int paddingLeft = maxLength - content.length();
+        String padded = "";
+        for(int i = 0; i < paddingLeft; i++){
+            padded += "0";
+        }
+        if(padLeft){
+            padded += content;
+        } else{
+            padded = content + padded;
+        }
+        return padded;
+    }
 }

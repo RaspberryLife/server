@@ -21,7 +21,7 @@ public class RBLSocketServer {
     private boolean serverRunning = false;
     private ClientHandler clientHandler = ClientHandler.getInstance();
 
-    private static final String DEBUG_TAG = "RBLServer";
+    private static final String DEBUG_TAG = RBLSocketServer.class.getSimpleName();
 
     public void start(int port){
         serverRunning = true;

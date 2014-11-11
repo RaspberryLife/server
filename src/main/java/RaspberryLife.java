@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
  */
 public class RaspberryLife {
 
-    public static final String DEBUG_TAG = "RaspberryHome";
+    public static final String DEBUG_TAG = RaspberryLife.class.getSimpleName();
     public static Thread serverThread = null;
     public static Thread webServerThread = null;
 
@@ -31,7 +31,6 @@ public class RaspberryLife {
 
         // RaspberryHome WebSocketServer
         webServerThread = new Thread(new Runnable() {
-            @Override
             public void run() {
                 Log.add(DEBUG_TAG,
                         "Starting WebSocketServer");
@@ -42,7 +41,6 @@ public class RaspberryLife {
 
         // RaspberryHome Application Server
         serverThread = new Thread(new Runnable() {
-            @Override
             public void run() {
                 Log.add(DEBUG_TAG, "Starting Java socket server");
                 RBLSocketServer server = new RBLSocketServer();

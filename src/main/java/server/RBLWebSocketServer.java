@@ -15,7 +15,7 @@ public class RBLWebSocketServer {
 
     private WebServer webServer = null;
 
-    private static final String DEBUG_TAG = "RBLWebSocketServer";
+    private static final String DEBUG_TAG = RBLWebSocketServer.class.getSimpleName();
 
     public void start(){
         webServer = WebServers.createWebServer(Config.WEBSOCKET_PORT);

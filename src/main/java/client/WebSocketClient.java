@@ -3,7 +3,7 @@ package client;
 import data.Log;
 import org.webbitserver.WebSocketConnection;
 import message.ProtobufMessageHandler;
-import protobuf.RBLproto.*;
+import protobuf.RblProto.*;
 
 /**
  * Created by Peter Mösenthin.
@@ -12,7 +12,7 @@ import protobuf.RBLproto.*;
  * connection.
  */
 public class WebSocketClient extends RaspberryLifeClient {
-    public static final String DEBUG_TAG = "WebSocketClient";
+    public static final String DEBUG_TAG = WebSocketClient.class.getSimpleName();
 
     private WebSocketConnection connection;
     private final ProtobufMessageHandler messageHandler =
