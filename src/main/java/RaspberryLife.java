@@ -21,7 +21,7 @@ public class RaspberryLife {
 
 
     public static void main(String[] args){
-        Log.add(DEBUG_TAG,"RaspberryHome " + Config.VERSION_ID);
+        Log.add(DEBUG_TAG,"RaspberryHome");
         try {
             Log.add(DEBUG_TAG, "Starting RBLServer on IP: " +
                     InetAddress.getLocalHost().getHostAddress());

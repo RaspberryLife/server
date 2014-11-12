@@ -6,8 +6,7 @@ package util;
  * Config class to hold all sorts of configuration for easy access.
  */
 public class Config {
-    public static final String VERSION_ID = "v0.5";
-    public static final String SERVER_ID = "rbh_server_" + VERSION_ID;
+    public static final String SERVER_ID = "rbh_server_master";
 
     public static final int JAVA_SOCKET_PORT = 6666;
     public static final int WEBSOCKET_PORT = 6680;
