@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 /**
  * Created by Peter Mösenthin.
  *
- * Main class for the RaspberryHome server application.
+ * Main class for the RaspberryLife server application.
  */
 public class RaspberryLife {
 
@@ -21,7 +21,7 @@ public class RaspberryLife {
 
 
     public static void main(String[] args){
-        Log.add(DEBUG_TAG,"RaspberryHome");
+        Log.add(DEBUG_TAG,"########### RaspberryLife server ###########");
         try {
             Log.add(DEBUG_TAG, "Starting RBLServer on IP: " +
                     InetAddress.getLocalHost().getHostAddress());
