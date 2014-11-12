@@ -1,9 +1,12 @@
 package data;
 
 import client.ClientHandler;
+import com.adamtaft.eb.EventBusService;
 import jssc.*;
 import protobuf.ProtoFactory;
 import util.Config;
+
+import java.util.Comparator;
 
 /**
  * Created by Peter Mösenthin.
@@ -29,8 +32,11 @@ public class SerialConnector {
             }
             Log.add(DEBUG_TAG,"Initializing serial port " + mPortName);
             mSerialPort = new SerialPort(mPortName);
-            mSerialPort.openPort();//Open serial port
-            mSerialPort.setParams(38400, 8, 1, 0);//Set params
+            mSerialPort.openPort();
+            mSerialPort.setParams(Config.SERIAL_PORT_BAUDRATE,
+                    Config.SERIAL_PORT_DATA_BITS,
+                    Config.SERIAL_PORT_STOP_BITS,
+                    Config.SERIAL_PORT_PARITY);
             int mask = SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS
                     + SerialPort.MASK_DSR;
             mSerialPort.setEventsMask(mask);
@@ -92,11 +98,12 @@ public class SerialConnector {
             if(event.isRXCHAR()){//If data is available
                 //Read data, if 10 bytes available
                 try {
-                    byte buffer[] = mSerialPort.readBytes();
+                    byte buffer[] = mSerialPort.readBytes(Config.SERIAL_MESSAGE_BYTE_LENGTH);
                     if(buffer.length != 0) {
                         String message = new String(buffer);
                         message = message.trim();
-                        Log.add(DEBUG_TAG, "Received serial message: " + message);
+                        Log.add(DEBUG_TAG, "Received serial message: " + message
+                                + " Bufferlength" + "=" + buffer.length);
                         ClientHandler.broadcastMessage(
                                 ProtoFactory.buildPlainTextMessage(
                                         Config.SERVER_ID,
