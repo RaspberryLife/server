@@ -50,6 +50,8 @@ public class SerialMessageHandler {
                 serialMessage += getZeroPaddedString(String.valueOf(intParams.get(0)), 4, true);
             }
 
+            serialMessage += ":";
+
             serialMessage = getZeroPaddedString(serialMessage, 32, false);
 
             sendSerialMessage(serialMessage);
