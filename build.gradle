@@ -7,6 +7,17 @@ repositories {
     mavenCentral()
 }
 
+task fullJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'RBL Server',
+                'Implementation-Version': version,
+                'Main-Class': 'RaspberryLife'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile(
