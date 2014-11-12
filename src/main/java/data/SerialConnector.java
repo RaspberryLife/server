@@ -30,7 +30,7 @@ public class SerialConnector {
             Log.add(DEBUG_TAG,"Initializing serial port " + mPortName);
             mSerialPort = new SerialPort(mPortName);
             mSerialPort.openPort();//Open serial port
-            mSerialPort.setParams(57600, 8, 1, 0);//Set params
+            mSerialPort.setParams(38400, 8, 1, 0);//Set params
             int mask = SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS
                     + SerialPort.MASK_DSR;
             mSerialPort.setEventsMask(mask);
@@ -72,7 +72,9 @@ public class SerialConnector {
             public void run() {
                 try {
                     //Write data to port, in this case a "0" (zero)
-                    mSerialPort.writeBytes(message.getBytes());
+                    if(mSerialPort != null){
+                        mSerialPort.writeBytes(message.getBytes());
+                    }
                 }
                 catch (SerialPortException ex) {
                     Log.add(DEBUG_TAG,"Failed to send message via serial port " + ex);
