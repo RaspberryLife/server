@@ -16,6 +16,7 @@ public class MySQLConnection {
     private Connection mConnection;
 
     public static final String DEBUG_TAG = MySQLConnection.class.getSimpleName();
+    public static final boolean D = false;
 
     public boolean open(){
         Properties connectionProps = new Properties();
@@ -50,7 +51,7 @@ public class MySQLConnection {
     }
 
     public void createDatabase(){
-        Log.add(DEBUG_TAG,"Creating database");
+        if(D){Log.add(DEBUG_TAG,"Creating database");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
@@ -62,7 +63,7 @@ public class MySQLConnection {
     }
 
     public void selectDatabase(){
-        Log.add(DEBUG_TAG,"selecting database");
+        if(D){Log.add(DEBUG_TAG,"selecting database");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
@@ -74,7 +75,7 @@ public class MySQLConnection {
     }
 
     public void createTable(String name){
-        Log.add(DEBUG_TAG,"Creating table");
+        if(D){Log.add(DEBUG_TAG,"Creating table");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
@@ -86,7 +87,7 @@ public class MySQLConnection {
     }
 
     public void close(){
-        Log.add(DEBUG_TAG,"Closing connection");
+        if(D){Log.add(DEBUG_TAG,"Closing connection");}
         try {
             mConnection.close();
         } catch (SQLException e) {
@@ -95,7 +96,7 @@ public class MySQLConnection {
     }
 
     public void insertTemp(int temp){
-        Log.add(DEBUG_TAG,"Inserting temperature data");
+        if(D){Log.add(DEBUG_TAG,"Inserting temperature data");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
@@ -107,7 +108,7 @@ public class MySQLConnection {
     }
 
     public void test() {
-        Log.add(DEBUG_TAG,"Testing connection!");
+        if(D){Log.add(DEBUG_TAG,"Testing connection!");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
