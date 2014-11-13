@@ -8,7 +8,12 @@ import server.RBLWebSocketServer;
 import util.Config;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Created by Peter Mösenthin.
@@ -24,12 +29,7 @@ public class RaspberryLife {
 
     public static void main(String[] args){
         Log.add(DEBUG_TAG,"########### RaspberryLife server ###########");
-        try {
-            Log.add(DEBUG_TAG, "Starting RBLServer on IP: " +
-                    InetAddress.getLocalHost().getHostAddress());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        listIPAddresses();
 
         // RaspberryHome WebSocketServer
         webServerThread = new Thread(new Runnable() {
@@ -43,7 +43,7 @@ public class RaspberryLife {
 
         // RaspberryHome Application Server
         serverThread = new Thread(new Runnable() {
-            public void run() {
+                public void run() {
                 Log.add(DEBUG_TAG, "Starting Java socket server");
                 RBLSocketServer server = new RBLSocketServer();
                 server.start(Config.JAVA_SOCKET_PORT);
@@ -58,4 +58,38 @@ public class RaspberryLife {
         DataBaseHelper.init();
         DataBaseHelper.closeConnection();
     }
+
+    private static void listIPAddresses(){
+        List<String> ipAddresses = new ArrayList<String>();
+        int maxLength_ipv4 = 15;
+        Enumeration e = null;
+        //Get all network interfaces
+        try {
+            e = NetworkInterface.getNetworkInterfaces();
+        } catch (SocketException e1) {
+            e1.printStackTrace();
+        }
+
+        //Check all network interfaces
+        while(e!= null && e.hasMoreElements()){
+            NetworkInterface n = (NetworkInterface) e.nextElement();
+            Enumeration ee = n.getInetAddresses();
+
+            //Check all addresses in current interface
+            while (ee.hasMoreElements()){
+                InetAddress i = (InetAddress) ee.nextElement();
+                String address = i.getHostAddress();
+                if(address.length() <= maxLength_ipv4){
+                    if(!address.equals("127.0.0.1") && !address.equals("0:0:0:0:0:0:0:1")){
+                        //Log.address(DEBUG_TAG, "RBLServer on machine: " + i.getHostAddress());
+                        ipAddresses.add(address);
+                    }
+                }
+            }
+        }
+
+        Log.add(DEBUG_TAG, "Server running on " + ipAddresses.toString());
+    }
+
+
 }
