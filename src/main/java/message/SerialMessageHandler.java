@@ -18,7 +18,7 @@ public class SerialMessageHandler {
 
     private static int messageSeq = 0;
 
-    public void handleModuleRunInstruction(RaspberryLifeClient client, RBLMessage message) {
+    public void sendModuleRunInstruction(RaspberryLifeClient client, RBLMessage message) {
         Log.add(DEBUG_TAG, "Sending module instruction");
         RBLMessage.RunInstruction rI = message.getRunInstruction();
         String serialMessage = "";
