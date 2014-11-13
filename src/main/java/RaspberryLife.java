@@ -1,6 +1,8 @@
 
+import data.DataBaseHelper;
 import data.Log;
 import data.SerialConnector;
+import protobuf.RblProto;
 import server.RBLSocketServer;
 import server.RBLWebSocketServer;
 import util.Config;
@@ -53,5 +55,7 @@ public class RaspberryLife {
         serverThread.start();
         // Initialize the serial connector for module communication
         SerialConnector.init();
+        DataBaseHelper.init();
+        DataBaseHelper.closeConnection();
     }
 }

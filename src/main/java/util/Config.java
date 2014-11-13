@@ -12,8 +12,9 @@ public class Config {
     public static int WEBSOCKET_PORT = 6680;
     public static int DEBUG_LEVEL = 1;
 
-    public static String MYSQL_HOST= "jdbc:mysql://localhost:3306/";
-    public static String MYSQL_DBNAME = "testSerial";
+    public static String MYSQL_HOST= "localhost";
+    public static String MYSQL_PORT= "3306";
+    public static String MYSQL_DB_NAME = "rbl_data";
     public static String MYSQL_USER = "root";
     public static String MYSQL_PASSWORD = "";
 
