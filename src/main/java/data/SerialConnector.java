@@ -5,8 +5,6 @@ import jssc.*;
 import protobuf.ProtoFactory;
 import util.Config;
 
-import java.util.Comparator;
-
 /**
  * Created by Peter Mösenthin.
  *
@@ -33,10 +31,10 @@ public class SerialConnector {
             Log.add(DEBUG_TAG,"Initializing serial port " + mPortName);
             mSerialPort = new SerialPort(mPortName);
             mSerialPort.openPort();
-            mSerialPort.setParams(Config.SERIAL_PORT_BAUDRATE,
-                    Config.SERIAL_PORT_DATA_BITS,
-                    Config.SERIAL_PORT_STOP_BITS,
-                    Config.SERIAL_PORT_PARITY);
+            mSerialPort.setParams(Config.get().getInt("serial.baudrate"),
+                    Config.get().getInt("serial.data_bits"),
+                    Config.get().getInt("serial.stop_bits"),
+                    Config.get().getInt("serial.parity"));
             int mask = SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS
                     + SerialPort.MASK_DSR;
             mSerialPort.setEventsMask(mask);
@@ -96,9 +94,10 @@ public class SerialConnector {
      * Class to handle incoming serial messages.
      */
     private static class SerialPortReader implements SerialPortEventListener {
+        int messageLength = Config.get().getInt("serial.message_byte_length");
         public void serialEvent(SerialPortEvent event) {
             if(event.isRXCHAR()){//If data is available
-                if(event.getEventValue() == Config.SERIAL_MESSAGE_BYTE_LENGTH){
+                if(event.getEventValue() == messageLength){
                     try {
                         byte buffer[] = mSerialPort.readBytes();
                         if(buffer.length != 0) {
@@ -108,7 +107,7 @@ public class SerialConnector {
                                     + " BufferLength" + "=" + buffer.length);
                             ClientHandler.broadcastMessage(
                                     ProtoFactory.buildPlainTextMessage(
-                                            Config.SERVER_ID,
+                                            Config.get().getString("server.id"),
                                             "Serial connector received message: " +
                                                     message
                                     ));

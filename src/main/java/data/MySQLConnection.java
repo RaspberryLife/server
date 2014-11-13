@@ -20,8 +20,8 @@ public class MySQLConnection {
 
     public boolean open(){
         Properties connectionProps = new Properties();
-        connectionProps.put("user", Config.MYSQL_USER);
-        connectionProps.put("password", Config.MYSQL_PASSWORD);
+        connectionProps.put("user", Config.get().getString("database.user"));
+        connectionProps.put("password", Config.get().getString("database.password"));
 
         /*
         String url = Config.MYSQL_HOST + Config.MYSQL_DB_NAME
@@ -35,8 +35,10 @@ public class MySQLConnection {
             //mConnection = DriverManager.getConnection(url);
             mConnection = DriverManager.getConnection(
                     "jdbc:mysql://" +
-                            Config.MYSQL_HOST +
-                            ":" + Config.MYSQL_PORT + "/",
+                            Config.get().getString("database.host")
+                            + ":"
+                            + Config.get().getString("database.port")
+                            + "/",
                     connectionProps);
 
         } catch(ClassNotFoundException e) {
@@ -55,8 +57,8 @@ public class MySQLConnection {
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
-            statement.execute(
-                    "CREATE DATABASE IF NOT EXISTS " + Config.MYSQL_DB_NAME);
+            statement.execute("CREATE DATABASE IF NOT EXISTS "
+                    + Config.get().getString("database.db"));
         } catch (SQLException e) {
             Log.add(DEBUG_TAG, "Could not create database: " + e);
         }
@@ -68,7 +70,7 @@ public class MySQLConnection {
         try {
             statement = mConnection.createStatement();
             statement.execute(
-                    "USE " + Config.MYSQL_DB_NAME);
+                    "USE " + Config.get().getString("database.db"));
         } catch (SQLException e) {
             Log.add(DEBUG_TAG, "Could not select database: " + e);
         }

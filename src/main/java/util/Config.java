@@ -1,26 +1,103 @@
 package util;
 
+
+import data.Log;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.XMLConfiguration;
+
+import java.io.*;
+import java.net.URLDecoder;
+
 /**
  * Created by Peter Mösenthin.
  *
  * Config class to hold all sorts of configuration for easy access.
  */
 public class Config {
-    public static final String SERVER_ID = "rbh_server_master";
 
-    public static int JAVA_SOCKET_PORT = 6666;
-    public static int WEBSOCKET_PORT = 6680;
+    private static XMLConfiguration mConfiguration;
+    public static final String DEBUG_TAG = Config.class.getSimpleName();
+
     public static int DEBUG_LEVEL = 1;
 
-    public static String MYSQL_HOST= "localhost";
-    public static String MYSQL_PORT= "3306";
-    public static String MYSQL_DB_NAME = "rbl_data";
-    public static String MYSQL_USER = "root";
-    public static String MYSQL_PASSWORD = "";
 
-    public static int SERIAL_PORT_BAUDRATE = 38400;
-    public static int SERIAL_PORT_DATA_BITS = 8;
-    public static int SERIAL_PORT_STOP_BITS = 1;
-    public static int SERIAL_PORT_PARITY = 0;
-    public static int SERIAL_MESSAGE_BYTE_LENGTH = 32;
+    public static void dumpConfig(){
+        String configName =  "rbl_config_ext.xml";
+        String path = Config.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String[] pathSplit = path.split("/");
+        String ext_path = "";
+        for(int i = 0; i <pathSplit.length -1; i++){
+            ext_path += pathSplit[i] + "/";
+        }
+        ext_path += configName;
+
+        String decodedPath;
+        try {
+            decodedPath = URLDecoder.decode(ext_path, "UTF-8");
+            Log.add(DEBUG_TAG, "Writing external config: " + decodedPath);
+        } catch (UnsupportedEncodingException e) {
+            Log.add(DEBUG_TAG, "Could not create path for external configuration.");
+            return;
+        }
+
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(mConfiguration.getFile());
+        } catch (FileNotFoundException e) {
+            Log.add(DEBUG_TAG, "Could read configuration file. " + e);
+            return;
+        }
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+        FileWriter fstream = null;
+        try {
+            fstream = new FileWriter(ext_path, true);
+        } catch (IOException e) {
+            Log.add(DEBUG_TAG, "Could open FileWriter." + e);
+        }
+
+        BufferedWriter out = new BufferedWriter(fstream);
+
+        String line = null;
+        try {
+            while ((line = in.readLine()) != null) {
+                out.write(line);
+                out.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // close buffer reader
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // close buffer writer
+        try {
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static XMLConfiguration get(){
+        if(mConfiguration == null){
+            readConfig();
+        }
+        return mConfiguration;
+    }
+
+
+    public static void readConfig(){
+        try {
+            mConfiguration = new XMLConfiguration("rbl_config.xml");
+            Log.add(DEBUG_TAG, "Configuration loaded.");
+        } catch (ConfigurationException e) {
+            Log.add(DEBUG_TAG, "Unable to read configuration: " + e);
+        }
+    }
 }

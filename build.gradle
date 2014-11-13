@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 sourceCompatibility = 1.5
-version = '1.0.2'
+version = '1.0.3'
 
 repositories {
     mavenCentral()
@@ -26,6 +26,7 @@ dependencies {
             'org.scream3r:jssc:2.8.0',
             'mysql:mysql-connector-java:5.1.33',
             'org.webbitserver:webbit:0.4.15',
-            'com.google.protobuf:protobuf-java:2.6.1'
+            'com.google.protobuf:protobuf-java:2.6.1',
+            'commons-configuration:commons-configuration:1.7'
     )
 }

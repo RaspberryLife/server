@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- rbl_config.xml -->
+<config>
+    <server>
+        <id>rbh_server_master</id>
+    </server>
+    <database>
+        <host>localhost</host>
+        <port>3306</port>
+        <db>rbl_data</db>
+        <user>root</user>
+        <password></password>
+    </database>
+    <socket>
+        <java_port>6666</java_port>
+        <web_port>6680</web_port>
+    </socket>
+    <serial>
+        <baudrate>38400</baudrate>
+        <data_bits>8</data_bits>
+        <stop_bits>1</stop_bits>
+        <parity>0</parity>
+        <message_byte_length>32</message_byte_length>
+    </serial>
+</config>

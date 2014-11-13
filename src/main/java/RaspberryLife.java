@@ -2,7 +2,6 @@
 import data.DataBaseHelper;
 import data.Log;
 import data.SerialConnector;
-import protobuf.RblProto;
 import server.RBLSocketServer;
 import server.RBLWebSocketServer;
 import util.Config;
@@ -10,7 +9,6 @@ import util.Config;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -29,6 +27,8 @@ public class RaspberryLife {
 
     public static void main(String[] args){
         Log.add(DEBUG_TAG,"########### RaspberryLife server ###########");
+        Config.readConfig();
+        Config.dumpConfig();
         listIPAddresses();
 
         // RaspberryHome WebSocketServer
@@ -46,17 +46,20 @@ public class RaspberryLife {
                 public void run() {
                 Log.add(DEBUG_TAG, "Starting Java socket server");
                 RBLSocketServer server = new RBLSocketServer();
-                server.start(Config.JAVA_SOCKET_PORT);
+                server.start(Config.get().getInt("socket.java_port"));
             }
         });
 
         // Start threads
         webServerThread.start();
         serverThread.start();
+
         // Initialize the serial connector for module communication
         SerialConnector.init();
-        DataBaseHelper.init();
-        DataBaseHelper.closeConnection();
+
+        // Initialize database
+        DataBaseHelper.setUpInitial();
+
     }
 
     private static void listIPAddresses(){
@@ -82,7 +85,7 @@ public class RaspberryLife {
                 if(address.length() <= maxLength_ipv4){
                     if(!address.equals("127.0.0.1") && !address.equals("0:0:0:0:0:0:0:1")){
                         //Log.address(DEBUG_TAG, "RBLServer on machine: " + i.getHostAddress());
-                        ipAddresses.add(address);
+                        ipAddresses.add(n.getName() + " " + address);
                     }
                 }
             }
@@ -90,6 +93,5 @@ public class RaspberryLife {
 
         Log.add(DEBUG_TAG, "Server running on " + ipAddresses.toString());
     }
-
 
 }

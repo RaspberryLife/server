@@ -25,6 +25,11 @@ public class DataBaseHelper {
         return dataList;
     }
 
+    public static void setUpInitial(){
+        init();
+        closeConnection();
+    }
+
     public static void init(){
         if(mySQLConnection == null){
             mySQLConnection = new MySQLConnection();
@@ -40,7 +45,7 @@ public class DataBaseHelper {
     }
 
     public static synchronized void writeTempData(int temp){
-        init();
+        setUpInitial();
         mySQLConnection.insertTemp(temp);
         mySQLConnection.close();
     }
