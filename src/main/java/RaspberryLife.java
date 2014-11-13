@@ -9,7 +9,9 @@ import util.Config;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.security.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -26,11 +28,10 @@ public class RaspberryLife {
 
 
     public static void main(String[] args){
-        Log.add(DEBUG_TAG,"########### RaspberryLife server ###########");
+        Log.printLogHeader();
         Config.readConfig();
-        Config.dumpConfig();
+        //Config.dumpConfig();
         listIPAddresses();
-
         // RaspberryHome WebSocketServer
         webServerThread = new Thread(new Runnable() {
             public void run() {
@@ -93,5 +94,6 @@ public class RaspberryLife {
 
         Log.add(DEBUG_TAG, "Server running on " + ipAddresses.toString());
     }
+
 
 }

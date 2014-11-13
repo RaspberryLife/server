@@ -2,6 +2,8 @@ package data;
 
 import util.Config;
 
+import java.util.Calendar;
+
 /**
  * Created by Peter Mösenthin.
  *
@@ -21,6 +23,19 @@ public class Log {
            default:
                printToConsole("[" + tag + "]: " + message);
        }
+    }
+
+    public static void addClean(String message){
+        printToConsole(message);
+    }
+
+    public static void printLogHeader(){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        addClean("########################################");
+        addClean("# RaspberryLife server                 #");
+        addClean("# " + c.getTime().toString() + "         #");
+        addClean("########################################");
     }
 
 
