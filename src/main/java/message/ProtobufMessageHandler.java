@@ -55,7 +55,7 @@ public class ProtobufMessageHandler {
                 if(serialHandler == null){
                     serialHandler = new SerialMessageHandler();
                 }
-                serialHandler.handleModuleRunInstruction(client, message);
+                serialHandler.sendModuleRunInstruction(client, message);
             }
         }
 
