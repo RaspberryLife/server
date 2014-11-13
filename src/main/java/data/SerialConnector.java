@@ -28,6 +28,7 @@ public class SerialConnector {
         try {
             mPortName = determinePortName();
             if(mPortName == null){
+                Log.add(DEBUG_TAG,"No serial port found.");
                 return;
             }
             Log.add(DEBUG_TAG,"Initializing serial port " + mPortName);
@@ -80,10 +81,12 @@ public class SerialConnector {
                     //Write data to port, in this case a "0" (zero)
                     if(mSerialPort != null){
                         mSerialPort.writeBytes(message.getBytes());
+                    } else{
+                        Log.add(DEBUG_TAG,"Failed to send message. Serial port was null");
                     }
                 }
                 catch (SerialPortException ex) {
-                    Log.add(DEBUG_TAG,"Failed to send message via serial port " + ex);
+                    Log.add(DEBUG_TAG,"Failed to send message" + ex);
                 }
             }
         });
@@ -96,23 +99,26 @@ public class SerialConnector {
     private static class SerialPortReader implements SerialPortEventListener {
         public void serialEvent(SerialPortEvent event) {
             if(event.isRXCHAR()){//If data is available
-                //Read data, if 10 bytes available
-                try {
-                    byte buffer[] = mSerialPort.readBytes(Config.SERIAL_MESSAGE_BYTE_LENGTH);
-                    if(buffer.length != 0) {
-                        String message = new String(buffer);
-                        message = message.trim();
-                        Log.add(DEBUG_TAG, "Received serial message: " + message
-                                + " Bufferlength" + "=" + buffer.length);
-                        ClientHandler.broadcastMessage(
-                                ProtoFactory.buildPlainTextMessage(
-                                        Config.SERVER_ID,
-                                        "Serial connector received message: " +
-                                                message
-                                ));
+                if(event.getEventValue() == Config.SERIAL_MESSAGE_BYTE_LENGTH){
+                    try {
+                        byte buffer[] = mSerialPort.readBytes();
+                        if(buffer.length != 0) {
+                            String message = new String(buffer);
+                            message = message.trim();
+                            Log.add(DEBUG_TAG, "Received serial message: " + message
+                                    + " BufferLength" + "=" + buffer.length);
+                            ClientHandler.broadcastMessage(
+                                    ProtoFactory.buildPlainTextMessage(
+                                            Config.SERVER_ID,
+                                            "Serial connector received message: " +
+                                                    message
+                                    ));
+                            int temp = Integer.parseInt(message.split(":")[4]);
+                            DataBaseHelper.writeTempData(temp);
+                        }
+                    }catch (SerialPortException ex) {
+                        Log.add(DEBUG_TAG, "Serial port failed on receiving message." + ex);
                     }
-                }catch (SerialPortException ex) {
-                    Log.add(DEBUG_TAG, "Serial port failed on receiving message." + ex);
                 }
             }
         }
