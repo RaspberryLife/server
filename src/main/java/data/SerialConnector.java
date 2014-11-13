@@ -1,7 +1,6 @@
 package data;
 
 import client.ClientHandler;
-import com.adamtaft.eb.EventBusService;
 import jssc.*;
 import protobuf.ProtoFactory;
 import util.Config;
