@@ -25,8 +25,9 @@ public class Config {
         String configName =  "rbl_config_ext.xml";
         String path = Config.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         String[] pathSplit = path.split("/");
+        Log.add(DEBUG_TAG, "Split 0 " + pathSplit[0]);
         String ext_path = "";
-        for(int i = 0; i <pathSplit.length -1; i++){
+        for(int i = 1; i <pathSplit.length -1; i++){
             ext_path += pathSplit[i] + "/";
         }
         ext_path += configName;
