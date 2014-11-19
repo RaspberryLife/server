@@ -2,13 +2,13 @@
 import data.DataBaseHelper;
 import data.Log;
 import data.SerialConnector;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.impl.StdSchedulerFactory;
+import scheduling.ScheduleManager;
 import server.RBLSocketServer;
 import server.RBLWebSocketServer;
 import util.Config;
 import util.NetworkUtil;
+
+
 
 /**
  * Created by Peter Mösenthin.
@@ -79,24 +79,8 @@ public class RaspberryLife {
     }
 
     public static void initScheduler(){
-        Log.add(DEBUG_TAG, "Initializing scheduler");
-        Scheduler scheduler = null;
-        try {
-            scheduler = StdSchedulerFactory.getDefaultScheduler();
-        } catch (SchedulerException e) {
-            Log.add(DEBUG_TAG, "Unable to create scheduler");
-        }
-        if(scheduler != null){
-            try {
-                scheduler.start();
-            } catch (SchedulerException e) {
-                Log.add(DEBUG_TAG, "Unable to start scheduler");
-            }
-        }
-
+        ScheduleManager sm = new ScheduleManager();
+        sm.test();
     }
-
-
-
 
 }

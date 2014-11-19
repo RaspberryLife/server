@@ -1,6 +1,4 @@
-package util;/*
- * Created by Peter Mösenthin on 13.11.2014.
- */
+package util;
 
 import data.Log;
 
@@ -10,7 +8,9 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-
+/**
+ * Created by Peter Mösenthin.
+ */
 public class NetworkUtil {
 
     public static final String DEBUG_TAG = NetworkUtil.class.getSimpleName();
