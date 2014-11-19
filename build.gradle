@@ -30,6 +30,17 @@ dependencies {
             'org.quartz-scheduler:quartz:2.2.1', // Scheduler
             'eu.agrosense.client:lib-slf4j-simple:1.7.6-NB80', // Logging facade (used for Quartz)
             'commons-configuration:commons-configuration:1.7', // Configuration
-            'com.google.api-client:google-api-client-java6:1.19.0' //Google client api (Calendar)
+
+            //GOOGLE APIs
+            // Java client api
+            'com.google.api-client:google-api-client-java6:1.19.0',
+            // Jackson api
+            'com.google.http-client:google-http-client-jackson2:1.19.0',
+            // Http client
+            'com.google.http-client:google-http-client:1.19.0',
+            //Calendar service
+            'com.google.apis:google-api-services-calendar:v3-rev105-1.19.0'
+
+
     )
 }

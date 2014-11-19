@@ -1,6 +1,4 @@
-package data;
-
-import util.Config;
+package util;
 
 import java.util.Calendar;
 

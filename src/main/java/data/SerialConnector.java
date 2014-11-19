@@ -4,6 +4,7 @@ import client.ClientHandler;
 import jssc.*;
 import protobuf.ProtoFactory;
 import util.Config;
+import util.Log;
 
 /**
  * Created by Peter Mösenthin.
@@ -25,7 +26,7 @@ public class SerialConnector {
         try {
             mPortName = determinePortName();
             if(mPortName == null){
-                Log.add(DEBUG_TAG,"No serial port found.");
+                Log.add(DEBUG_TAG, "No serial port found.");
                 return;
             }
             Log.add(DEBUG_TAG,"Initializing serial port " + mPortName);

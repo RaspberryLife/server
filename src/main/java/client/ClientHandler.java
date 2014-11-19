@@ -1,6 +1,6 @@
 package client;
 
-import data.Log;
+import util.Log;
 import interfaces.ConnectionListener;
 import org.webbitserver.WebSocketConnection;
 import protobuf.RblProto.*;

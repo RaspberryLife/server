@@ -3,7 +3,7 @@ package server;
 import client.ClientHandler;
 import client.WebSocketClient;
 import com.google.protobuf.InvalidProtocolBufferException;
-import data.Log;
+import util.Log;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
 import protobuf.RblProto.*;

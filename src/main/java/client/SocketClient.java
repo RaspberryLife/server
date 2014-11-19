@@ -1,6 +1,6 @@
 package client;
 
-import data.Log;
+import util.Log;
 import protobuf.ProtoFactory;
 import message.ProtobufMessageHandler;
 import protobuf.RblProto.*;

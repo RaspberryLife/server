@@ -1,6 +1,6 @@
 
 import data.DataBaseHelper;
-import data.Log;
+import util.Log;
 import data.SerialConnector;
 import scheduling.ScheduleManager;
 import server.RBLSocketServer;
@@ -81,6 +81,10 @@ public class RaspberryLife {
     public static void initScheduler(){
         ScheduleManager sm = new ScheduleManager();
         sm.test();
+    }
+
+    public static void initGoogleCalendar(){
+
     }
 
 }

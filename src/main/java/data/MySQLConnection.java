@@ -1,6 +1,7 @@
 package data;
 
 import util.Config;
+import util.Log;
 
 import java.sql.*;
 import java.util.Properties;
@@ -42,7 +43,7 @@ public class MySQLConnection {
                     connectionProps);
 
         } catch(ClassNotFoundException e) {
-            Log.add(DEBUG_TAG,"Could not open database: " + e);
+            Log.add(DEBUG_TAG, "Could not open database: " + e);
             return false;
 
         } catch(SQLException e) {

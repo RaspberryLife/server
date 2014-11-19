@@ -1,8 +1,7 @@
 package server;
 
 import client.ClientHandler;
-import data.Log;
-import util.Config;
+import util.Log;
 
 import java.io.IOException;
 import java.net.ServerSocket;

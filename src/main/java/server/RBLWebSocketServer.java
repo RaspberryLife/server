@@ -1,6 +1,6 @@
 package server;
 
-import data.Log;
+import util.Log;
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 import org.webbitserver.handler.StaticFileHandler;

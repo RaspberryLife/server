@@ -1,7 +1,7 @@
 package message;
 
 import client.RaspberryLifeClient;
-import data.Log;
+import util.Log;
 import data.SerialConnector;
 import protobuf.RblProto.*;
 

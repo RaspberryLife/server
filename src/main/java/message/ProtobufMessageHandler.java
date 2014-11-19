@@ -2,7 +2,7 @@ package message;
 
 import client.RaspberryLifeClient;
 import data.DataBaseHelper;
-import data.Log;
+import util.Log;
 import protobuf.ProtoFactory;
 import util.NoAuth;
 import util.Config;

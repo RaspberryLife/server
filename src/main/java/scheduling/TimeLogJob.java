@@ -1,6 +1,6 @@
 package scheduling;
 
-import data.Log;
+import util.Log;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

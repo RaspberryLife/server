@@ -1,7 +1,5 @@
 package util;
 
-import data.Log;
-
 /**
  * Created by Peter Mösenthin.
  *
