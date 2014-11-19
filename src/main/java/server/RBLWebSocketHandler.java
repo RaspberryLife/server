@@ -47,6 +47,7 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
+
         //pass message to receiving client
         if(parsedMessage != null) {
                 WebSocketClient client = clientHandler.getWebSocketClient(connection);

@@ -16,11 +16,12 @@ public class MySQLConnection {
     private Connection mConnection;
 
     public static final String DEBUG_TAG = MySQLConnection.class.getSimpleName();
+    public static final boolean D = false;
 
     public boolean open(){
         Properties connectionProps = new Properties();
-        connectionProps.put("user", Config.MYSQL_USER);
-        connectionProps.put("password", Config.MYSQL_PASSWORD);
+        connectionProps.put("user", Config.get().getString("database.user"));
+        connectionProps.put("password", Config.get().getString("database.password"));
 
         /*
         String url = Config.MYSQL_HOST + Config.MYSQL_DB_NAME
@@ -34,8 +35,10 @@ public class MySQLConnection {
             //mConnection = DriverManager.getConnection(url);
             mConnection = DriverManager.getConnection(
                     "jdbc:mysql://" +
-                            Config.MYSQL_HOST +
-                            ":" + Config.MYSQL_PORT + "/",
+                            Config.get().getString("database.host")
+                            + ":"
+                            + Config.get().getString("database.port")
+                            + "/",
                     connectionProps);
 
         } catch(ClassNotFoundException e) {
@@ -50,31 +53,31 @@ public class MySQLConnection {
     }
 
     public void createDatabase(){
-        Log.add(DEBUG_TAG,"Creating database");
+        if(D){Log.add(DEBUG_TAG,"Creating database");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
-            statement.execute(
-                    "CREATE DATABASE IF NOT EXISTS " + Config.MYSQL_DB_NAME);
+            statement.execute("CREATE DATABASE IF NOT EXISTS "
+                    + Config.get().getString("database.db"));
         } catch (SQLException e) {
             Log.add(DEBUG_TAG, "Could not create database: " + e);
         }
     }
 
     public void selectDatabase(){
-        Log.add(DEBUG_TAG,"selecting database");
+        if(D){Log.add(DEBUG_TAG,"selecting database");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
             statement.execute(
-                    "USE " + Config.MYSQL_DB_NAME);
+                    "USE " + Config.get().getString("database.db"));
         } catch (SQLException e) {
             Log.add(DEBUG_TAG, "Could not select database: " + e);
         }
     }
 
     public void createTable(String name){
-        Log.add(DEBUG_TAG,"Creating table");
+        if(D){Log.add(DEBUG_TAG,"Creating table");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
@@ -86,7 +89,7 @@ public class MySQLConnection {
     }
 
     public void close(){
-        Log.add(DEBUG_TAG,"Closing connection");
+        if(D){Log.add(DEBUG_TAG,"Closing connection");}
         try {
             mConnection.close();
         } catch (SQLException e) {
@@ -95,7 +98,7 @@ public class MySQLConnection {
     }
 
     public void insertTemp(int temp){
-        Log.add(DEBUG_TAG,"Inserting temperature data");
+        if(D){Log.add(DEBUG_TAG,"Inserting temperature data");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
@@ -107,7 +110,7 @@ public class MySQLConnection {
     }
 
     public void test() {
-        Log.add(DEBUG_TAG,"Testing connection!");
+        if(D){Log.add(DEBUG_TAG,"Testing connection!");}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();

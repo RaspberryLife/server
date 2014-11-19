@@ -65,7 +65,7 @@ public class ProtobufMessageHandler {
                 DataBaseHelper dbh = new DataBaseHelper();
                 RBLMessage m =
                         ProtoFactory.buildDataSetMessage(
-                                Config.SERVER_ID,
+                                Config.get().getString("server.id"),
                                 "livingroom_sensormodule",
                                 "temp",
                                 dbh.getDataList(50),
