@@ -23,9 +23,11 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile fileTree(dir: 'libs', include: '*.jar')
     compile(
-            'org.scream3r:jssc:2.8.0',
-            'mysql:mysql-connector-java:5.1.33',
-            'org.webbitserver:webbit:0.4.15',
-            'com.google.protobuf:protobuf-java:2.6.1'
+            'org.scream3r:jssc:2.8.0', // Serial connection
+            'mysql:mysql-connector-java:5.1.33', // MySQL conenction
+            'org.webbitserver:webbit:0.4.15', // Websocket server
+            'com.google.protobuf:protobuf-java:2.6.1', // Protocol buffers
+            'net.engio:mbassador:1.2.0', // Event bus
+            'org.quartz-scheduler:quartz:2.2.1' // Scheduler
     )
 }
