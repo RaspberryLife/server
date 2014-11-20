@@ -73,6 +73,7 @@ public class SerialConnector {
      * @param message
      */
     public static void send(final String message){
+        Log.add(DEBUG_TAG,"Sending serial message " + message + " Length=" + message.getBytes().length);
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {

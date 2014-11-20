@@ -59,7 +59,6 @@ public class SerialMessageHandler {
     }
 
     private void sendSerialMessage(String message){
-        Log.add(DEBUG_TAG, "Sending serial message " + message);
         SerialConnector.send(message);
     }
 
