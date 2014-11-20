@@ -98,14 +98,14 @@ public class SerialConnector {
         int messageLength = Config.get().getInt("serial.message_byte_length");
         public void serialEvent(SerialPortEvent event) {
             if(event.isRXCHAR()){//If data is available
+                Log.add(DEBUG_TAG, "Received serial event. Value=" + event.getEventValue() + " Type=" +event.getEventType());
                 if(event.getEventValue() == messageLength){
                     try {
                         byte buffer[] = mSerialPort.readBytes();
                         if(buffer.length != 0) {
                             String message = new String(buffer);
                             message = message.trim();
-                            Log.add(DEBUG_TAG, "Received serial message: " + message
-                                    + " BufferLength" + "=" + buffer.length);
+                            Log.add(DEBUG_TAG, "Received serial message: " + message);
                             ClientHandler.broadcastMessage(
                                     ProtoFactory.buildPlainTextMessage(
                                             Config.get().getString("server.id"),
