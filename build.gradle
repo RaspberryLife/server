@@ -28,7 +28,7 @@ dependencies {
             'com.google.protobuf:protobuf-java:2.6.1', // Protocol buffers
             'net.engio:mbassador:1.2.0', // Event bus
             'org.quartz-scheduler:quartz:2.2.1', // Scheduler
-            'eu.agrosense.client:lib-slf4j-simple:1.7.6-NB80', // Logging facade (used for Quartz)
+            //'eu.agrosense.client:lib-slf4j-simple:1.7.6-NB80', // Logging facade (used for Quartz)
             'commons-configuration:commons-configuration:1.7', // Configuration
 
             //GOOGLE APIs
