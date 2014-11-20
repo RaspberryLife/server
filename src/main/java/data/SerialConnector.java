@@ -112,8 +112,10 @@ public class SerialConnector {
                                             "Serial connector received message: " +
                                                     message
                                     ));
-                            int temp = Integer.parseInt(message.split(":")[4]);
-                            DataBaseHelper.writeTempData(temp);
+
+                            // Save value to database
+                            //int temp = Integer.parseInt(message.split(":")[4]);
+                            //DataBaseHelper.writeTempData(temp);
                         }
                     }catch (SerialPortException ex) {
                         Log.add(DEBUG_TAG, "Serial port failed on receiving message." + ex);
