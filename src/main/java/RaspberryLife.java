@@ -83,8 +83,4 @@ public class RaspberryLife {
         sm.test();
     }
 
-    public static void initGoogleCalendar(){
-
-    }
-
 }
