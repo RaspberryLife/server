@@ -135,15 +135,17 @@ public class SocketClient extends RaspberryLifeClient {
     @Override
     public void onConnectionDenied(String reason){
         RBLMessage m =
-                ProtoFactory.buildAuthDeniedMessage(Config.get().getString("server.id"),
-                        "REASON=" + reason);
+                ProtoFactory.buildAuthMessage(Config.get().getString("server.id"),
+                        RBLMessage.MessageFlag.RESPONSE,
+                        "Client denied. REASON=" + reason);
         sendMessage(m);
     }
 
     @Override
     public void onConnectionAccepted(){
         RBLMessage m =
-                ProtoFactory.buildAuthAcceptMessage(Config.get().getString("server.id"),
+                ProtoFactory.buildAuthMessage(Config.get().getString("server.id"),
+                        RBLMessage.MessageFlag.RESPONSE,
                         "Accepted client with id: "
                                 + getId()
                                 + " TIME= " + System.currentTimeMillis());

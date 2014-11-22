@@ -3,6 +3,7 @@ package data;
 import client.ClientHandler;
 import jssc.*;
 import protobuf.ProtoFactory;
+import protobuf.RblProto;
 import util.Config;
 import util.Log;
 
@@ -109,10 +110,10 @@ public class SerialConnector {
                             ClientHandler.broadcastMessage(
                                     ProtoFactory.buildPlainTextMessage(
                                             Config.get().getString("server.id"),
+                                            RblProto.RBLMessage.MessageFlag.RESPONSE,
                                             "Serial connector received message: " +
                                                     message
                                     ));
-
                             // Save value to database
                             //int temp = Integer.parseInt(message.split(":")[4]);
                             //DataBaseHelper.writeTempData(temp);

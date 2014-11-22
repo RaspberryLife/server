@@ -12,39 +12,45 @@ import protobuf.RblProto.*;
  */
 public class ProtoFactory {
 
-    public static final RBLMessage.DataType DATA_TYPE_FLOAT =
-            RBLMessage.DataType.FLOAT;
-    public static final RBLMessage.DataType DATA_TYPE_INTEGER =
-            RBLMessage.DataType.INTEGER;
-    public static final RBLMessage.DataType DATA_TYPE_STRING =
-            RBLMessage.DataType.STRING;
-
+    //==========================================================================
+    // BASE
+    //==========================================================================
 
     private static RBLMessage.Builder createBaseMessage(
             String id,
+            RBLMessage.MessageFlag messageFlag,
             RBLMessage.MessageType messageType){
         return RBLMessage.newBuilder()
-                .setMType(messageType)
-                .setId(id);
+                .setId(id)
+                .setMessageType(messageType)
+                .setMessageFlag(messageFlag);
     }
+
+    //==========================================================================
+    // PLAIN TEXT
+    //==========================================================================
 
     public static RBLMessage buildPlainTextMessage(
             String id,
+            RBLMessage.MessageFlag flag,
             String plainText){
-        return createBaseMessage(id, RBLMessage.MessageType.PLAIN_TEXT)
+        return createBaseMessage(id, flag, RBLMessage.MessageType.PLAIN_TEXT)
                 .setPlainText(
                         RBLMessage.PlainText.newBuilder()
                                 .setText(plainText))
                 .build();
     }
 
+    //==========================================================================
+    // INSTRUCTION
+    //==========================================================================
+
     public static RBLMessage.Instruction.Builder buildInstructionMessage(
             int instructionId,
             List<String> stringParameters,
             List<Integer> intParameters){
-         RBLMessage.Instruction.Builder instruction =
-                 RBLMessage.Instruction.newBuilder();
-                instruction.setInstructionID(instructionId);
+        RBLMessage.Instruction.Builder instruction = RBLMessage.Instruction.newBuilder();
+        instruction.setInstructionId(instructionId);
         if(stringParameters != null){
             instruction.addAllStringParameters(stringParameters);
         }
@@ -54,168 +60,155 @@ public class ProtoFactory {
         return instruction;
     }
 
-
     public static RBLMessage buildRunInstructionMessage(
             String id,
-            RBLMessage.ModelType modelType,
-            int targetModuleId,
+            RBLMessage.MessageFlag messageFlag,
+            RBLMessage.Actuator actuator,
             RBLMessage.Instruction.Builder instruction){
         return createBaseMessage(
-                id,
+                id, messageFlag,
                 RBLMessage.MessageType.RUN_INSTRUCTION)
                 .setRunInstruction(RBLMessage.RunInstruction.newBuilder()
-                        .setTargetModulID(targetModuleId)
-                        .setModeltype(modelType)
-                        .setInstruction(instruction)
-
+                                .setActuator(actuator)
+                                .setInstruction(instruction)
                 ).build();
     }
 
-    public static RBLMessage buildRegisterDataFieldMessage(
-            String id,
-            String fieldName,
-            RBLMessage.DataType dataType){
-       return createBaseMessage(
-               id,
-               RBLMessage.MessageType.REGISTER_DATA_FIELD)
-               .setRegisterDataField(RBLMessage.RegisterDataField.newBuilder()
-                       .setDType(dataType)
-                       .setFieldName(fieldName)
-               ).build();
+    //==========================================================================
+    // LOGIC
+    //==========================================================================
+
+    public static RBLMessage.Actuator.Builder buildActuator(
+            RBLMessage.ActuatorType actuatorType,
+            int actuatorId){
+        return RBLMessage.Actuator.newBuilder()
+                .setActuatorId(actuatorId)
+                .setActuatorType(actuatorType);
     }
 
-    public static RBLMessage.Data.Builder createDataMessge(
+    public static RBLMessage.Condition.Builder buildCondition(
+            int fieldId,
+            int thresholdOver,
+            int thresholdUnder,
+            boolean state){
+        return RBLMessage.Condition.newBuilder()
+                .setFieldId(fieldId)
+                .setState(state)
+                .setThresholdOver(thresholdOver)
+                .setThresholdUnder(thresholdUnder);
+    }
+
+    public static RBLMessage buildLogicMessage(
+            String id,
+            RBLMessage.MessageFlag messageFlag,
+            String name,
+            RBLMessage.Actuator.Builder initiator,
+            RBLMessage.Actuator.Builder receiver,
+            RBLMessage.Condition.Builder condition
+    ){
+        RBLMessage.Logic.Builder logicMessage = RBLMessage.Logic.newBuilder();
+        logicMessage.setName(name);
+        logicMessage.setCondition(condition);
+        logicMessage.setInitiator(initiator);
+        logicMessage.setReceiver(receiver);
+        return createBaseMessage(
+                id, messageFlag,
+                RBLMessage.MessageType.LOGIC)
+                .setLogic(logicMessage)
+                .build();
+    }
+
+
+    //==========================================================================
+    // DATA
+    //==========================================================================
+
+    public static RBLMessage buildSetDataMessage(
+            String id,
+            RBLMessage.MessageFlag messageFlag,
+            RBLMessage.Actuator actuator,
+            int fieldId,
+            RBLMessage.Data data){
+        RBLMessage.SetData.Builder setDataMessage = RBLMessage.SetData.newBuilder();
+        setDataMessage.setData(data);
+        setDataMessage.setFieldId(fieldId);
+        setDataMessage.setActuator(actuator);
+        return createBaseMessage(
+                id, messageFlag,
+                RBLMessage.MessageType.SET_DATA)
+                .setSetData(setDataMessage).build();
+    }
+
+    public static RBLMessage buildGetDataMessage(
+            String id,
+            RBLMessage.MessageFlag messageFlag,
+            RBLMessage.Actuator actuator,
+            int fieldId,
+            RBLMessage.Range.Builder range
+    ){
+        RBLMessage.GetData.Builder getDataMessage = RBLMessage.GetData.newBuilder();
+        getDataMessage.setFieldId(fieldId);
+        getDataMessage.setActuator(actuator);
+        if(range != null){
+            getDataMessage.setRange(range);
+        }
+        return createBaseMessage(
+                id, messageFlag,
+                RBLMessage.MessageType.GET_DATA)
+                .setGetData(getDataMessage).build();
+    }
+
+    public static RBLMessage.Range.Builder buildRange(
+            int count,
+            String startDateTime,
+            String endDateTime){
+        return RBLMessage.Range.newBuilder()
+                .setCount(count)
+                .setStartDateTime(startDateTime)
+                .setEndDateTime(endDateTime);
+    }
+
+
+    public static RBLMessage.Data.Builder buildDataMessage(
+            int fieldId,
             RBLMessage.DataType dataType,
-            String dateTime,
-            Object data){
+            Iterable<String> stringData,
+            Iterable<Integer> int32Data,
+            Iterable<Float> floatData){
         RBLMessage.Data.Builder dataMessage = RBLMessage.Data.newBuilder();
-        dataMessage.setDType(dataType)
-                .setDateTime(dateTime);
-        if(dataType == RBLMessage.DataType.FLOAT){
-            if(data instanceof Float) {
-                dataMessage.setFloatData((Float) data);
-            }
+        dataMessage.setDataType(dataType);
+        dataMessage.setFieldId(fieldId);
+
+        if(stringData != null && dataType == RBLMessage.DataType.STRING){
+            dataMessage.addAllStringData(stringData);
         }
-        else if(dataType == RBLMessage.DataType.INTEGER){
-            if(data instanceof Integer){
-                dataMessage.setInt32Data((Integer) data);
-            }
+
+        if(int32Data != null && dataType == RBLMessage.DataType.INTEGER){
+            dataMessage.addAllInt32Data(int32Data);
         }
-        else if(dataType == RBLMessage.DataType.STRING){
-            if(data instanceof String){
-                dataMessage.setStringData((String) data);
-            }
+
+        if(floatData != null && dataType == RBLMessage.DataType.FLOAT){
+            dataMessage.addAllFloatData(floatData);
         }
 
         return dataMessage;
     }
 
-    public static RBLMessage buildUpdateDataFieldMessage(
-            String id,
-            String fieldName,
-            RBLMessage.Data.Builder data){
-        return createBaseMessage(
-                id,
-                RBLMessage.MessageType.UPDATE_DATA_FIELD)
-                .setUpdateDataField(RBLMessage.UpdateDataField.newBuilder()
-                        .setFieldName(fieldName)
-                        .setData(data)
-                ).build();
-    }
+    //==========================================================================
+    // AUTH
+    //==========================================================================
 
-    public static RBLMessage buildGetDataSetMessage(
+    public static RBLMessage buildAuthMessage(
             String id,
-            String modulId,
-            String fieldId,
-            int count,
-            String startDateTime,
-            String endDateTime){
-        RBLMessage.Builder message = createBaseMessage(id,
-                RBLMessage.MessageType.GET_DATA_SET);
-        RBLMessage.GetDataSet.Builder gds = RBLMessage.GetDataSet.newBuilder();
-        gds.setModulID(modulId);
-        gds.setFieldID(fieldId);
-        if(count > 0){
-            gds.setCount(count);
-        }
-        if(!startDateTime.isEmpty()){
-            gds.setStartDateTime(startDateTime);
-        }
-        if(!endDateTime.isEmpty()){
-            gds.setEndDateTime(endDateTime);
-        }
-        message.setGetDataSet(gds);
-        return message.build();
-    }
-
-    public static RBLMessage buildDataSetMessage(
-            String id,
-            String modulId,
-            String fieldId,
-            List<? super Object> dataList,
-            RBLMessage.DataType dataType){
-        RBLMessage.Builder message =
-                createBaseMessage(id, RBLMessage.MessageType.DATA_SET);
-        RBLMessage.DataSet.Builder dataSet = RBLMessage
-                .DataSet
-                .newBuilder();
-        dataSet.setModulID(modulId);
-        dataSet.setFieldID(fieldId);
-        RBLMessage.Data.Builder data = RBLMessage.Data
-                .newBuilder();
-        if(dataType == RBLMessage.DataType.FLOAT){
-            data.setDType(dataType);
-            for(Object o : dataList) {
-                data.setFloatData((Float) o);
-                dataSet.addData(data);
-            }
-        }
-        else if(dataType == RBLMessage.DataType.INTEGER){
-            data.setDType(dataType);
-            for(Object o : dataList) {
-                data.setInt32Data((Integer) o);
-                dataSet.addData(data);
-            }
-        }
-        else if(dataType == RBLMessage.DataType.STRING){
-            data.setDType(dataType);
-            for(Object o : dataList) {
-                data.setStringData((String) o);
-                dataSet.addData(data);
-            }
-        }
-        message.setDataSet(dataSet);
-        return message.build();
-    }
-
-    public static RBLMessage buildAuthRequestMessage(
-            String id,
+            RBLMessage.MessageFlag messageFlag,
             String key){
-        return createBaseMessage(id, RBLMessage.MessageType.AUTH_REQUEST)
+        return createBaseMessage(id, messageFlag, RBLMessage.MessageType.AUTH)
                 .setPlainText(
                         RBLMessage.PlainText.newBuilder()
                         .setText(key))
                 .build();
     }
 
-    public static RBLMessage buildAuthDeniedMessage(
-            String id,
-            String reason){
-        return createBaseMessage(id, RBLMessage.MessageType.AUTH_DENIED)
-                .setPlainText(
-                        RBLMessage.PlainText.newBuilder()
-                        .setText(reason))
-                .build();
-    }
 
-    public static RBLMessage buildAuthAcceptMessage(
-            String id,
-            String message){
-        return createBaseMessage(id, RBLMessage.MessageType.AUTH_ACCEPT)
-                .setPlainText(
-                        RBLMessage.PlainText.newBuilder()
-                                .setText(message)
-                )
-                .build();
-    }
+
 }

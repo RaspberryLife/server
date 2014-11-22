@@ -23,9 +23,9 @@ public class SerialMessageHandler {
         RBLMessage.RunInstruction rI = message.getRunInstruction();
         String serialMessage = "";
         if(rI != null){
-            int modelType = rI.getModeltype().getNumber();
-            int targetModuleId = rI.getTargetModulID();
-            int instructionId = rI.getInstruction().getInstructionID();
+            int modelType = rI.getInstruction().getModuleType().getNumber();
+            int targetModuleId = rI.getInstruction().getModuleId();
+            int instructionId = rI.getInstruction().getInstructionId();
             List<Integer> intParams = rI.getInstruction().getIntParametersList();
             List<String> stringParams = rI.getInstruction().getStringParametersList();
 

@@ -30,7 +30,7 @@ public class ProtobufMessageHandler {
      */
     public void handleMessage(RBLMessage message){
         // Auth message
-        if(message.getMType() == RBLMessage.MessageType.AUTH_REQUEST){
+        if(message.getMessageType() == RBLMessage.MessageType.AUTH){
             String key = message.getPlainText().getText();
             boolean accepted = NoAuth.verify(key);
             client.setId(message.getId());
@@ -42,15 +42,15 @@ public class ProtobufMessageHandler {
         }
 
         // Plaintext message
-        else if(message.getMType() == RBLMessage.MessageType.PLAIN_TEXT) {
+        else if(message.getMessageType() == RBLMessage.MessageType.PLAIN_TEXT) {
             String text = message.getPlainText().getText();
             if(client.isAccepted){
-                Log.add(DEBUG_TAG, "Client " + client.getId() + " says " + text);
+                Log.add(DEBUG_TAG, "Client " + client.getId() + " says: " + text);
             }
         }
 
         // RunInstruction message
-        else if(message.getMType() == RBLMessage.MessageType.RUN_INSTRUCTION) {
+        else if(message.getMessageType() == RBLMessage.MessageType.RUN_INSTRUCTION) {
             if(client.isAccepted){
                 if(serialHandler == null){
                     serialHandler = new SerialMessageHandler();
@@ -60,8 +60,9 @@ public class ProtobufMessageHandler {
         }
 
         // GetDataSet message
-        else if(message.getMType() == RBLMessage.MessageType.GET_DATA_SET){
+        else if(message.getMessageType() == RBLMessage.MessageType.GET_DATA){
             if(client.isAccepted) {
+                /*
                 DataBaseHelper dbh = new DataBaseHelper();
                 RBLMessage m =
                         ProtoFactory.buildDataSetMessage(
@@ -72,6 +73,7 @@ public class ProtobufMessageHandler {
                                 ProtoFactory.DATA_TYPE_FLOAT
                         );
                 client.sendMessage(m);
+                */
             } else {
                 Log.add(DEBUG_TAG,
                         "Unable to send message. Client was not accepted"
