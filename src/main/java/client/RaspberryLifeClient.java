@@ -21,7 +21,7 @@ public abstract class RaspberryLifeClient {
 
 
     public void setId(String id) {
-        if(this.id == null || this.id == "") {
+        if(this.id == null || this.id.isEmpty()) {
             this.id = id;
         }
     }

@@ -1,11 +1,10 @@
 package message;
 
 import client.RaspberryLifeClient;
-import data.DataBaseHelper;
+import system.InstructionHandler;
+import system.SystemManager;
 import util.Log;
-import protobuf.ProtoFactory;
 import util.NoAuth;
-import util.Config;
 import protobuf.RblProto.*;
 
 /**
@@ -17,12 +16,10 @@ public class ProtobufMessageHandler {
 
     private RaspberryLifeClient client;
     public static final String DEBUG_TAG = ProtobufMessageHandler.class.getSimpleName();
-    private SerialMessageHandler serialHandler;
 
     public ProtobufMessageHandler(RaspberryLifeClient client){
         this.client = client;
     }
-
 
     /**
      * Handle the actual RBLMessage.
@@ -52,28 +49,15 @@ public class ProtobufMessageHandler {
         // RunInstruction message
         else if(message.getMessageType() == RBLMessage.MessageType.RUN_INSTRUCTION) {
             if(client.isAccepted){
-                if(serialHandler == null){
-                    serialHandler = new SerialMessageHandler();
-                }
-                serialHandler.sendModuleRunInstruction(client, message);
+                SystemManager.getInstance().getInstructionHandler()
+                        .handleRunInstruction(message);
             }
         }
 
         // GetDataSet message
         else if(message.getMessageType() == RBLMessage.MessageType.GET_DATA){
             if(client.isAccepted) {
-                /*
-                DataBaseHelper dbh = new DataBaseHelper();
-                RBLMessage m =
-                        ProtoFactory.buildDataSetMessage(
-                                Config.get().getString("server.id"),
-                                "livingroom_sensormodule",
-                                "temp",
-                                dbh.getDataList(50),
-                                ProtoFactory.DATA_TYPE_FLOAT
-                        );
-                client.sendMessage(m);
-                */
+                //TODO implement
             } else {
                 Log.add(DEBUG_TAG,
                         "Unable to send message. Client was not accepted"
@@ -81,8 +65,9 @@ public class ProtobufMessageHandler {
                 );
             }
         }
-
     }
+
+
 
 
 }

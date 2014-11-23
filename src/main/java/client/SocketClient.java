@@ -35,8 +35,7 @@ public class SocketClient extends RaspberryLifeClient {
             inputStream = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             Log.add(DEBUG_TAG,
-                    "Client: Could not set up network streams");
-            e.printStackTrace();
+                    "Client: Could not set up network streams. " + e.getMessage());
         }
         startReadThread();
     }
@@ -72,15 +71,17 @@ public class SocketClient extends RaspberryLifeClient {
                     } catch (IOException e) {
                         read = false;
                         Log.add(DEBUG_TAG,
-                                "Client could not read message " +
-                                        "ID=" + getId()
+                                "Client could not read message "
+                                        + "ID=" + getId()
+                                        + " " + e.getMessage()
                         );
                         readThread.interrupt();
                         if(e.getMessage().equalsIgnoreCase("Connection reset")){
                             closeConnection();
                             Log.add(DEBUG_TAG,
-                                    "Client reset connection " +
-                                            "ID=" + getId()
+                                    "Client reset connection "
+                                            + "ID=" + getId()
+                                            + " " + e.getMessage()
                             );
                         }
                         //e.printStackTrace();
@@ -88,6 +89,7 @@ public class SocketClient extends RaspberryLifeClient {
                         Log.add(DEBUG_TAG,
                                 "Client could not cast message "
                                         + "ID=" + getId()
+                                        + " " + e.getMessage()
                         );
 
                     }
@@ -104,7 +106,9 @@ public class SocketClient extends RaspberryLifeClient {
         } catch (IOException e) {
             Log.add(DEBUG_TAG,
                     "Client could not write message" +
-                            "ID=" + getId());
+                            "ID=" + getId()
+                            + " " + e.getMessage()
+            );
             closeConnection();
             e.printStackTrace();
         }
@@ -126,6 +130,7 @@ public class SocketClient extends RaspberryLifeClient {
             Log.add(DEBUG_TAG,
                     "Client could not close connection" +
                             "ID=" + getId()
+                            + " " + e.getMessage()
             );
             e.printStackTrace();
         }
@@ -135,7 +140,7 @@ public class SocketClient extends RaspberryLifeClient {
     @Override
     public void onConnectionDenied(String reason){
         RBLMessage m =
-                ProtoFactory.buildAuthMessage(Config.get().getString("server.id"),
+                ProtoFactory.buildAuthMessage(Config.getConf().getString("server.id"),
                         RBLMessage.MessageFlag.RESPONSE,
                         "Client denied. REASON=" + reason);
         sendMessage(m);
@@ -144,7 +149,7 @@ public class SocketClient extends RaspberryLifeClient {
     @Override
     public void onConnectionAccepted(){
         RBLMessage m =
-                ProtoFactory.buildAuthMessage(Config.get().getString("server.id"),
+                ProtoFactory.buildAuthMessage(Config.getConf().getString("server.id"),
                         RBLMessage.MessageFlag.RESPONSE,
                         "Accepted client with id: "
                                 + getId()

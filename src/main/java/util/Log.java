@@ -23,6 +23,22 @@ public class Log {
        }
     }
 
+    public static void add(String tag,String message, boolean showInConsole){
+        if(showInConsole){
+            add(tag, message);
+        }else{
+            //TODO write only to logfile
+        }
+    }
+
+    public static void add(String tag, String message, Exception e){
+        message += "Exception: "
+                + e.getClass().getSimpleName() + " - "
+                + e.getMessage();
+        add(tag, message);
+    }
+
+
     public static void addClean(String message){
         printToConsole(message);
     }

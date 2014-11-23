@@ -1,9 +1,11 @@
-package data;
+package server;
 
-import client.ClientHandler;
+import com.google.common.eventbus.Subscribe;
 import jssc.*;
-import protobuf.ProtoFactory;
-import protobuf.RblProto;
+import message.ModuleInstruction;
+import message.SerialMessage;
+import message.SerialMessageHandler;
+import system.EventBusService;
 import util.Config;
 import util.Log;
 
@@ -14,29 +16,34 @@ import util.Log;
  */
 public class SerialConnector {
 
-    private static SerialPort mSerialPort = null;
-    private static String mPortName = null;
+    private SerialPort mSerialPort = null;
+    private String mPortName = null;
+    private int messageLength;
 
 
-    public static final String DEBUG_TAG = SerialConnector.class.getSimpleName();
+
+    public final String DEBUG_TAG = SerialConnector.class.getSimpleName();
 
     /**
      * Sets up the serial port and opens it.
      */
-    public static void init(){
+    public void init(){
+        mPortName = determinePortName();
+        if(mPortName == null){
+            Log.add(DEBUG_TAG, "No serial port found.");
+            return;
+        }
+        messageLength = Config.getConf().getInt("serial.message_byte_length");
+        EventBusService.register(new SerialMessageHandler());
+        EventBusService.register(this);
         try {
-            mPortName = determinePortName();
-            if(mPortName == null){
-                Log.add(DEBUG_TAG, "No serial port found.");
-                return;
-            }
-            Log.add(DEBUG_TAG,"Initializing serial port " + mPortName);
+            Log.add(DEBUG_TAG,"Opening serial port " + mPortName);
             mSerialPort = new SerialPort(mPortName);
             mSerialPort.openPort();
-            mSerialPort.setParams(Config.get().getInt("serial.baudrate"),
-                    Config.get().getInt("serial.data_bits"),
-                    Config.get().getInt("serial.stop_bits"),
-                    Config.get().getInt("serial.parity"));
+            mSerialPort.setParams(Config.getConf().getInt("serial.baudrate"),
+                    Config.getConf().getInt("serial.data_bits"),
+                    Config.getConf().getInt("serial.stop_bits"),
+                    Config.getConf().getInt("serial.parity"));
             int mask = SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS
                     + SerialPort.MASK_DSR;
             mSerialPort.setEventsMask(mask);
@@ -46,7 +53,7 @@ public class SerialConnector {
         }
     }
 
-    public static void reset(){
+    public void reset(){
         if(mSerialPort != null){
             try {
                 mSerialPort.closePort();
@@ -57,24 +64,26 @@ public class SerialConnector {
 
     }
 
-    private static String determinePortName(){
-        String[] availiablePorts = SerialPortList.getPortNames();
+    private String determinePortName(){
+        String[] availablePorts = SerialPortList.getPortNames();
         String portName = null;
-        for (String port : availiablePorts) {
+        for (String port : availablePorts) {
             Log.add(DEBUG_TAG, "Found serial Port " + port);
         }
-        if(availiablePorts.length > 0){
-            portName = availiablePorts[0];
+        if(availablePorts.length > 0){
+            portName = availablePorts[0];
         }
         return portName;
     }
 
     /**
-     * Send a string message via the serial connection.
-     * @param message
+     * Send a message via the serial connection.
      */
-    public static void send(final String message){
-        Log.add(DEBUG_TAG,"Sending serial message " + message + " Length=" + message.getBytes().length);
+    @Subscribe
+    public void send(ModuleInstruction instruction){
+        final String message = instruction.build();
+        Log.add(DEBUG_TAG,"Sending serial message " + message
+                + " Length=" + message.getBytes().length);
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -96,8 +105,7 @@ public class SerialConnector {
     /**
      * Class to handle incoming serial messages.
      */
-    private static class SerialPortReader implements SerialPortEventListener {
-        int messageLength = Config.get().getInt("serial.message_byte_length");
+    private class SerialPortReader implements SerialPortEventListener {
         public void serialEvent(SerialPortEvent event) {
             if(event.isRXCHAR()){//If data is available
                 if(event.getEventValue() == messageLength){
@@ -106,17 +114,7 @@ public class SerialConnector {
                         if(buffer.length != 0) {
                             String message = new String(buffer);
                             message = message.trim();
-                            Log.add(DEBUG_TAG, "Received serial message: " + message);
-                            ClientHandler.broadcastMessage(
-                                    ProtoFactory.buildPlainTextMessage(
-                                            Config.get().getString("server.id"),
-                                            RblProto.RBLMessage.MessageFlag.RESPONSE,
-                                            "Serial connector received message: " +
-                                                    message
-                                    ));
-                            // Save value to database
-                            //int temp = Integer.parseInt(message.split(":")[4]);
-                            //DataBaseHelper.writeTempData(temp);
+                            EventBusService.post(new SerialMessage(message));
                         }
                     }catch (SerialPortException ex) {
                         Log.add(DEBUG_TAG, "Serial port failed on receiving message." + ex);
@@ -124,22 +122,21 @@ public class SerialConnector {
                 }
             }
         }
-
     }
 
-    public static SerialPort getSerialPort() {
+    public SerialPort getSerialPort() {
         return mSerialPort;
     }
 
-    public static void setSerialPort(SerialPort serialPort) {
+    public void setSerialPort(SerialPort serialPort) {
         mSerialPort = serialPort;
     }
 
-    public static String getPortName() {
+    public String getPortName() {
         return mPortName;
     }
 
-    public static void setPortName(String portName) {
+    public void setPortName(String portName) {
         mPortName = mPortName;
     }
 }

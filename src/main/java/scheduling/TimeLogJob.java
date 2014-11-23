@@ -1,5 +1,7 @@
 package scheduling;
 
+import message.ModuleInstruction;
+import system.EventBusService;
 import util.Log;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -18,6 +20,12 @@ public class TimeLogJob implements Job {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
         Log.add(DEBUG_TAG, "The time is " + c.getTime().toString());
+        ModuleInstruction mi = new ModuleInstruction();
+        mi.modelType = 1;
+        mi.moduleId = 2;
+        mi.instructionId  = 3;
+        mi.params = null;
+        EventBusService.post(mi);
     }
 
 }

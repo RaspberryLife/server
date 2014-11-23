@@ -21,104 +21,111 @@ public class MySQLConnection {
 
     public boolean open(){
         Properties connectionProps = new Properties();
-        connectionProps.put("user", Config.get().getString("database.user"));
-        connectionProps.put("password", Config.get().getString("database.password"));
+        connectionProps.put("user", Config.getConf().getString("database.user"));
+        connectionProps.put("password", Config.getConf().getString("database.password"));
 
-        /*
-        String url = Config.MYSQL_HOST + Config.MYSQL_DB_NAME
-                + "?user=" + Config.MYSQL_USER
-                + "?password=" + Config.MYSQL_PASSWORD;
-
-        Log.add(DEBUG_TAG,"MySQLConnection with: " + url);
-        */
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            //mConnection = DriverManager.getConnection(url);
             mConnection = DriverManager.getConnection(
                     "jdbc:mysql://" +
-                            Config.get().getString("database.host")
+                            Config.getConf().getString("database.host")
                             + ":"
-                            + Config.get().getString("database.port")
+                            + Config.getConf().getString("database.port")
                             + "/",
                     connectionProps);
 
         } catch(ClassNotFoundException e) {
-            Log.add(DEBUG_TAG, "Could not open database: " + e);
+            Log.add(DEBUG_TAG, "Could not open database: ", e);
             return false;
 
         } catch(SQLException e) {
-            Log.add(DEBUG_TAG,"Could not open database: " + e);
+            Log.add(DEBUG_TAG,"Could not open database: ", e);
+            return false;
+        } catch(Exception e) {
+            Log.add(DEBUG_TAG,"Could not open database: ", e);
             return false;
         }
         return true;
     }
 
     public void createDatabase(){
-        if(D){Log.add(DEBUG_TAG,"Creating database");}
+        Log.add(DEBUG_TAG,"Creating database", D);
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
             statement.execute("CREATE DATABASE IF NOT EXISTS "
-                    + Config.get().getString("database.db"));
+                    + Config.getConf().getString("database.db"));
         } catch (SQLException e) {
-            Log.add(DEBUG_TAG, "Could not create database: " + e);
+            Log.add(DEBUG_TAG, "Could not create database: ", e);
+        } catch (Exception e){
+            Log.add(DEBUG_TAG, "Could not create database: ", e);
         }
     }
 
     public void selectDatabase(){
-        if(D){Log.add(DEBUG_TAG,"selecting database");}
+        if(D){Log.add(DEBUG_TAG,"selecting database", D);}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
             statement.execute(
-                    "USE " + Config.get().getString("database.db"));
+                    "USE " + Config.getConf().getString("database.db"));
         } catch (SQLException e) {
-            Log.add(DEBUG_TAG, "Could not select database: " + e);
+            Log.add(DEBUG_TAG, "Could not select database: ", e);
+        } catch (Exception e) {
+            Log.add(DEBUG_TAG, "Could not select database: ", e);
         }
     }
 
     public void createTable(String name){
-        if(D){Log.add(DEBUG_TAG,"Creating table");}
+        if(D){Log.add(DEBUG_TAG,"Creating table", D);}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
             statement.execute(
                     "CREATE TABLE IF NOT EXISTS " + name + "( temp INT )");
         } catch (SQLException e) {
-            Log.add(DEBUG_TAG, "Could not create table: " + e);
+            Log.add(DEBUG_TAG, "Could not create table: ", e);
+        } catch (Exception e) {
+            Log.add(DEBUG_TAG, "Could not create table: ", e);
         }
     }
 
     public void close(){
-        if(D){Log.add(DEBUG_TAG,"Closing connection");}
+        if(D){Log.add(DEBUG_TAG,"Closing connection", D);}
         try {
             mConnection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.add(DEBUG_TAG, "Could not close connection: ", e);
+        } catch (Exception e) {
+            Log.add(DEBUG_TAG, "Could not close connection: ", e);
         }
     }
 
     public void insertTemp(int temp){
-        if(D){Log.add(DEBUG_TAG,"Inserting temperature data");}
+        if(D){Log.add(DEBUG_TAG,"Inserting temperature data", D);}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
             statement.execute(
-                    "INSERT INTO " + "test" + " (temp) VALUES (1.4),(2.5),(3.6)");
+                    "INSERT INTO " + "test" + " (temp) VALUES (" + temp + ")");
         } catch (SQLException e) {
-            Log.add(DEBUG_TAG, "write test data: " + e);
+            Log.add(DEBUG_TAG, "write test data: ", e);
+        }catch (Exception e) {
+            Log.add(DEBUG_TAG, "write test data: ", e);
         }
     }
 
     public void test() {
-        if(D){Log.add(DEBUG_TAG,"Testing connection!");}
+        if(D){Log.add(DEBUG_TAG,"Testing connection!", D);}
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
             statement.execute(
                     "INSERT INTO " + "test" + " (temp) VALUES (1.4),(2.5),(3.6)");
         } catch (SQLException e) {
-            Log.add(DEBUG_TAG, "write test data: " + e);
+            Log.add(DEBUG_TAG, "write test data: ", e);
+        }catch (Exception e) {
+            Log.add(DEBUG_TAG, "write test data: ", e);
         }
     }
 }

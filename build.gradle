@@ -26,7 +26,7 @@ dependencies {
             'mysql:mysql-connector-java:5.1.33', // MySQL conenction
             'org.webbitserver:webbit:0.4.15', // Websocket server
             'com.google.protobuf:protobuf-java:2.6.1', // Protocol buffers
-            'net.engio:mbassador:1.2.0', // Event bus
+            'com.google.guava:guava:18.0', // Guava libs (Event bus, etc)
             'org.quartz-scheduler:quartz:2.2.1', // Scheduler
             // Logging facade used for Quartz (was unresolved at some point)
             //'eu.agrosense.client:lib-slf4j-simple:1.7.6-NB80',

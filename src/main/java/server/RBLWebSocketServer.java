@@ -18,7 +18,7 @@ public class RBLWebSocketServer {
     private static final String DEBUG_TAG = RBLWebSocketServer.class.getSimpleName();
 
     public void start(){
-        webServer = WebServers.createWebServer(Config.get().getInt("socket.web_port"));
+        webServer = WebServers.createWebServer(Config.getConf().getInt("socket.web_port"));
         webServer.add(new StaticFileHandler("/static-files"));
         webServer.add("/websocket-echo", new RBLWebSocketHandler());
         webServer.start();

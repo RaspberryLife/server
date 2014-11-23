@@ -36,10 +36,11 @@ public class DataBaseHelper {
         if(mySQLConnection == null){
             mySQLConnection = new MySQLConnection();
         }
-        mySQLConnection.open();
-        mySQLConnection.createDatabase();
-        mySQLConnection.selectDatabase();
-        mySQLConnection.createTable("temp");
+        if(mySQLConnection.open()){
+            mySQLConnection.createDatabase();
+            mySQLConnection.selectDatabase();
+            mySQLConnection.createTable("temp");
+        }
     }
 
     public static void closeConnection(){
@@ -47,7 +48,7 @@ public class DataBaseHelper {
     }
 
     public static synchronized void writeTempData(int temp){
-        setUpInitial();
+        init();
         mySQLConnection.insertTemp(temp);
         mySQLConnection.close();
     }
