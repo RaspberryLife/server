@@ -17,13 +17,13 @@ public class SystemManager {
 
     public static final String DEBUG_TAG = SystemManager.class.getSimpleName();
 
-    public static Thread serverThread = null;
+    RBLSocketServer socketServer = null;
     public static Thread webServerThread = null;
     public static SerialConnector serialConnector = null;
     public static InstructionHandler instructionHandler;
 
 
-    public static boolean runDebugSetup = true;
+    public static boolean runDebugSetup = false;
 
 
     public static SystemManager getInstance(){
@@ -35,7 +35,7 @@ public class SystemManager {
     }
 
     private SystemManager(){
-
+        runDebugSetup = Config.getConf().getBoolean("test.run_debug");
     }
 
     public void start(){
@@ -75,25 +75,15 @@ public class SystemManager {
 
 
     private static void startSocketServer(){
-        serverThread = new Thread(new Runnable() {
-            public void run() {
-                Log.add(DEBUG_TAG, "Starting Java socket server");
-                RBLSocketServer server = new RBLSocketServer();
-                server.start(Config.getConf().getInt("socket.java_port"));
-            }
-        });
-        serverThread.start();
+        Log.add(DEBUG_TAG, "Starting Java socket server");
+        RBLSocketServer server = new RBLSocketServer();
+        server.start();
     }
 
     private static void startWebSocketServer(){
         Log.add(DEBUG_TAG, "Starting WebSocketServer");
-        webServerThread = new Thread(new Runnable() {
-            public void run() {
-                RBLWebSocketServer webServer = new RBLWebSocketServer();
-                webServer.start();
-            }
-        });
-        webServerThread.start();
+        RBLWebSocketServer webServer = new RBLWebSocketServer();
+        webServer.start();
     }
 
     // Initialize the serial connector for module communication

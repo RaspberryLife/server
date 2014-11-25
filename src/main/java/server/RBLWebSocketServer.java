@@ -11,13 +11,24 @@ import util.Config;
  *
  * WebSocketServer class that is created by the main method.
  */
-public class RBLWebSocketServer {
+public class RBLWebSocketServer implements Runnable{
 
     private WebServer webServer = null;
+    private Thread serverThread = null;
 
     private static final String DEBUG_TAG = RBLWebSocketServer.class.getSimpleName();
 
     public void start(){
+        serverThread = new Thread(this);
+        serverThread.start();
+    }
+
+    public WebServer getWebServer(){
+        return webServer;
+    }
+
+
+    public void run() {
         webServer = WebServers.createWebServer(Config.getConf().getInt("socket.web_port"));
         webServer.add(new StaticFileHandler("/static-files"));
         webServer.add("/websocket-echo", new RBLWebSocketHandler());
@@ -26,10 +37,4 @@ public class RBLWebSocketServer {
                 "WebSocketServer listens on port "
                         + webServer.getPort());
     }
-
-    public WebServer getWebServer(){
-        return webServer;
-    }
-
-
 }

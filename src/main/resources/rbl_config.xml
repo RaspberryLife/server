@@ -23,4 +23,7 @@
         <parity>0</parity>
         <message_byte_length>32</message_byte_length>
     </serial>
+    <test>
+        <run_debug>false</run_debug>
+    </test>
 </config>
