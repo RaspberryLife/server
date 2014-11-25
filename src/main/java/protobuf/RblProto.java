@@ -407,6 +407,10 @@ public final class RblProto {
        * <code>RESPONSE = 1;</code>
        */
       RESPONSE(1, 1),
+      /**
+       * <code>DEBUG = 99;</code>
+       */
+      DEBUG(2, 99),
       ;
 
       /**
@@ -417,6 +421,10 @@ public final class RblProto {
        * <code>RESPONSE = 1;</code>
        */
       public static final int RESPONSE_VALUE = 1;
+      /**
+       * <code>DEBUG = 99;</code>
+       */
+      public static final int DEBUG_VALUE = 99;
 
 
       public final int getNumber() { return value; }
@@ -425,6 +433,7 @@ public final class RblProto {
         switch (value) {
           case 0: return REQUEST;
           case 1: return RESPONSE;
+          case 99: return DEBUG;
           default: return null;
         }
       }
@@ -506,13 +515,13 @@ public final class RblProto {
        */
       LOGIC(5, 5),
       /**
-       * <code>AUTH = 7;</code>
+       * <code>AUTH = 6;</code>
        *
        * <pre>
-       * All auth messages use PlainText as message content
+       * All authentication messages use PlainText as message content
        * </pre>
        */
-      AUTH(6, 7),
+      AUTH(6, 6),
       ;
 
       /**
@@ -540,13 +549,13 @@ public final class RblProto {
        */
       public static final int LOGIC_VALUE = 5;
       /**
-       * <code>AUTH = 7;</code>
+       * <code>AUTH = 6;</code>
        *
        * <pre>
-       * All auth messages use PlainText as message content
+       * All authentication messages use PlainText as message content
        * </pre>
        */
-      public static final int AUTH_VALUE = 7;
+      public static final int AUTH_VALUE = 6;
 
 
       public final int getNumber() { return value; }
@@ -559,7 +568,7 @@ public final class RblProto {
           case 3: return SET_DATA;
           case 4: return DATA;
           case 5: return LOGIC;
-          case 7: return AUTH;
+          case 6: return AUTH;
           default: return null;
         }
       }
@@ -6958,7 +6967,7 @@ public final class RblProto {
        * <code>optional int32 count = 1;</code>
        *
        * <pre>
-       *leaving this empty will result in a fixed number of results e.g. 50
+       * Leaving this empty will result in a fixed number of results e.g. 50
        * </pre>
        */
       boolean hasCount();
@@ -6966,7 +6975,7 @@ public final class RblProto {
        * <code>optional int32 count = 1;</code>
        *
        * <pre>
-       *leaving this empty will result in a fixed number of results e.g. 50
+       * Leaving this empty will result in a fixed number of results e.g. 50
        * </pre>
        */
       int getCount();
@@ -6976,7 +6985,7 @@ public final class RblProto {
        * <code>optional string startDateTime = 2;</code>
        *
        * <pre>
-       *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+       * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
        * </pre>
        */
       boolean hasStartDateTime();
@@ -6984,7 +6993,7 @@ public final class RblProto {
        * <code>optional string startDateTime = 2;</code>
        *
        * <pre>
-       *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+       * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
        * </pre>
        */
       java.lang.String getStartDateTime();
@@ -6992,7 +7001,7 @@ public final class RblProto {
        * <code>optional string startDateTime = 2;</code>
        *
        * <pre>
-       *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+       * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
        * </pre>
        */
       com.google.protobuf.ByteString
@@ -7003,7 +7012,7 @@ public final class RblProto {
        * <code>optional string endDateTime = 3;</code>
        *
        * <pre>
-       * same as startDateTime
+       * Same as startDateTime
        * </pre>
        */
       boolean hasEndDateTime();
@@ -7011,7 +7020,7 @@ public final class RblProto {
        * <code>optional string endDateTime = 3;</code>
        *
        * <pre>
-       * same as startDateTime
+       * Same as startDateTime
        * </pre>
        */
       java.lang.String getEndDateTime();
@@ -7019,7 +7028,7 @@ public final class RblProto {
        * <code>optional string endDateTime = 3;</code>
        *
        * <pre>
-       * same as startDateTime
+       * Same as startDateTime
        * </pre>
        */
       com.google.protobuf.ByteString
@@ -7138,7 +7147,7 @@ public final class RblProto {
        * <code>optional int32 count = 1;</code>
        *
        * <pre>
-       *leaving this empty will result in a fixed number of results e.g. 50
+       * Leaving this empty will result in a fixed number of results e.g. 50
        * </pre>
        */
       public boolean hasCount() {
@@ -7148,7 +7157,7 @@ public final class RblProto {
        * <code>optional int32 count = 1;</code>
        *
        * <pre>
-       *leaving this empty will result in a fixed number of results e.g. 50
+       * Leaving this empty will result in a fixed number of results e.g. 50
        * </pre>
        */
       public int getCount() {
@@ -7162,7 +7171,7 @@ public final class RblProto {
        * <code>optional string startDateTime = 2;</code>
        *
        * <pre>
-       *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+       * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
        * </pre>
        */
       public boolean hasStartDateTime() {
@@ -7172,7 +7181,7 @@ public final class RblProto {
        * <code>optional string startDateTime = 2;</code>
        *
        * <pre>
-       *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+       * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
        * </pre>
        */
       public java.lang.String getStartDateTime() {
@@ -7193,7 +7202,7 @@ public final class RblProto {
        * <code>optional string startDateTime = 2;</code>
        *
        * <pre>
-       *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+       * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
        * </pre>
        */
       public com.google.protobuf.ByteString
@@ -7217,7 +7226,7 @@ public final class RblProto {
        * <code>optional string endDateTime = 3;</code>
        *
        * <pre>
-       * same as startDateTime
+       * Same as startDateTime
        * </pre>
        */
       public boolean hasEndDateTime() {
@@ -7227,7 +7236,7 @@ public final class RblProto {
        * <code>optional string endDateTime = 3;</code>
        *
        * <pre>
-       * same as startDateTime
+       * Same as startDateTime
        * </pre>
        */
       public java.lang.String getEndDateTime() {
@@ -7248,7 +7257,7 @@ public final class RblProto {
        * <code>optional string endDateTime = 3;</code>
        *
        * <pre>
-       * same as startDateTime
+       * Same as startDateTime
        * </pre>
        */
       public com.google.protobuf.ByteString
@@ -7536,7 +7545,7 @@ public final class RblProto {
          * <code>optional int32 count = 1;</code>
          *
          * <pre>
-         *leaving this empty will result in a fixed number of results e.g. 50
+         * Leaving this empty will result in a fixed number of results e.g. 50
          * </pre>
          */
         public boolean hasCount() {
@@ -7546,7 +7555,7 @@ public final class RblProto {
          * <code>optional int32 count = 1;</code>
          *
          * <pre>
-         *leaving this empty will result in a fixed number of results e.g. 50
+         * Leaving this empty will result in a fixed number of results e.g. 50
          * </pre>
          */
         public int getCount() {
@@ -7556,7 +7565,7 @@ public final class RblProto {
          * <code>optional int32 count = 1;</code>
          *
          * <pre>
-         *leaving this empty will result in a fixed number of results e.g. 50
+         * Leaving this empty will result in a fixed number of results e.g. 50
          * </pre>
          */
         public Builder setCount(int value) {
@@ -7569,7 +7578,7 @@ public final class RblProto {
          * <code>optional int32 count = 1;</code>
          *
          * <pre>
-         *leaving this empty will result in a fixed number of results e.g. 50
+         * Leaving this empty will result in a fixed number of results e.g. 50
          * </pre>
          */
         public Builder clearCount() {
@@ -7585,7 +7594,7 @@ public final class RblProto {
          * <code>optional string startDateTime = 2;</code>
          *
          * <pre>
-         *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+         * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
          * </pre>
          */
         public boolean hasStartDateTime() {
@@ -7595,7 +7604,7 @@ public final class RblProto {
          * <code>optional string startDateTime = 2;</code>
          *
          * <pre>
-         *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+         * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
          * </pre>
          */
         public java.lang.String getStartDateTime() {
@@ -7613,7 +7622,7 @@ public final class RblProto {
          * <code>optional string startDateTime = 2;</code>
          *
          * <pre>
-         *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+         * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
          * </pre>
          */
         public com.google.protobuf.ByteString
@@ -7633,7 +7642,7 @@ public final class RblProto {
          * <code>optional string startDateTime = 2;</code>
          *
          * <pre>
-         *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+         * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
          * </pre>
          */
         public Builder setStartDateTime(
@@ -7650,7 +7659,7 @@ public final class RblProto {
          * <code>optional string startDateTime = 2;</code>
          *
          * <pre>
-         *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+         * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
          * </pre>
          */
         public Builder clearStartDateTime() {
@@ -7663,7 +7672,7 @@ public final class RblProto {
          * <code>optional string startDateTime = 2;</code>
          *
          * <pre>
-         *specify date as follows: "YYYY-MM-DD hh:mm:ss"
+         * Specify date as follows: "YYYY-MM-DD hh:mm:ss"
          * </pre>
          */
         public Builder setStartDateTimeBytes(
@@ -7683,7 +7692,7 @@ public final class RblProto {
          * <code>optional string endDateTime = 3;</code>
          *
          * <pre>
-         * same as startDateTime
+         * Same as startDateTime
          * </pre>
          */
         public boolean hasEndDateTime() {
@@ -7693,7 +7702,7 @@ public final class RblProto {
          * <code>optional string endDateTime = 3;</code>
          *
          * <pre>
-         * same as startDateTime
+         * Same as startDateTime
          * </pre>
          */
         public java.lang.String getEndDateTime() {
@@ -7711,7 +7720,7 @@ public final class RblProto {
          * <code>optional string endDateTime = 3;</code>
          *
          * <pre>
-         * same as startDateTime
+         * Same as startDateTime
          * </pre>
          */
         public com.google.protobuf.ByteString
@@ -7731,7 +7740,7 @@ public final class RblProto {
          * <code>optional string endDateTime = 3;</code>
          *
          * <pre>
-         * same as startDateTime
+         * Same as startDateTime
          * </pre>
          */
         public Builder setEndDateTime(
@@ -7748,7 +7757,7 @@ public final class RblProto {
          * <code>optional string endDateTime = 3;</code>
          *
          * <pre>
-         * same as startDateTime
+         * Same as startDateTime
          * </pre>
          */
         public Builder clearEndDateTime() {
@@ -7761,7 +7770,7 @@ public final class RblProto {
          * <code>optional string endDateTime = 3;</code>
          *
          * <pre>
-         * same as startDateTime
+         * Same as startDateTime
          * </pre>
          */
         public Builder setEndDateTimeBytes(
@@ -10682,7 +10691,7 @@ public final class RblProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023raspberrylife.proto\"\223\r\n\nRBLMessage\022\n\n\002" +
+      "\n\023raspberrylife.proto\"\236\r\n\nRBLMessage\022\n\n\002" +
       "id\030\001 \002(\t\0228\n\013messageType\030\002 \002(\0162\027.RBLMessa" +
       "ge.MessageType:\nPLAIN_TEXT\022,\n\013messageFla" +
       "g\030\003 \002(\0162\027.RBLMessage.MessageFlag\022\025\n\rmess" +
@@ -10717,15 +10726,15 @@ public final class RblProto {
       "\t\032y\n\004Data\022\017\n\007fieldId\030\001 \002(\005\022&\n\010dataType\030\002" +
       " \002(\0162\024.RBLMessage.DataType\022\022\n\nstringData" +
       "\030\003 \003(\t\022\021\n\tint32Data\030\004 \003(\005\022\021\n\tfloatData\030\005" +
-      " \003(\002\"(\n\013MessageFlag\022\013\n\007REQUEST\020\000\022\014\n\010RESP" +
-      "ONSE\020\001\"m\n\013MessageType\022\016\n\nPLAIN_TEXT\020\000\022\023\n" +
-      "\017RUN_INSTRUCTION\020\001\022\014\n\010GET_DATA\020\002\022\014\n\010SET_" +
-      "DATA\020\003\022\010\n\004DATA\020\004\022\t\n\005LOGIC\020\005\022\010\n\004AUTH\020\007\"0\n" +
-      "\nModuleType\022\017\n\013MODULE_TEMP\020\000\022\021\n\rMODULE_O",
-      "UTLET\020\001\"2\n\014ActuatorType\022\n\n\006SYSTEM\020\000\022\n\n\006C" +
-      "LIENT\020\001\022\n\n\006MODULE\020\002\".\n\010DataType\022\013\n\007INTEG" +
-      "ER\020\000\022\t\n\005FLOAT\020\001\022\n\n\006STRING\020\002B\024\n\010protobufB" +
-      "\010RblProto"
+      " \003(\002\"3\n\013MessageFlag\022\013\n\007REQUEST\020\000\022\014\n\010RESP" +
+      "ONSE\020\001\022\t\n\005DEBUG\020c\"m\n\013MessageType\022\016\n\nPLAI" +
+      "N_TEXT\020\000\022\023\n\017RUN_INSTRUCTION\020\001\022\014\n\010GET_DAT" +
+      "A\020\002\022\014\n\010SET_DATA\020\003\022\010\n\004DATA\020\004\022\t\n\005LOGIC\020\005\022\010" +
+      "\n\004AUTH\020\006\"0\n\nModuleType\022\017\n\013MODULE_TEMP\020\000\022",
+      "\021\n\rMODULE_OUTLET\020\001\"2\n\014ActuatorType\022\n\n\006SY" +
+      "STEM\020\000\022\n\n\006CLIENT\020\001\022\n\n\006MODULE\020\002\".\n\010DataTy" +
+      "pe\022\013\n\007INTEGER\020\000\022\t\n\005FLOAT\020\001\022\n\n\006STRING\020\002B\024" +
+      "\n\010protobufB\010RblProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
