@@ -1,4 +1,4 @@
-package message;
+package message.events;
 
 /**
  * Created by Peter Mösenthin.

@@ -1,12 +1,9 @@
 package system;
 
 
-import message.ModuleInstruction;
+import message.events.ModuleInstruction;
 import util.Log;
 import protobuf.RblProto.*;
-
-
-import java.util.List;
 
 /**
  * Created by Peter Mösenthin.

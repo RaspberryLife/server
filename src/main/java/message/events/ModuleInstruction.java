@@ -1,4 +1,4 @@
-package message;
+package message.events;
 
 import util.StringUtil;
 

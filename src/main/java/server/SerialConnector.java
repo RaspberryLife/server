@@ -2,8 +2,8 @@ package server;
 
 import com.google.common.eventbus.Subscribe;
 import jssc.*;
-import message.ModuleInstruction;
-import message.SerialMessage;
+import message.events.ModuleInstruction;
+import message.events.SerialMessage;
 import message.SerialMessageHandler;
 import system.EventBusService;
 import util.Config;
@@ -19,7 +19,6 @@ public class SerialConnector {
     private SerialPort mSerialPort = null;
     private String mPortName = null;
     private int messageLength;
-
 
 
     public final String DEBUG_TAG = SerialConnector.class.getSimpleName();

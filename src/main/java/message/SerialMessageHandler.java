@@ -2,6 +2,7 @@ package message;
 
 import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
+import message.events.SerialMessage;
 import protobuf.ProtoFactory;
 import protobuf.RblProto;
 import util.Config;
