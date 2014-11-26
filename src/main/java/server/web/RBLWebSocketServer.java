@@ -1,4 +1,4 @@
-package server;
+package server.web;
 
 import util.Log;
 import org.webbitserver.WebServer;

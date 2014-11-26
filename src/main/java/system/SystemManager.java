@@ -1,12 +1,11 @@
 package system;
 
 
-import com.google.common.eventbus.EventBus;
 import data.DataBaseHelper;
 import scheduling.ScheduleManager;
 import server.RBLSocketServer;
-import server.RBLWebSocketServer;
-import server.SerialConnector;
+import server.web.RBLWebSocketServer;
+import server.serial.SerialConnector;
 import util.Config;
 import util.Log;
 import util.NetworkUtil;

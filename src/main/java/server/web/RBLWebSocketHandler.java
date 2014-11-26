@@ -1,4 +1,4 @@
-package server;
+package server.web;
 
 import client.ClientHandler;
 import client.WebSocketClient;

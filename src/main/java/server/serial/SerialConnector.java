@@ -1,10 +1,10 @@
-package server;
+package server.serial;
 
 import com.google.common.eventbus.Subscribe;
 import jssc.*;
+import message.SerialMessageHandler;
 import message.events.ModuleInstruction;
 import message.events.SerialMessage;
-import message.SerialMessageHandler;
 import system.EventBusService;
 import util.Config;
 import util.Log;
