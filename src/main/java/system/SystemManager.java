@@ -34,28 +34,26 @@ public class SystemManager {
     }
 
     private SystemManager(){
-        runDebugSetup = Config.getConf().getBoolean("test.run_debug");
+
     }
 
     public void start(){
-        Log.add(DEBUG_TAG, "Starting ...");
         Log.printLogHeader();
-        Config.readConfig();
-        //Config.dumpConfig();
+        initConfig();
         NetworkUtil.listIPAddresses();
         initEventBus();
         instructionHandler = new InstructionHandler();
         startSocketServer();
         startWebSocketServer();
         initSerialConnection();
-        initDatabase();
         if(runDebugSetup){
+            initDatabase();
             initScheduler();
         }
     }
 
     public void stop(){
-        Log.add(DEBUG_TAG, "Stopping ...");
+        Log.add(DEBUG_TAG, "Stopping ... (But not really)");
     }
 
     public void restart(){
@@ -71,33 +69,38 @@ public class SystemManager {
     //                                      STARTUP
     //----------------------------------------------------------------------------------------------
 
+    private void initConfig(){
+        Config.readConfig();
+        runDebugSetup = Config.getConf().getBoolean("test.run_debug");
+        //Config.dumpConfig();
+    }
 
 
-    private static void startSocketServer(){
+    private void startSocketServer(){
         Log.add(DEBUG_TAG, "Starting Java socket server");
         RBLSocketServer server = new RBLSocketServer();
         server.start();
     }
 
-    private static void startWebSocketServer(){
+    private void startWebSocketServer(){
         Log.add(DEBUG_TAG, "Starting WebSocketServer");
         RBLWebSocketServer webServer = new RBLWebSocketServer();
         webServer.start();
     }
 
     // Initialize the serial connector for module communication
-    private static void initSerialConnection(){
+    private void initSerialConnection(){
         Log.add(DEBUG_TAG, "Initializing serial connector");
         serialConnector = new SerialConnector();
         serialConnector.init();
     }
 
-    private static void initDatabase(){
+    private void initDatabase(){
         Log.add(DEBUG_TAG, "Initializing database");
         DataBaseHelper.setUpInitial();
     }
 
-    private static void initScheduler(){
+    private void initScheduler(){
         Log.add(DEBUG_TAG, "Initializing scheduler");
         ScheduleManager sm = new ScheduleManager();
         sm.test();

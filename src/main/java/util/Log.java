@@ -32,7 +32,7 @@ public class Log {
     }
 
     public static void add(String tag, String message, Exception e){
-        message += "Exception: "
+        message += " Exception: "
                 + e.getClass().getSimpleName() + " - "
                 + e.getMessage();
         add(tag, message);
