@@ -26,7 +26,6 @@ public class SerialMessageHandler {
                 broadcastDebug(message);
                 break;
         }
-
     }
 
     private void broadcastDebug(SerialMessage message) {
@@ -39,7 +38,7 @@ public class SerialMessageHandler {
                                 message.rawContent
                 ));
         ModuleInstruction mi = new ModuleInstruction();
-        mi.modelType = message.moduleType;
+        mi.moduleType = message.moduleType;
         mi.moduleId = message.moduleId;
         mi.instructionId = message.instructionId;
         mi.params = message.params;

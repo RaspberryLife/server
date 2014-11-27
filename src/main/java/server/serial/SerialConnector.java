@@ -80,9 +80,10 @@ public class SerialConnector {
      */
     @Subscribe
     public void send(ModuleInstruction instruction){
-        final String message = instruction.build();
+        final String message = "?" + instruction.build() + "!";
         Log.add(DEBUG_TAG,"Sending serial message " + message
                 + " Length=" + message.getBytes().length);
+
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -112,7 +113,7 @@ public class SerialConnector {
                         byte buffer[] = mSerialPort.readBytes();
                         if(buffer.length != 0) {
                             String message = new String(buffer);
-                            message = message.trim();
+                            message = message.trim().substring(1, messageLength - 2);
                             EventBusService.post(new SerialMessage(message));
                         }
                     }catch (SerialPortException ex) {

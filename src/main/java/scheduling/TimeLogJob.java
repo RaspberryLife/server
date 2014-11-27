@@ -21,7 +21,7 @@ public class TimeLogJob implements Job {
         c.setTimeInMillis(System.currentTimeMillis());
         Log.add(DEBUG_TAG, "The time is " + c.getTime().toString());
         ModuleInstruction mi = new ModuleInstruction();
-        mi.modelType = 1;
+        mi.moduleType = 1;
         mi.moduleId = 2;
         mi.instructionId  = 3;
         mi.params = null;

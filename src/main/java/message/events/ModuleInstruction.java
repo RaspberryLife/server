@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class ModuleInstruction {
 
-    public int modelType;
+    public int moduleType;
     public int moduleId;
     private static int messageSeq = 0;
     public int instructionId;
@@ -18,7 +18,7 @@ public class ModuleInstruction {
 
     public String build(){
         String serialMessage = "";
-        serialMessage += StringUtil.getZeroPadded(String.valueOf(modelType), 3, true);
+        serialMessage += StringUtil.getZeroPadded(String.valueOf(moduleType), 3, true);
 
         //Target module id
         serialMessage += ":";

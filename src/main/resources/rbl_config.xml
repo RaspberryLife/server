@@ -17,11 +17,11 @@
         <web_port>6680</web_port>
     </socket>
     <serial>
-        <baudrate>38400</baudrate>
+        <baudrate>9600</baudrate>
         <data_bits>8</data_bits>
         <stop_bits>1</stop_bits>
         <parity>0</parity>
-        <message_byte_length>32</message_byte_length>
+        <message_byte_length>34</message_byte_length>
     </serial>
     <test>
         <run_debug>false</run_debug>
