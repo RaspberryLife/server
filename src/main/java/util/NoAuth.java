@@ -3,7 +3,7 @@ package util;
 /**
  * Created by Peter Mösenthin.
  *
- * Class to handle the Authentication. Currently there really isn't any real
+ * Class to handle the Authentication. Currently there isn't any real
  * authentication
  */
 public class NoAuth {

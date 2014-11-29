@@ -1,13 +1,13 @@
-package message;
+package server.serial;
 
 import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
-import message.events.ModuleInstruction;
-import message.events.SerialMessage;
+import event.message.ModuleInstruction;
+import event.message.SerialMessage;
 import protobuf.ProtoFactory;
 import protobuf.RblProto;
-import system.EventBusService;
-import util.Config;
+import event.EventBusService;
+import system.Config;
 import util.Log;
 
 /**

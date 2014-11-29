@@ -1,6 +1,6 @@
 package data;
 
-import util.Config;
+import system.Config;
 import util.Log;
 
 import java.sql.*;

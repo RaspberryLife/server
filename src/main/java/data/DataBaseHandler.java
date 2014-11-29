@@ -11,11 +11,11 @@ import java.util.Random;
  *
  * The DataBaseHelper is basically a wrapper to access the MySQL Database.
  */
-public class DataBaseHelper {
+public class DataBaseHandler {
 
     public static MySQLConnection mySQLConnection;
 
-    public static final String DEBUG_TAG = DataBaseHelper.class.getSimpleName();
+    public static final String DEBUG_TAG = DataBaseHandler.class.getSimpleName();
 
     public List<? super Object> getDataList(int length){
         Log.add(DEBUG_TAG, "Generating some fake data");

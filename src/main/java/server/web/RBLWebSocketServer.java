@@ -4,7 +4,7 @@ import util.Log;
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 import org.webbitserver.handler.StaticFileHandler;
-import util.Config;
+import system.Config;
 
 /**
  * Created by Peter Mösenthin.

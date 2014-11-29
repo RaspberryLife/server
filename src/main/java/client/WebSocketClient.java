@@ -2,7 +2,7 @@ package client;
 
 import util.Log;
 import org.webbitserver.WebSocketConnection;
-import message.ProtobufMessageHandler;
+import protobuf.ProtobufMessageHandler;
 import protobuf.RblProto.*;
 
 /**

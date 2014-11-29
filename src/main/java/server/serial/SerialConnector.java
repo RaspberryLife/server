@@ -2,11 +2,10 @@ package server.serial;
 
 import com.google.common.eventbus.Subscribe;
 import jssc.*;
-import message.SerialMessageHandler;
-import message.events.ModuleInstruction;
-import message.events.SerialMessage;
-import system.EventBusService;
-import util.Config;
+import event.message.ModuleInstruction;
+import event.message.SerialMessage;
+import event.EventBusService;
+import system.Config;
 import util.Log;
 
 /**

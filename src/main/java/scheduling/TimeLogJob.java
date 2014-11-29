@@ -1,7 +1,7 @@
 package scheduling;
 
-import message.events.ModuleInstruction;
-import system.EventBusService;
+import event.message.ModuleInstruction;
+import event.EventBusService;
 import util.Log;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

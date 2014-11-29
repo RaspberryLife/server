@@ -1,7 +1,6 @@
-package message;
+package protobuf;
 
 import client.RaspberryLifeClient;
-import system.InstructionHandler;
 import system.SystemManager;
 import util.Log;
 import util.NoAuth;

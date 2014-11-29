@@ -2,9 +2,9 @@ package client;
 
 import util.Log;
 import protobuf.ProtoFactory;
-import message.ProtobufMessageHandler;
+import protobuf.ProtobufMessageHandler;
 import protobuf.RblProto.*;
-import util.Config;
+import system.Config;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

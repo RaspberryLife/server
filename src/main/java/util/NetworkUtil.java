@@ -41,7 +41,6 @@ public class NetworkUtil {
                 }
             }
         }
-
         Log.add(DEBUG_TAG, "Server running on " + ipAddresses.toString());
     }
 }

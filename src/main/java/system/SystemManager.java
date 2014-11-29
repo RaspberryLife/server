@@ -1,12 +1,12 @@
 package system;
 
 
-import data.DataBaseHelper;
+import data.DataBaseHandler;
+import event.EventBusService;
 import scheduling.ScheduleManager;
 import server.RBLSocketServer;
 import server.web.RBLWebSocketServer;
 import server.serial.SerialConnector;
-import util.Config;
 import util.Log;
 import util.NetworkUtil;
 
@@ -97,7 +97,7 @@ public class SystemManager {
 
     private void initDatabase(){
         Log.add(DEBUG_TAG, "Initializing database");
-        DataBaseHelper.setUpInitial();
+        DataBaseHandler.setUpInitial();
     }
 
     private void initScheduler(){

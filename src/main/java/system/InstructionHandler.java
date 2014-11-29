@@ -1,7 +1,8 @@
 package system;
 
 
-import message.events.ModuleInstruction;
+import event.EventBusService;
+import event.message.ModuleInstruction;
 import util.Log;
 import protobuf.RblProto.*;
 

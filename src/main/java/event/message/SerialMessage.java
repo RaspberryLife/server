@@ -1,4 +1,4 @@
-package message.events;
+package event.message;
 
 import util.Log;
 
