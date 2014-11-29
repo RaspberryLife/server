@@ -19,7 +19,6 @@ public class ScheduleManager {
     public static final String DEBUG_TAG = ScheduleManager.class.getSimpleName();
 
     public void test(){
-        Log.add(DEBUG_TAG, "Initializing scheduler");
         Scheduler scheduler = null;
         try {
             scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -42,7 +41,7 @@ public class ScheduleManager {
                 .withIdentity("trigger1", "group1")
                 .startNow()
                 .withSchedule(simpleSchedule()
-                        .withIntervalInSeconds(10)
+                        .withIntervalInSeconds(60)
                         .repeatForever())
                 .build();
 

@@ -17,7 +17,11 @@ public class SerialConnector {
 
     private SerialPort mSerialPort = null;
     private String mPortName = null;
-    private int messageLength;
+    private int mMessageLength;
+    private String mOverridePort = null;
+
+    private static final String PREFIX = "?";
+    private static final String SUFFIX = "!";
 
 
     public final String DEBUG_TAG = SerialConnector.class.getSimpleName();
@@ -28,10 +32,10 @@ public class SerialConnector {
     public void init(){
         mPortName = determinePortName();
         if(mPortName == null){
-            Log.add(DEBUG_TAG, "No serial port found.");
+            Log.add(DEBUG_TAG, "No serial port found");
             return;
         }
-        messageLength = Config.getConf().getInt("serial.message_byte_length");
+        mMessageLength = Config.getConf().getInt("serial.message_byte_length");
         EventBusService.register(new SerialMessageHandler());
         EventBusService.register(this);
         try {
@@ -52,14 +56,19 @@ public class SerialConnector {
     }
 
     public void reset(){
+        close();
+        init();
+    }
+
+    public void close(){
         if(mSerialPort != null){
             try {
                 mSerialPort.closePort();
+                mSerialPort = null;
             } catch (SerialPortException e) {
                 Log.add(DEBUG_TAG, "Unable to close serial port. " + e);
             }
         }
-
     }
 
     private String determinePortName(){
@@ -71,6 +80,10 @@ public class SerialConnector {
         if(availablePorts.length > 0){
             portName = availablePorts[0];
         }
+        mOverridePort = Config.getConf().getString("serial.override_port");
+        if(!mOverridePort.isEmpty()){
+            portName = mOverridePort;
+        }
         return portName;
     }
 
@@ -79,14 +92,13 @@ public class SerialConnector {
      */
     @Subscribe
     public void send(ModuleInstruction instruction){
-        final String message = "?" + instruction.build() + "!";
+        final String message = PREFIX + instruction.build() + SUFFIX;
         Log.add(DEBUG_TAG,"Sending serial message " + message
                 + " Length=" + message.getBytes().length);
 
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
-                    //Write data to port, in this case a "0" (zero)
                     if(mSerialPort != null){
                         mSerialPort.writeBytes(message.getBytes());
                     } else{
@@ -107,12 +119,12 @@ public class SerialConnector {
     private class SerialPortReader implements SerialPortEventListener {
         public void serialEvent(SerialPortEvent event) {
             if(event.isRXCHAR()){//If data is available
-                if(event.getEventValue() == messageLength){
+                if(event.getEventValue() == mMessageLength){
                     try {
                         byte buffer[] = mSerialPort.readBytes();
                         if(buffer.length != 0) {
                             String message = new String(buffer);
-                            message = message.trim().substring(1, messageLength - 2);
+                            message = message.trim().substring(1, mMessageLength - 2);
                             EventBusService.post(new SerialMessage(message));
                         }
                     }catch (SerialPortException ex) {
@@ -122,6 +134,8 @@ public class SerialConnector {
             }
         }
     }
+
+
 
     public SerialPort getSerialPort() {
         return mSerialPort;

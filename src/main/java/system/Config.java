@@ -96,7 +96,6 @@ public class Config {
     public static void readConfig(){
         try {
             mConfiguration = new XMLConfiguration("rbl_config.xml");
-            Log.add(DEBUG_TAG, "Configuration loaded.");
         } catch (ConfigurationException e) {
             Log.add(DEBUG_TAG, "Unable to read configuration: " + e);
         }

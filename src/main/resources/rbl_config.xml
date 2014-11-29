@@ -22,8 +22,9 @@
         <stop_bits>1</stop_bits>
         <parity>0</parity>
         <message_byte_length>34</message_byte_length>
+        <override_port></override_port>
     </serial>
     <test>
-        <run_debug>false</run_debug>
+        <run_debug>true</run_debug>
     </test>
 </config>

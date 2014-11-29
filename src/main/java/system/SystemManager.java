@@ -70,6 +70,7 @@ public class SystemManager {
     //----------------------------------------------------------------------------------------------
 
     private void initConfig(){
+        Log.add(DEBUG_TAG, "Loading configuration");
         Config.readConfig();
         runDebugSetup = Config.getConf().getBoolean("test.run_debug");
         //Config.dumpConfig();
@@ -77,13 +78,13 @@ public class SystemManager {
 
 
     private void startSocketServer(){
-        Log.add(DEBUG_TAG, "Starting Java socket server");
+        Log.add(DEBUG_TAG, "Starting RBLSocketServer");
         RBLSocketServer server = new RBLSocketServer();
         server.start();
     }
 
     private void startWebSocketServer(){
-        Log.add(DEBUG_TAG, "Starting WebSocketServer");
+        Log.add(DEBUG_TAG, "Starting RBLWebSocketServer");
         RBLWebSocketServer webServer = new RBLWebSocketServer();
         webServer.start();
     }
