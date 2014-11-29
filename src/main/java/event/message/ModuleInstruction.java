@@ -2,19 +2,14 @@ package event.message;
 
 import util.StringUtil;
 
-import java.util.List;
-
 /**
  * Created by Peter Mösenthin.
  */
-public class ModuleInstruction {
+public class ModuleInstruction extends Instruction{
 
-    public int moduleType;
-    public int moduleId;
-    private static int messageSeq = 0;
-    public int instructionId;
-    public List<Integer> params;
-
+    private int moduleType;
+    private int moduleId;
+    private static int messageSequenceNumber = 0;
 
     public String build(){
         String serialMessage = "";
@@ -26,16 +21,17 @@ public class ModuleInstruction {
 
         // Message number
         serialMessage += ":";
-        serialMessage += StringUtil.getZeroPadded(String.valueOf(getMessageSeq()), 2, true);
+        serialMessage += StringUtil.getZeroPadded(String.valueOf(getMessageSequenceNumber()),
+                2, true);
 
         // Instruction id
         serialMessage += ":";
         serialMessage += StringUtil.getZeroPadded(String.valueOf(instructionId), 2, true);
 
         // Parameters
-        if(params != null && params.size() > 0){
+        if(intParameters != null && intParameters.size() > 0){
             serialMessage += ":";
-            serialMessage += StringUtil.getZeroPadded(String.valueOf(params.get(0)), 4, true);
+            serialMessage += StringUtil.getZeroPadded(String.valueOf(intParameters.get(0)), 4, true);
         }
 
         serialMessage += ":";
@@ -43,12 +39,28 @@ public class ModuleInstruction {
         return serialMessage;
     }
 
-    private int getMessageSeq(){
-        messageSeq++;
-        if(messageSeq > 99) {
-            messageSeq = 0;
+    private int getMessageSequenceNumber(){
+        messageSequenceNumber++;
+        if(messageSequenceNumber > 99) {
+            messageSequenceNumber = 0;
         }
-        return messageSeq;
+        return messageSequenceNumber;
+    }
+
+    public int getType() {
+        return moduleType;
+    }
+
+    public void setType(int type) {
+        this.moduleType = type;
+    }
+
+    public int getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(int moduleId) {
+        this.moduleId = moduleId;
     }
 
 

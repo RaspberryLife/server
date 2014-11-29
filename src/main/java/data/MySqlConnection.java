@@ -11,13 +11,13 @@ import java.util.Properties;
  *
  * Class to handle the actual MySQL Database.
  */
-public class MySQLConnection {
+public class MySqlConnection {
 
 
     private Connection mConnection;
 
-    public static final String DEBUG_TAG = MySQLConnection.class.getSimpleName();
-    public static final boolean D = false;
+    public static final String DEBUG_TAG = MySqlConnection.class.getSimpleName();
+    public static final boolean D = true;
 
     public boolean open(){
         Properties connectionProps = new Properties();
@@ -59,6 +59,35 @@ public class MySQLConnection {
             Log.add(DEBUG_TAG, "Could not create database: ", e);
         } catch (Exception e){
             Log.add(DEBUG_TAG, "Could not create database: ", e);
+        }
+    }
+
+    public void createHibernate(){
+        Log.add(DEBUG_TAG,"Creating hibernate database", D);
+        Statement statement = null;
+        try {
+            statement = mConnection.createStatement();
+            statement.execute("CREATE DATABASE IF NOT EXISTS `rbl_data`");
+            statement.execute("CREATE TABLE `logic` (" +
+                    "`logic_id` BIGINT(10) NOT NULL AUTO_INCREMENT," +
+                    "`name` VARCHAR(50) NULL DEFAULT NULL," +
+                    "PRIMARY KEY (`logic_id`))");
+            statement.execute("CREATE TABLE `actuator` (" +
+                    "`actuator_id` BIGINT(10) NOT NULL AUTO_INCREMENT," +
+                    "`name` VARCHAR(50) NULL DEFAULT NULL," +
+                    "PRIMARY KEY (`actuator_id`))");
+            statement.execute("CREATE TABLE `logic_initiator` (" +
+                    "`actuator_id` BIGINT(10) NOT NULL," +
+                    "`logic_id` BIGINT(10) NOT NULL," +
+                    "PRIMARY KEY (`actuator_id`, `logic_id`)" +
+                    "INDEX `FK_LOGIC` (`logic_id`)," +
+                    "CONSTRAINT `FK_ACTUATOR` FOREIGN KEY (`actuator_id`) REFERENCES `actuator` (`actuator_id`)," +
+                    "CONSTRAINT `FK_LOGIC` FOREIGN KEY (`logic_id`) REFERENCES `logic` (`logic_id`)" +
+                    ")");
+        } catch (SQLException e) {
+            Log.add(DEBUG_TAG, "Could not create hibernate database: ", e);
+        } catch (Exception e){
+            Log.add(DEBUG_TAG, "Could not create hibernate database: ", e);
         }
     }
 

@@ -3,5 +3,5 @@ package event.message;
 /**
  * Created by Peter Mösenthin.
  */
-public class SystemInstruction {
+public class SystemInstruction extends Instruction{
 }

@@ -2,6 +2,7 @@ package system;
 
 
 import data.DataBaseHandler;
+import data.HibernateManager;
 import event.EventBusService;
 import scheduling.ScheduleManager;
 import server.RBLSocketServer;
@@ -47,8 +48,9 @@ public class SystemManager {
         startWebSocketServer();
         initSerialConnection();
         if(runDebugSetup){
-            initDatabase();
-            initScheduler();
+            //initDatabase();
+            initHibernate();
+            //initScheduler();
         }
     }
 
@@ -99,6 +101,14 @@ public class SystemManager {
     private void initDatabase(){
         Log.add(DEBUG_TAG, "Initializing database");
         DataBaseHandler.setUpInitial();
+    }
+
+    private void initHibernate() {
+        Log.add(DEBUG_TAG, "Initializing hibernate");
+        HibernateManager hm = new HibernateManager();
+        DataBaseHandler dbh = new DataBaseHandler();
+        dbh.createHibernateDataBase();
+        hm.runTest();
     }
 
     private void initScheduler(){

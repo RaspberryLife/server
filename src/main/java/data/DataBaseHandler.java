@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class DataBaseHandler {
 
-    public static MySQLConnection mySQLConnection;
+    public static MySqlConnection mySqlConnection;
 
     public static final String DEBUG_TAG = DataBaseHandler.class.getSimpleName();
 
@@ -33,24 +33,34 @@ public class DataBaseHandler {
     }
 
     public static void init(){
-        if(mySQLConnection == null){
-            mySQLConnection = new MySQLConnection();
+        if(mySqlConnection == null){
+            mySqlConnection = new MySqlConnection();
         }
-        if(mySQLConnection.open()){
-            mySQLConnection.createDatabase();
-            mySQLConnection.selectDatabase();
-            mySQLConnection.createTable("temp");
+        if(mySqlConnection.open()){
+            mySqlConnection.createDatabase();
+            mySqlConnection.selectDatabase();
+            mySqlConnection.createTable("temp");
         }
     }
 
     public static void closeConnection(){
-        mySQLConnection.close();
+        mySqlConnection.close();
     }
 
     public static synchronized void writeTempData(int temp){
         init();
-        mySQLConnection.insertTemp(temp);
-        mySQLConnection.close();
+        mySqlConnection.insertTemp(temp);
+        mySqlConnection.close();
+    }
+
+    public void createHibernateDataBase(){
+        if(mySqlConnection == null){
+            mySqlConnection = new MySqlConnection();
+        }
+        if(mySqlConnection.open()){
+            mySqlConnection.createHibernate();
+            mySqlConnection.close();
+        }
     }
 
 }

@@ -38,10 +38,11 @@ public class SerialMessageHandler {
                                 message.rawContent
                 ));
         ModuleInstruction mi = new ModuleInstruction();
-        mi.moduleType = message.moduleType;
-        mi.moduleId = message.moduleId;
-        mi.instructionId = message.instructionId;
-        mi.params = message.params;
+
+        mi.setType(message.moduleType);
+        mi.setModuleId(message.moduleId);
+        mi.setInstructionId(message.instructionId);
+        mi.setIntParameters(message.intParameters);
         EventBusService.post(mi);
     }
 

@@ -18,14 +18,14 @@ public class SerialMessage {
     public int moduleId;
     public int messageSeq;
     public int instructionId;
-    public List<Integer> params;
+    public List<Integer> intParameters;
 
     public SerialMessage(String content){
         this.rawContent = content;
     }
 
     public void populateSelf(){
-        params = new ArrayList<Integer>();
+        intParameters = new ArrayList<Integer>();
         try {
             String[] split = rawContent.split(":");
             moduleType = Integer.parseInt(split[0]);
@@ -34,7 +34,7 @@ public class SerialMessage {
             instructionId = Integer.parseInt(split[3]);
 
             for(int i = 4; i < split.length; i++){
-                params.add(Integer.parseInt(split[i]));
+                intParameters.add(Integer.parseInt(split[i]));
             }
         } catch (IndexOutOfBoundsException e){
             Log.add(DEBUG_TAG, "Unable to populate serial message", e);

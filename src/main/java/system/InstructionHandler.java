@@ -33,11 +33,14 @@ public class InstructionHandler {
         RBLMessage.RunInstruction rI = message.getRunInstruction();
         if(rI != null){
             ModuleInstruction mi = new ModuleInstruction();
-            mi.moduleType = rI.getInstruction().getModuleType().getNumber();
-            mi.moduleId = rI.getInstruction().getModuleId();
-            mi.instructionId  = rI.getInstruction().getInstructionId();
-            mi.params = rI.getInstruction().getIntParametersList();
-            Log.add(DEBUG_TAG, "MT=" + mi.moduleType + " MID=" + mi.moduleId + " IID=" + mi.instructionId + " PARAMS=" + mi.params.toString());
+            mi.setType(rI.getInstruction().getModuleType().getNumber());
+            mi.setModuleId(rI.getInstruction().getModuleId());
+            mi.setInstructionId(rI.getInstruction().getInstructionId());
+            mi.setIntParameters(rI.getInstruction().getIntParametersList());
+            Log.add(DEBUG_TAG, "MT=" + mi.getType()
+                    + " MID=" + mi.getModuleId()
+                    + " IID=" + mi.getInstructionId()
+                    + " INT_PARAMS=" + mi.getIntParameters());
             EventBusService.post(mi);
         }
     }

@@ -85,8 +85,8 @@ public class Config {
         }
     }
 
-    public static XMLConfiguration getConf(){
-        if(mConfiguration == null){
+    public static XMLConfiguration getConf() {
+        if (mConfiguration == null) {
             readConfig();
         }
         return mConfiguration;
