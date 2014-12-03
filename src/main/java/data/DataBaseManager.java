@@ -5,17 +5,26 @@ import data.model.Logic;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Created by Peter Mösenthin.
+ *
+ * The DataBaseHelper is basically a wrapper to access the MySQL Database.
  */
-public class HibernateManager {
+public class DataBaseManager {
 
-    private final SessionFactory sessionFactory = buildSessionFactory();
+    private MySqlConnection mySqlConnection;
+    private SessionFactory sessionFactory;
+
+    public final String DEBUG_TAG = DataBaseManager.class.getSimpleName();
+
 
     private SessionFactory buildSessionFactory() {
         try {
@@ -27,9 +36,9 @@ public class HibernateManager {
                     configuration.getProperties()).build();
             return configuration.buildSessionFactory(serviceRegistry);
 
-        } catch (Throwable ex) {
-            System.err.println("Initial SessionFactory creation failed. " + ex);
-            throw new ExceptionInInitializerError(ex);
+        } catch (Exception e) {
+            Log.add(DEBUG_TAG, "Failed to create SessionFactory. ", e);
+            return null;
         }
     }
 
@@ -37,8 +46,21 @@ public class HibernateManager {
         return sessionFactory;
     }
 
+    public void initSession(){
+        if(mySqlConnection == null){
+            mySqlConnection = new MySqlConnection();
+        }
+        if(mySqlConnection.open()){
+            if(!mySqlConnection.databaseExists()){
+                createInitialStructure();
+                mySqlConnection.close();
+            }
+        }
+        sessionFactory = buildSessionFactory();
+    }
 
-    public void runTest() {
+
+    public void runHibernateTest() {
         SessionFactory sf = getSessionFactory();
         Session session = sf.openSession();
         session.beginTransaction();
@@ -67,8 +89,24 @@ public class HibernateManager {
 
         session.getTransaction().commit();
         session.close();
-
     }
 
+    public List<? super Object> getFakeDataList(int length){
+        Log.add(DEBUG_TAG, "Generating some fake data");
+        List<? super Object> dataList = new ArrayList<Object>();
+        for (int i=0; i< length; i++){
+            Random r = new Random();
+            dataList.add((r.nextFloat()* 30) + i);
+        }
+        return dataList;
+    }
+
+    public void createInitialStructure(){
+        Log.add(DEBUG_TAG, "Creating Hibernate structure");
+        if(mySqlConnection.open()){
+            mySqlConnection.createInitialStructure();
+            mySqlConnection.close();
+        }
+    }
 
 }
