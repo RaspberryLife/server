@@ -11,6 +11,7 @@ import util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -60,23 +61,23 @@ public class DataBaseManager {
     }
 
 
-    public void runHibernateTest() {
+    public void runHibernateWriteTest() {
         SessionFactory sf = getSessionFactory();
         Session session = sf.openSession();
         session.beginTransaction();
 
         Actuator a = new Actuator();
         a.setType(Actuator.TYPE_CLIENT);
-        a.setActuator_id(42);
+        a.setActuator_id(66);
         Actuator b = new Actuator();
         b.setType(Actuator.TYPE_MODULE);
-        b.setActuator_id(43);
+        b.setActuator_id(67);
 
         Logic l1 = new Logic();
         l1.setName("heizung_fenster");
         l1.setLogic_id(1234);
         l1.getLogic_initiator().add(a);
-        l1.getLogic_receiver().add(b);
+        l1.getLogic_receiver().add(a);
 
         Logic l2 = new Logic();
         l2.setLogic_id(5678);
@@ -91,12 +92,34 @@ public class DataBaseManager {
         session.close();
     }
 
+    public void runHibernateReadTest(){
+        Session session = sessionFactory.openSession();
+        List logics = session.createQuery("from Logic").list();
+        for(Object o : logics){
+            Logic l = (Logic) o;
+            String init = "[ ";
+            String receiver = "[ ";
+            for(Actuator a : l.getLogic_initiator()){
+                init += a.getType() + " ";
+                init += a.getActuator_id() + " ";
+            }
+            init += " ]";
+            for(Actuator a : l.getLogic_receiver()){
+                receiver += a.getType() + " ";
+                receiver += a.getActuator_id() + " ";
+            }
+            receiver += " ]";
+            Log.add(DEBUG_TAG, "Found logic: " + l.getName() + " Id: " + l.getLogic_id() + " Initiator: " + init + " Receiver: " + receiver);
+        }
+        session.close();
+    }
+
     public List<? super Object> getFakeDataList(int length){
         Log.add(DEBUG_TAG, "Generating some fake data");
         List<? super Object> dataList = new ArrayList<Object>();
         for (int i=0; i< length; i++){
             Random r = new Random();
-            dataList.add((r.nextFloat()* 30) + i);
+            dataList.add((r.nextFloat() * 30) + i);
         }
         return dataList;
     }

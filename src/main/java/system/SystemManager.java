@@ -49,7 +49,6 @@ public class SystemManager {
         if(runDebugSetup){
             Log.add(DEBUG_TAG, "Running debug setup");
             initDatabase();
-            //initHibernate();
             //initScheduler();
         }
     }
@@ -102,7 +101,8 @@ public class SystemManager {
         Log.add(DEBUG_TAG, "Initializing database");
         DataBaseManager dbm = new DataBaseManager();
         dbm.initSession();
-        //dbm.runHibernateTest();
+        //dbm.runHibernateWriteTest();
+        dbm.runHibernateReadTest();
     }
 
     private void initScheduler(){
@@ -114,7 +114,5 @@ public class SystemManager {
     private void initEventBus() {
         EventBusService.init();
     }
-
-
 
 }
