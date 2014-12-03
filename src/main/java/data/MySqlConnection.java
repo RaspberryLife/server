@@ -69,7 +69,7 @@ public class MySqlConnection {
             statement = mConnection.createStatement();
             statement.execute("CREATE DATABASE IF NOT EXISTS rbl_data COLLATE utf8_general_ci");
             statement.execute("USE rbl_data");
-            statement.execute("CREATE TABLE IF NOT EXISTS logic (logic_table_id INT(10) NOT NULL AUTO_INCREMENT,logic_id INT(10) NOT NULL,logic_name VARCHAR(50) NULL DEFAULT NULL,name VARCHAR(50) NULL DEFAULT NULL,PRIMARY KEY (logic_table_id))");
+            statement.execute("CREATE TABLE IF NOT EXISTS logic (logic_table_id INT(10) NOT NULL AUTO_INCREMENT,logic_id INT(10) NOT NULL,logic_name VARCHAR(50) NULL DEFAULT NULL,PRIMARY KEY (logic_table_id))");
             statement.execute("CREATE TABLE IF NOT EXISTS actuator (actuator_table_id INT(10) NOT NULL AUTO_INCREMENT,actuator_id INT(10) NOT NULL,actuator_name VARCHAR(50) NULL DEFAULT NULL,actuator_type VARCHAR(50) NOT NULL,PRIMARY KEY (actuator_table_id))");
             statement.execute("CREATE TABLE IF NOT EXISTS logic_initiator (actuator_table_id INT(10) NOT NULL,logic_table_id INT(10) NOT NULL,PRIMARY KEY (actuator_table_id, logic_table_id),CONSTRAINT FK_INIT_ACTUATOR FOREIGN KEY (actuator_table_id) REFERENCES actuator (actuator_table_id),CONSTRAINT FK_INIT_LOGIC FOREIGN KEY (logic_table_id) REFERENCES logic (logic_table_id))");
             statement.execute("CREATE TABLE IF NOT EXISTS logic_receiver (actuator_table_id INT(10) NOT NULL,logic_table_id INT(10) NOT NULL,PRIMARY KEY (actuator_table_id, logic_table_id),CONSTRAINT FK_RECEIVE_ACTUATOR FOREIGN KEY (actuator_table_id) REFERENCES actuator (actuator_table_id),CONSTRAINT FK_RECEIVE_LOGIC FOREIGN KEY (logic_table_id) REFERENCES logic (logic_table_id))");
