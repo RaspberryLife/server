@@ -119,31 +119,5 @@ public class MySqlConnection {
         }
     }
 
-    public void insertTemp(int temp){
-        if(D){Log.add(DEBUG_TAG,"Inserting temperature data", D);}
-        Statement statement = null;
-        try {
-            statement = mConnection.createStatement();
-            statement.execute(
-                    "INSERT INTO " + "test" + " (temp) VALUES (" + temp + ")");
-        } catch (SQLException e) {
-            Log.add(DEBUG_TAG, "write test data: ", e);
-        }catch (Exception e) {
-            Log.add(DEBUG_TAG, "write test data: ", e);
-        }
-    }
 
-    public void test() {
-        if(D){Log.add(DEBUG_TAG,"Testing connection!", D);}
-        Statement statement = null;
-        try {
-            statement = mConnection.createStatement();
-            statement.execute(
-                    "INSERT INTO " + "test" + " (temp) VALUES (1.4),(2.5),(3.6)");
-        } catch (SQLException e) {
-            Log.add(DEBUG_TAG, "write test data: ", e);
-        }catch (Exception e) {
-            Log.add(DEBUG_TAG, "write test data: ", e);
-        }
-    }
 }

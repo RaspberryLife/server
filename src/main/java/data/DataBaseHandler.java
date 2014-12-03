@@ -47,16 +47,6 @@ public class DataBaseHandler {
         mySqlConnection.close();
     }
 
-    public void writeTempData(int temp){
-        init();
-        mySqlConnection.insertTemp(temp);
-        mySqlConnection.close();
-    }
-
-
-
-
-
     public void createHibernateDataBase(){
         Log.add(DEBUG_TAG, "Preparing database for hibernate");
         if(mySqlConnection == null){
