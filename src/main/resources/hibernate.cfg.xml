@@ -8,13 +8,16 @@
         <!-- Database setup -->
         <property name="hibernate.connection.url">jdbc:mysql://localhost/rbl_data</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">hanswurst</property>
+        <property name="hibernate.connection.password"></property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
 
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
+
+
+        <property name="hibernate.id.new_generator_mappings">SEQUENCE</property>
 
         <!-- Disable the second-level cache  -->
         <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>

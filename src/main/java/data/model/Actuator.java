@@ -1,64 +1,81 @@
 package data.model;
 
 import javax.persistence.*;
-import javax.persistence.metamodel.ListAttribute;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="ACTUATOR")
+@Table(name="actuator")
 public class Actuator {
 
     public static final String TYPE_SYSTEM = "SYSTEM";
     public static final String TYPE_MODULE = "MODULE";
     public static final String TYPE_CLIENT = "CLIENT";
 
-    @Column(name="ACTUATOR_MAP_ID")
-    private int id;
-
-    @Column(name="ACTUATOR_NAME")
-    private String name;
-
-    @ManyToMany(mappedBy="initiator")
-    private Set<Logic> logic_initiator;
-
-    @ManyToMany(mappedBy="receiver")
-    private Set<Logic> Logic_receiver;
-
     @Id
     @GeneratedValue
-    @Column(name="ACTUATOR_ID")
-    private int actuatorId;
+    @Column(name="actuator_table_id")
+    private int actuator_table_id;
 
-    @Column(name="ACTUATOR_TYPE")
+    @Column(name="actuator_name")
+    private String actuator_name;
+
+    @ManyToMany(mappedBy="logic_initiator")
+    private Set<Logic> logic_initiator;
+
+    @ManyToMany(mappedBy="logic_receiver")
+    private Set<Logic> logic_receiver;
+
+    @Column(name="actuator_id", nullable=true)
+    private int actuator_id;
+
+    @Column(name="actuator_type")
     private String type;
 
-    public Actuator(int id, String type) {
-        this.id = id;
-        this.type = type;
+    public int getActuator_id() {
+        return actuator_id;
     }
 
-    public int getId() {
-        return id;
+    public void setActuator_id(int actuator_id) {
+        this.actuator_id = actuator_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Set<Logic> getLogic_initiator() {
+        return logic_initiator;
+    }
+
+    public void setLogic_initiator(Set<Logic> logic_initiator) {
+        this.logic_initiator = logic_initiator;
+    }
+
+    public Set<Logic> getLogic_receiver() {
+        return logic_receiver;
+    }
+
+    public void setLogic_receiver(Set<Logic> logic_receiver) {
+        logic_receiver = logic_receiver;
+    }
+
+    public int getActuator_table_id() {
+        return actuator_table_id;
+    }
+
+    public void setActuator_table_id(int actuator_table_id) {
+        this.actuator_table_id = actuator_table_id;
     }
 
     public String getType() {
         return type;
     }
 
-    public String getName() {
-        return name;
+    public String getActuator_name() {
+        return actuator_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setActuator_name(String actuator_name) {
+        this.actuator_name = actuator_name;
     }
 
     public void setType(String type) {

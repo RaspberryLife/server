@@ -23,7 +23,7 @@ public class SystemManager {
     public static InstructionHandler instructionHandler;
 
 
-    public static boolean runDebugSetup = false;
+    public static boolean runDebugSetup = true;
 
 
     public static SystemManager getInstance(){
@@ -48,6 +48,7 @@ public class SystemManager {
         startWebSocketServer();
         initSerialConnection();
         if(runDebugSetup){
+            Log.add(DEBUG_TAG, "Running debug setup");
             //initDatabase();
             initHibernate();
             //initScheduler();
@@ -100,14 +101,14 @@ public class SystemManager {
 
     private void initDatabase(){
         Log.add(DEBUG_TAG, "Initializing database");
-        DataBaseHandler.setUpInitial();
+        //DataBaseHandler.setUpInitial();
     }
 
     private void initHibernate() {
         Log.add(DEBUG_TAG, "Initializing hibernate");
-        HibernateManager hm = new HibernateManager();
         DataBaseHandler dbh = new DataBaseHandler();
         dbh.createHibernateDataBase();
+        HibernateManager hm = new HibernateManager();
         hm.runTest();
     }
 

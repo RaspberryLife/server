@@ -13,9 +13,9 @@ import java.util.Random;
  */
 public class DataBaseHandler {
 
-    public static MySqlConnection mySqlConnection;
+    public MySqlConnection mySqlConnection;
 
-    public static final String DEBUG_TAG = DataBaseHandler.class.getSimpleName();
+    public final String DEBUG_TAG = DataBaseHandler.class.getSimpleName();
 
     public List<? super Object> getDataList(int length){
         Log.add(DEBUG_TAG, "Generating some fake data");
@@ -27,12 +27,12 @@ public class DataBaseHandler {
         return dataList;
     }
 
-    public static void setUpInitial(){
+    public void setUpInitial(){
         init();
         closeConnection();
     }
 
-    public static void init(){
+    public void init(){
         if(mySqlConnection == null){
             mySqlConnection = new MySqlConnection();
         }
@@ -43,17 +43,22 @@ public class DataBaseHandler {
         }
     }
 
-    public static void closeConnection(){
+    public void closeConnection(){
         mySqlConnection.close();
     }
 
-    public static synchronized void writeTempData(int temp){
+    public void writeTempData(int temp){
         init();
         mySqlConnection.insertTemp(temp);
         mySqlConnection.close();
     }
 
+
+
+
+
     public void createHibernateDataBase(){
+        Log.add(DEBUG_TAG, "Preparing database for hibernate");
         if(mySqlConnection == null){
             mySqlConnection = new MySqlConnection();
         }

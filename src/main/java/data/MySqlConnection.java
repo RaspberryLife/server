@@ -20,10 +20,10 @@ public class MySqlConnection {
     public static final boolean D = true;
 
     public boolean open(){
+        Log.add(DEBUG_TAG,"Opening database connection", D);
         Properties connectionProps = new Properties();
         connectionProps.put("user", Config.getConf().getString("database.user"));
         connectionProps.put("password", Config.getConf().getString("database.password"));
-
         try {
             Class.forName("com.mysql.jdbc.Driver");
             mConnection = DriverManager.getConnection(
@@ -67,23 +67,12 @@ public class MySqlConnection {
         Statement statement = null;
         try {
             statement = mConnection.createStatement();
-            statement.execute("CREATE DATABASE IF NOT EXISTS `rbl_data`");
-            statement.execute("CREATE TABLE `logic` (" +
-                    "`logic_id` BIGINT(10) NOT NULL AUTO_INCREMENT," +
-                    "`name` VARCHAR(50) NULL DEFAULT NULL," +
-                    "PRIMARY KEY (`logic_id`))");
-            statement.execute("CREATE TABLE `actuator` (" +
-                    "`actuator_id` BIGINT(10) NOT NULL AUTO_INCREMENT," +
-                    "`name` VARCHAR(50) NULL DEFAULT NULL," +
-                    "PRIMARY KEY (`actuator_id`))");
-            statement.execute("CREATE TABLE `logic_initiator` (" +
-                    "`actuator_id` BIGINT(10) NOT NULL," +
-                    "`logic_id` BIGINT(10) NOT NULL," +
-                    "PRIMARY KEY (`actuator_id`, `logic_id`)" +
-                    "INDEX `FK_LOGIC` (`logic_id`)," +
-                    "CONSTRAINT `FK_ACTUATOR` FOREIGN KEY (`actuator_id`) REFERENCES `actuator` (`actuator_id`)," +
-                    "CONSTRAINT `FK_LOGIC` FOREIGN KEY (`logic_id`) REFERENCES `logic` (`logic_id`)" +
-                    ")");
+            statement.execute("CREATE DATABASE IF NOT EXISTS rbl_data COLLATE utf8_general_ci");
+            statement.execute("USE rbl_data");
+            statement.execute("CREATE TABLE IF NOT EXISTS logic (logic_table_id INT(10) NOT NULL AUTO_INCREMENT,logic_id INT(10) NOT NULL,logic_name VARCHAR(50) NULL DEFAULT NULL,name VARCHAR(50) NULL DEFAULT NULL,PRIMARY KEY (logic_table_id))");
+            statement.execute("CREATE TABLE IF NOT EXISTS actuator (actuator_table_id INT(10) NOT NULL AUTO_INCREMENT,actuator_id INT(10) NOT NULL,actuator_name VARCHAR(50) NULL DEFAULT NULL,actuator_type VARCHAR(50) NOT NULL,PRIMARY KEY (actuator_table_id))");
+            statement.execute("CREATE TABLE IF NOT EXISTS logic_initiator (actuator_table_id INT(10) NOT NULL,logic_table_id INT(10) NOT NULL,PRIMARY KEY (actuator_table_id, logic_table_id),CONSTRAINT FK_INIT_ACTUATOR FOREIGN KEY (actuator_table_id) REFERENCES actuator (actuator_table_id),CONSTRAINT FK_INIT_LOGIC FOREIGN KEY (logic_table_id) REFERENCES logic (logic_table_id))");
+            statement.execute("CREATE TABLE IF NOT EXISTS logic_receiver (actuator_table_id INT(10) NOT NULL,logic_table_id INT(10) NOT NULL,PRIMARY KEY (actuator_table_id, logic_table_id),CONSTRAINT FK_RECEIVE_ACTUATOR FOREIGN KEY (actuator_table_id) REFERENCES actuator (actuator_table_id),CONSTRAINT FK_RECEIVE_LOGIC FOREIGN KEY (logic_table_id) REFERENCES logic (logic_table_id))");
         } catch (SQLException e) {
             Log.add(DEBUG_TAG, "Could not create hibernate database: ", e);
         } catch (Exception e){

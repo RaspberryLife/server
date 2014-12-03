@@ -2,7 +2,6 @@ package data.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,38 +9,49 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name="LOGIC")
+@Table(name="logic")
 public class Logic {
 
     @Id
     @GeneratedValue
-    @Column(name="LOGIC_ID")
-    private Long id;
+    @Column(name="logic_table_id")
+    private int logic_table_id;
 
-    @Column(name="LOGIC_NAME")
+    @Column(name="logic_id")
+    private int logic_id;
+
+    @Column(name="logic_name")
     private String name;
 
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name="LOGIC_INITIATOR",
-            joinColumns={@JoinColumn(name="LOGIC_ID")},
-            inverseJoinColumns={@JoinColumn(name="ACTUATOR_ID")})
-    private Set<Actuator> initiator = new HashSet<Actuator>();
+    @JoinTable(name="logic_initiator",
+            joinColumns={@JoinColumn(name="logic_table_id")},
+            inverseJoinColumns={@JoinColumn(name="actuator_table_id")})
+    private Set<Actuator> logic_initiator = new HashSet<Actuator>();
 
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name="LOGIC_RECEIVER",
-            joinColumns={@JoinColumn(name="LOGIC_ID")},
-            inverseJoinColumns={@JoinColumn(name="ACTUATOR_ID")})
-    private Set<Actuator> receiver = new HashSet<Actuator>();
+    @JoinTable(name="logic_receiver",
+            joinColumns={@JoinColumn(name="logic_table_id")},
+            inverseJoinColumns={@JoinColumn(name="actuator_table_id")})
+    private Set<Actuator> logic_receiver = new HashSet<Actuator>();
 
     //private Condition condition;
 
 
-    public Long getId() {
-        return id;
+    public int getLogic_table_id() {
+        return logic_table_id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLogic_table_id(int logic_table_id) {
+        this.logic_table_id = logic_table_id;
+    }
+
+    public int getLogic_id() {
+        return logic_id;
+    }
+
+    public void setLogic_id(int logic_id) {
+        this.logic_id = logic_id;
     }
 
     public String getName() {
@@ -52,19 +62,19 @@ public class Logic {
         this.name = name;
     }
 
-    public Set<Actuator> getInitiator() {
-        return initiator;
+    public Set<Actuator> getLogic_initiator() {
+        return logic_initiator;
     }
 
-    public void setInitiator(Set<Actuator> initiator) {
-        this.initiator = initiator;
+    public void setLogic_initiator(Set<Actuator> logic_initiator) {
+        this.logic_initiator = logic_initiator;
     }
 
-    public Set<Actuator> getReceiver() {
-        return receiver;
+    public Set<Actuator> getLogic_receiver() {
+        return logic_receiver;
     }
 
-    public void setReceiver(Set<Actuator> receiver) {
-        this.receiver = receiver;
+    public void setLogic_receiver(Set<Actuator> logic_receiver) {
+        this.logic_receiver = logic_receiver;
     }
 }
