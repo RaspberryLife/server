@@ -29,9 +29,9 @@ public class ModuleInstruction extends Instruction{
         serialMessage += StringUtil.getZeroPadded(String.valueOf(instructionId), 2, true);
 
         // Parameters
-        if(intParameters != null && intParameters.size() > 0){
+        if(parameters != null && parameters.size() > 0){
             serialMessage += ":";
-            serialMessage += StringUtil.getZeroPadded(String.valueOf(intParameters.get(0)), 4, true);
+            serialMessage += StringUtil.getZeroPadded(parameters.get(0), 4, true);
         }
 
         serialMessage += ":";

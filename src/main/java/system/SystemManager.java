@@ -101,7 +101,7 @@ public class SystemManager {
         Log.add(DEBUG_TAG, "Initializing database");
         DataBaseManager dbm = new DataBaseManager();
         dbm.initSession();
-        //dbm.runHibernateWriteTest();
+        dbm.runHibernateWriteTest();
         dbm.runHibernateReadTest();
     }
 

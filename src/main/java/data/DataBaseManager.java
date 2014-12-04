@@ -53,6 +53,7 @@ public class DataBaseManager {
         }
         if(mySqlConnection.open()){
             if(!mySqlConnection.databaseExists()){
+                Log.add(DEBUG_TAG, "Database does not exist creating new.   ");
                 createInitialStructure();
                 mySqlConnection.close();
             }
@@ -72,6 +73,9 @@ public class DataBaseManager {
         Actuator b = new Actuator();
         b.setType(Actuator.TYPE_MODULE);
         b.setActuator_id(67);
+        Actuator c = new Actuator();
+        c.setType(Actuator.TYPE_SYSTEM);
+        c.setActuator_id(1234);
 
         Logic l1 = new Logic();
         l1.setName("heizung_fenster");
@@ -84,6 +88,7 @@ public class DataBaseManager {
         l2.setName("fenster_heizung");
         l2.getLogic_initiator().add(b);
         l2.getLogic_receiver().add(a);
+        l2.getLogic_receiver().add(c);
 
         session.save(l1);
         session.save(l2);

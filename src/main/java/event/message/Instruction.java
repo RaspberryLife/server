@@ -8,8 +8,7 @@ import java.util.List;
 public abstract class Instruction {
 
     protected int instructionId;
-    protected List<Integer> intParameters;
-    protected List<String> stringParameters;
+    protected List<String> parameters;
 
     public int getInstructionId() {
         return instructionId;
@@ -19,19 +18,11 @@ public abstract class Instruction {
         this.instructionId = instructionId;
     }
 
-    public List<Integer> getIntParameters() {
-        return intParameters;
+    public List<String> getParameters() {
+        return parameters;
     }
 
-    public void setIntParameters(List<Integer> intParameters) {
-        this.intParameters = intParameters;
-    }
-
-    public List<String> getStringParameters() {
-        return stringParameters;
-    }
-
-    public void setStringParameters(List<String> stringParameters) {
-        this.stringParameters = stringParameters;
+    public void setParameters(List<String> parameters) {
+        this.parameters = parameters;
     }
 }

@@ -20,46 +20,15 @@ public class ProtobufMessageHandler {
         this.client = client;
     }
 
-    /**
-     * Handle the actual RBLMessage.
-     * @param message
-     */
     public void handleMessage(RBLMessage message){
-        // Auth message
-        if(message.getMessageType() == RBLMessage.MessageType.AUTH){
-            String key = message.getPlainText().getText();
-            boolean accepted = NoAuth.verify(key);
-            client.setId(message.getId());
-            if(accepted){
-                client.acceptConnection();
-            } else {
-                client.denyConnection("Bad key");
-            }
-        }
-
-        // Plaintext message
-        else if(message.getMessageType() == RBLMessage.MessageType.PLAIN_TEXT) {
-            String text = message.getPlainText().getText();
-            if(client.isAccepted){
-                Log.add(DEBUG_TAG, "Client " + client.getId() + " says: " + text);
-            }
-        }
-
-        // RunInstruction message
-        else if(message.getMessageType() == RBLMessage.MessageType.RUN_INSTRUCTION) {
-            if(client.isAccepted){
-                SystemManager.getInstance().getInstructionHandler()
-                        .handleRunInstruction(message);
-            }
-        }
-
-        // GetDataSet message
-        else if(message.getMessageType() == RBLMessage.MessageType.GET_DATA){
+        if(message.getMessageType().equals(RBLMessage.MessageType.AUTH)){
+            handleAuthMessage(message);
+        }else {
             if(client.isAccepted) {
-                //TODO implement
+                switchType(message);
             } else {
                 Log.add(DEBUG_TAG,
-                        "Unable to send message. Client was not accepted"
+                        "Cannot handle message. Client is not accepted"
                                 +" ID=" + client.getId()
                 );
             }
@@ -67,6 +36,56 @@ public class ProtobufMessageHandler {
     }
 
 
+    private void switchType(RBLMessage message){
+        RBLMessage.MessageType type = message.getMessageType();
+        switch (type) {
+            case AUTH:
+                break;
+            case PLAIN_TEXT:
+                handlePlaintextMessage(message);
+                break;
+            case RUN_INSTRUCTION:
+                handleRunInstruction(message);
+                break;
+            case DATASET:
+                handleDataSetMessage(message);
+                break;
+            case LOGIC:
+                handleLogicMessage(message);
+                break;
+        }
+    }
+
+    private void handleLogicMessage(RBLMessage message) {
+        //TODO implement
+    }
+
+    private void handleDataSetMessage(RBLMessage message) {
+        //TODO implement
+    }
+
+
+    private void handleRunInstruction(RBLMessage message) {
+            SystemManager.getInstance().getInstructionHandler()
+                    .handleRunInstruction(message);
+
+    }
+
+    private void handlePlaintextMessage(RBLMessage message) {
+        String text = message.getPlainText().getText();
+        Log.add(DEBUG_TAG, "Client " + client.getId() + " says: " + text);
+    }
+
+    private void handleAuthMessage(RBLMessage message) {
+        String key = message.getPlainText().getText();
+        boolean accepted = NoAuth.verify(key);
+        client.setId(message.getId());
+        if(accepted){
+            client.acceptConnection();
+        } else {
+            client.denyConnection("Bad key");
+        }
+    }
 
 
 }
