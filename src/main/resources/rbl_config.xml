@@ -25,6 +25,6 @@
         <override_port></override_port>
     </serial>
     <test>
-        <run_debug>true</run_debug>
+        <run_debug>false</run_debug>
     </test>
 </config>

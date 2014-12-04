@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 sourceCompatibility = 1.5
-version = '1.0.9'
+version = '1.1.0'
 
 repositories {
     mavenCentral()
@@ -29,7 +29,7 @@ dependencies {
             'com.google.guava:guava:18.0', // Guava libs (Event bus, etc)
             'org.quartz-scheduler:quartz:2.2.1', // Scheduler
             // Logging facade used for Quartz (was unresolved at some point)
-            'eu.agrosense.client:lib-slf4j-simple:1.7.6-NB80',
+            //'eu.agrosense.client:lib-slf4j-simple:1.7.6-NB80',
             'commons-configuration:commons-configuration:1.7', // Configuration
             'org.apache.commons:commons-email:1.1', // E-Mail
 

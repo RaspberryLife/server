@@ -10,6 +10,9 @@ import event.EventBusService;
 import system.Config;
 import util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Peter Mösenthin.
  */
@@ -91,11 +94,16 @@ public class SerialMessageHandler {
                 handleLuminosityMessage(message);
                 break;
             case MODULE_RELAY:
+                handleRelayMessage(message);
                 break;
             case MODULE_PIR_AND_RELAY:
                 break;
         }
 
+    }
+
+    private void handleRelayMessage(SerialMessage message) {
+        //TODO implement
     }
 
     private void handleLuminosityMessage(SerialMessage message) {
@@ -107,7 +115,17 @@ public class SerialMessageHandler {
     }
 
     private void handlePirMessage(SerialMessage message) {
-        //TODO implement
+        if(message.instructionId == 1){
+            ModuleInstruction mi = new ModuleInstruction();
+            mi.setType(MODULE_OUTLET);
+            mi.setModuleId(1);
+            mi.setInstructionId(1);
+            List<String> params = new ArrayList<String>();
+            params.add("01");
+            params.add("01");
+            params.add("04");
+            EventBusService.post(mi);
+        }
     }
 
     private void handleTempMessage(SerialMessage message) {

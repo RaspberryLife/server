@@ -127,7 +127,7 @@ public class SerialConnector {
                             message = message.trim().substring(1, mMessageLength - 2);
                             EventBusService.post(new SerialMessage(message));
                         }
-                    }catch (SerialPortException ex) {
+                    } catch (SerialPortException ex) {
                         Log.add(DEBUG_TAG, "Serial port failed on receiving message." + ex);
                     }
                 }

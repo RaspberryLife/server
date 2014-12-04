@@ -36,11 +36,11 @@ public class InstructionHandler {
             mi.setType(rI.getInstruction().getModuleType().getNumber());
             mi.setModuleId(rI.getInstruction().getModuleId());
             mi.setInstructionId(rI.getInstruction().getInstructionId());
-            mi.setIntParameters(rI.getInstruction().getIntParametersList());
+            mi.setParameters(rI.getInstruction().getParametersList());
             Log.add(DEBUG_TAG, "MT=" + mi.getType()
                     + " MID=" + mi.getModuleId()
                     + " IID=" + mi.getInstructionId()
-                    + " INT_PARAMS=" + mi.getIntParameters());
+                    + " INT_PARAMS=" + mi.getParameters());
             EventBusService.post(mi);
         }
     }

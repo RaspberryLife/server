@@ -22,7 +22,7 @@ public class SystemManager {
     public static InstructionHandler instructionHandler;
 
 
-    public static boolean runDebugSetup = true;
+    public static boolean runDebugSetup;
 
 
     public static SystemManager getInstance(){
@@ -48,7 +48,7 @@ public class SystemManager {
         initSerialConnection();
         if(runDebugSetup){
             Log.add(DEBUG_TAG, "Running debug setup");
-            initDatabase();
+            //initDatabase();
             //initScheduler();
         }
     }

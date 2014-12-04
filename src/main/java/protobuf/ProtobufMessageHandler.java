@@ -57,7 +57,42 @@ public class ProtobufMessageHandler {
     }
 
     private void handleLogicMessage(RBLMessage message) {
-        //TODO implement
+        RBLMessage.Logic l = message.getLogic();
+
+        String initiators = "[ ";
+        for(RBLMessage.Actuator a : l.getInitiatorList()){
+            initiators += a.getName() + "(" + a.getActuatorId() + ") ";
+        }
+        initiators += "]";
+
+        String receivers = "[ ";
+        for(RBLMessage.Actuator a : l.getReceiverList()){
+            receivers += a.getName() + "(" + a.getActuatorId() + ") ";
+        }
+        receivers += "]";
+
+        String conditions = "[ ";
+        for(RBLMessage.Condition c : l.getConditionList()){
+            conditions += "FID=" + c.getFieldId() + " ";
+        }
+        conditions += "]";
+
+        String triggers = "[ ";
+        for(RBLMessage.Trigger t : l.getTriggerList()){
+            triggers += "IID=" + t.getInstructionId() + " ";
+        }
+        triggers += "]";
+
+
+
+        Log.add(DEBUG_TAG,
+                "Received logic:"
+                + " Name: " + l.getName()
+                + " Initiators: " + initiators
+                + " Conditions: " + conditions
+                + " Receivers: " + receivers
+                + " Trigger: " + triggers
+        );
     }
 
     private void handleDataSetMessage(RBLMessage message) {
