@@ -97,20 +97,28 @@ public class SerialMessageHandler {
                 handleRelayMessage(message);
                 break;
             case MODULE_PIR_AND_RELAY:
+                handlePirAndRelayMessage(message);
                 break;
         }
+    }
 
+    private void handlePirAndRelayMessage(SerialMessage message) {
+        Log.add(DEBUG_TAG, "Received Pir/Relay " + message.rawContent);
+        //TODO implement
     }
 
     private void handleRelayMessage(SerialMessage message) {
+        Log.add(DEBUG_TAG, "Received Relay" + message.rawContent);
         //TODO implement
     }
 
     private void handleLuminosityMessage(SerialMessage message) {
+        Log.add(DEBUG_TAG, "Received luminosity " + message.rawContent);
         //TODO implement
     }
 
     private void handleReedMessage(SerialMessage message) {
+        Log.add(DEBUG_TAG, "Received Reed " + message.rawContent);
         //TODO implement
     }
 
@@ -129,15 +137,17 @@ public class SerialMessageHandler {
     }
 
     private void handleTempMessage(SerialMessage message) {
+        Log.add(DEBUG_TAG, "Received Temp " + message.rawContent);
         //TODO implement
     }
 
     private void handleOutletMessage(SerialMessage message) {
+        Log.add(DEBUG_TAG, "Received outlet " + message.rawContent);
         //TODO implement
     }
 
     private void broadcastDebug(SerialMessage message) {
-        Log.add(DEBUG_TAG, "Received serial debug " + message.rawContent);
+        Log.add(DEBUG_TAG, "Received debug " + message.rawContent);
         ClientHandler.broadcastMessage(
                 ProtoFactory.buildPlainTextMessage(
                         Config.getConf().getString("server.id"),

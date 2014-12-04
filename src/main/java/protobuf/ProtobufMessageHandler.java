@@ -39,8 +39,6 @@ public class ProtobufMessageHandler {
     private void switchType(RBLMessage message){
         RBLMessage.MessageType type = message.getMessageType();
         switch (type) {
-            case AUTH:
-                break;
             case PLAIN_TEXT:
                 handlePlaintextMessage(message);
                 break;
@@ -73,30 +71,47 @@ public class ProtobufMessageHandler {
 
         String conditions = "[ ";
         for(RBLMessage.Condition c : l.getConditionList()){
-            conditions += "FID=" + c.getFieldId() + " ";
+            conditions += "FID=" + c.getFieldId()
+                    + " TU=" + c.getThresholdUnder()
+                    + " TO=" + c.getThresholdOver()
+                    + " S=" + c.getState();
         }
         conditions += "]";
 
         String triggers = "[ ";
         for(RBLMessage.Trigger t : l.getTriggerList()){
-            triggers += "IID=" + t.getInstructionId() + " ";
+            triggers += "IID=" + t.getInstructionId() + " "
+                        + " PARAMS=( ";
+            for(String s : t.getParametersList()){
+                triggers += s + " ";
+            }
+            triggers += ")";
         }
         triggers += "]";
 
-
-
         Log.add(DEBUG_TAG,
-                "Received logic:"
+                "Received Logic:"
                 + " Name: " + l.getName()
                 + " Initiators: " + initiators
                 + " Conditions: " + conditions
                 + " Receivers: " + receivers
-                + " Trigger: " + triggers
+                + " Triggers: " + triggers
         );
     }
 
     private void handleDataSetMessage(RBLMessage message) {
-        //TODO implement
+        RBLMessage.DataSet d = message.getDataSet();
+        Log.add(DEBUG_TAG,
+                "Received DataSet:"
+                + " CrudType: " + d.getCrudType()
+                + " DataType: " + d.getDataType()
+                + " Actuator: " + d.getActuator()
+                + " FieldId: " + d.getFieldId()
+                + " Range: "
+                        + " Start=" + d.getRange().getStartDateTime()
+                        + " End=" + d.getRange().getEndDateTime()
+                        + " Count=" + d.getRange().getCount()
+        );
     }
 
 
