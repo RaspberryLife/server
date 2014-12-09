@@ -4,7 +4,7 @@ import util.Log;
 import protobuf.ProtoFactory;
 import protobuf.ProtobufMessageHandler;
 import protobuf.RblProto.*;
-import system.Config;
+import util.Config;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

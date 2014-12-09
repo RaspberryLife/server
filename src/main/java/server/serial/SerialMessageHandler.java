@@ -2,12 +2,12 @@ package server.serial;
 
 import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
-import event.message.ModuleInstruction;
-import event.message.SerialMessage;
+import event.ModuleEvent;
+import event.SerialMessageEvent;
 import protobuf.ProtoFactory;
 import protobuf.RblProto;
-import event.EventBusService;
-import system.Config;
+import system.service.EventBusService;
+import util.Config;
 import util.Log;
 
 import java.util.ArrayList;
@@ -33,14 +33,14 @@ public class SerialMessageHandler {
     //----------------------------------------------------------------------------------------------
 
     @Subscribe
-    public void handleSerialMessage(SerialMessage message) {
+    public void handleSerialMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received message: " + message.rawContent);
         message.populateBase();
         preSwitchOnInstruction(message);
     }
 
 
-    private void preSwitchOnInstruction(SerialMessage message){
+    private void preSwitchOnInstruction(SerialMessageEvent message){
         switch (message.instructionId){
             case 99:
                 broadcastDebug(message);
@@ -56,7 +56,7 @@ public class SerialMessageHandler {
     //                                      SYSTEM FUNCTIONALITY
     //----------------------------------------------------------------------------------------------
 
-    private void readHeartbeat(SerialMessage message) {
+    private void readHeartbeat(SerialMessageEvent message) {
         String voltage = "";
         String preColon = message.parameters.get(2).substring(0,1);
         String postColon = message.parameters.get(2).substring(2,3);
@@ -76,7 +76,7 @@ public class SerialMessageHandler {
     //----------------------------------------------------------------------------------------------
 
 
-    private void switchModelType(SerialMessage message) {
+    private void switchModelType(SerialMessageEvent message) {
         switch(message.moduleType){
             case MODULE_OUTLET:
                 handleOutletMessage(message);
@@ -102,29 +102,29 @@ public class SerialMessageHandler {
         }
     }
 
-    private void handlePirAndRelayMessage(SerialMessage message) {
+    private void handlePirAndRelayMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received Pir/Relay " + message.rawContent);
         //TODO implement
     }
 
-    private void handleRelayMessage(SerialMessage message) {
+    private void handleRelayMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received Relay" + message.rawContent);
         //TODO implement
     }
 
-    private void handleLuminosityMessage(SerialMessage message) {
+    private void handleLuminosityMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received luminosity " + message.rawContent);
         //TODO implement
     }
 
-    private void handleReedMessage(SerialMessage message) {
+    private void handleReedMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received Reed " + message.rawContent);
         //TODO implement
     }
 
-    private void handlePirMessage(SerialMessage message) {
+    private void handlePirMessage(SerialMessageEvent message) {
         if(message.instructionId == 1){
-            ModuleInstruction mi = new ModuleInstruction();
+            ModuleEvent mi = new ModuleEvent();
             mi.setType(MODULE_OUTLET);
             mi.setModuleId(1);
             mi.setInstructionId(1);
@@ -136,17 +136,17 @@ public class SerialMessageHandler {
         }
     }
 
-    private void handleTempMessage(SerialMessage message) {
+    private void handleTempMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received Temp " + message.rawContent);
         //TODO implement
     }
 
-    private void handleOutletMessage(SerialMessage message) {
+    private void handleOutletMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received outlet " + message.rawContent);
         //TODO implement
     }
 
-    private void broadcastDebug(SerialMessage message) {
+    private void broadcastDebug(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received debug " + message.rawContent);
         ClientHandler.broadcastMessage(
                 ProtoFactory.buildPlainTextMessage(
@@ -155,7 +155,7 @@ public class SerialMessageHandler {
                         "Serial connector received message: " +
                                 message.rawContent
                 ));
-        ModuleInstruction mi = new ModuleInstruction();
+        ModuleEvent mi = new ModuleEvent();
 
         mi.setType(message.moduleType);
         mi.setModuleId(message.moduleId);

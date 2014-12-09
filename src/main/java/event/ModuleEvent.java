@@ -1,11 +1,11 @@
-package event.message;
+package event;
 
 import util.StringUtil;
 
 /**
  * Created by Peter Mösenthin.
  */
-public class ModuleInstruction extends Instruction{
+public class ModuleEvent extends InstructionEvent {
 
     private int moduleType;
     private int moduleId;
@@ -24,7 +24,7 @@ public class ModuleInstruction extends Instruction{
         serialMessage += StringUtil.getZeroPadded(String.valueOf(getMessageSequenceNumber()),
                 2, true);
 
-        // Instruction id
+        // InstructionEvent id
         serialMessage += ":";
         serialMessage += StringUtil.getZeroPadded(String.valueOf(instructionId), 2, true);
 

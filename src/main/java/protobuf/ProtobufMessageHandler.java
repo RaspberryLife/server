@@ -1,7 +1,6 @@
 package protobuf;
 
 import client.RaspberryLifeClient;
-import system.SystemManager;
 import util.Log;
 import util.NoAuth;
 import protobuf.RblProto.*;
@@ -15,6 +14,8 @@ public class ProtobufMessageHandler {
 
     private RaspberryLifeClient client;
     public static final String DEBUG_TAG = ProtobufMessageHandler.class.getSimpleName();
+    private ProtobufInstructionResolver instructionResolver = new ProtobufInstructionResolver();
+
 
     public ProtobufMessageHandler(RaspberryLifeClient client){
         this.client = client;
@@ -116,9 +117,7 @@ public class ProtobufMessageHandler {
 
 
     private void handleRunInstruction(RBLMessage message) {
-            SystemManager.getInstance().getInstructionHandler()
-                    .handleRunInstruction(message);
-
+        instructionResolver.resolve(message);
     }
 
     private void handlePlaintextMessage(RBLMessage message) {

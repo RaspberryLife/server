@@ -1,4 +1,4 @@
-package event.message;
+package event;
 
 import util.Log;
 
@@ -8,9 +8,9 @@ import java.util.List;
 /**
  * Created by Peter Mösenthin.
  */
-public class SerialMessage {
+public class SerialMessageEvent {
 
-    public static final String DEBUG_TAG = SerialMessage.class.getSimpleName();
+    public static final String DEBUG_TAG = SerialMessageEvent.class.getSimpleName();
 
     public String rawContent;
 
@@ -20,7 +20,7 @@ public class SerialMessage {
     public int instructionId;
     public List<String> parameters;
 
-    public SerialMessage(String content){
+    public SerialMessageEvent(String content){
         this.rawContent = content;
     }
 

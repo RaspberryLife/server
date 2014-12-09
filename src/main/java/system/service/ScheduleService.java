@@ -1,5 +1,6 @@
-package scheduling;
+package system.service;
 
+import scheduling.TimeLogJob;
 import util.Log;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -14,9 +15,9 @@ import static org.quartz.TriggerBuilder.newTrigger;
 /**
  * Created by Peter Mösenthin.
  */
-public class ScheduleManager {
+public class ScheduleService {
 
-    public static final String DEBUG_TAG = ScheduleManager.class.getSimpleName();
+    public static final String DEBUG_TAG = ScheduleService.class.getSimpleName();
 
     public void test(){
         Scheduler scheduler = null;

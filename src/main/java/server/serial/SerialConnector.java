@@ -1,11 +1,12 @@
 package server.serial;
 
 import com.google.common.eventbus.Subscribe;
+import event.ModuleEvent;
+import event.SystemEvent;
 import jssc.*;
-import event.message.ModuleInstruction;
-import event.message.SerialMessage;
-import event.EventBusService;
-import system.Config;
+import event.SerialMessageEvent;
+import system.service.EventBusService;
+import util.Config;
 import util.Log;
 
 /**
@@ -14,6 +15,8 @@ import util.Log;
  * Class to handle the serial connection to send data to modules
  */
 public class SerialConnector {
+
+    private static final SerialConnector instance = new SerialConnector();
 
     private SerialPort mSerialPort = null;
     private String mPortName = null;
@@ -26,10 +29,30 @@ public class SerialConnector {
 
     public final String DEBUG_TAG = SerialConnector.class.getSimpleName();
 
+    public static void register(){
+        EventBusService.register(instance);
+    }
+
+    public void handleEvent(SystemEvent e){
+        switch (e.getMessage()){
+            case SystemEvent.START_SERIAL_CONNECTION:
+                start();
+                break;
+            case SystemEvent.STOP_SERIAL_CONNECTION:
+                stop();
+                break;
+            case SystemEvent.RESTART_SERIAL_CONNECTION:
+                restart();
+        }
+    }
+
+    private SerialConnector(){
+    }
+
     /**
      * Sets up the serial port and opens it.
      */
-    public void init(){
+    private void start(){
         mPortName = determinePortName();
         if(mPortName == null){
             Log.add(DEBUG_TAG, "No serial port found");
@@ -37,7 +60,6 @@ public class SerialConnector {
         }
         mMessageLength = Config.getConf().getInt("serial.message_byte_length");
         EventBusService.register(new SerialMessageHandler());
-        EventBusService.register(this);
         try {
             Log.add(DEBUG_TAG,"Opening serial port " + mPortName);
             mSerialPort = new SerialPort(mPortName);
@@ -55,12 +77,12 @@ public class SerialConnector {
         }
     }
 
-    public void reset(){
-        close();
-        init();
+    private void restart(){
+        stop();
+        start();
     }
 
-    public void close(){
+    private void stop(){
         if(mSerialPort != null){
             try {
                 mSerialPort.closePort();
@@ -91,7 +113,7 @@ public class SerialConnector {
      * Send a message via the serial connection.
      */
     @Subscribe
-    public void send(ModuleInstruction instruction){
+    public void send(ModuleEvent instruction){
         final String message = PREFIX + instruction.build() + SUFFIX;
         Log.add(DEBUG_TAG,"Sending serial message " + message
                 + " Length=" + message.getBytes().length);
@@ -125,7 +147,7 @@ public class SerialConnector {
                         if(buffer.length != 0) {
                             String message = new String(buffer);
                             message = message.trim().substring(1, mMessageLength - 2);
-                            EventBusService.post(new SerialMessage(message));
+                            EventBusService.post(new SerialMessageEvent(message));
                         }
                     } catch (SerialPortException ex) {
                         Log.add(DEBUG_TAG, "Serial port failed on receiving message." + ex);
@@ -135,21 +157,4 @@ public class SerialConnector {
         }
     }
 
-
-
-    public SerialPort getSerialPort() {
-        return mSerialPort;
-    }
-
-    public void setSerialPort(SerialPort serialPort) {
-        mSerialPort = serialPort;
-    }
-
-    public String getPortName() {
-        return mPortName;
-    }
-
-    public void setPortName(String portName) {
-        mPortName = mPortName;
-    }
 }

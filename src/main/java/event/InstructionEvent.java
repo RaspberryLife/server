@@ -1,11 +1,11 @@
-package event.message;
+package event;
 
 import java.util.List;
 
 /**
  * Created by Peter Mösenthin.
  */
-public abstract class Instruction {
+public abstract class InstructionEvent {
 
     protected int instructionId;
     protected List<String> parameters;

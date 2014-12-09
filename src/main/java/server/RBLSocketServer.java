@@ -1,7 +1,10 @@
 package server;
 
 import client.ClientHandler;
-import system.Config;
+import com.google.common.eventbus.Subscribe;
+import event.SystemEvent;
+import system.service.EventBusService;
+import util.Config;
 import util.Log;
 
 import java.io.IOException;
@@ -12,7 +15,9 @@ import java.net.ServerSocket;
  *
  * Server class that is created by the main method.
  */
-public class RBLSocketServer implements Runnable{
+public class RBLSocketServer{
+
+    private static RBLSocketServer instance = new RBLSocketServer();
 
     private ServerSocket serverAcceptSocket;
     private Thread serverThread = null;
@@ -24,37 +29,61 @@ public class RBLSocketServer implements Runnable{
 
     private static final String DEBUG_TAG = RBLSocketServer.class.getSimpleName();
 
-    public void start(){
+    /**
+     * Empty constructor for event access only
+     */
+    private RBLSocketServer(){
+    }
+
+    public static void register() {
+        EventBusService.register(instance);
+    }
+
+    @Subscribe
+    public void handleEvent(SystemEvent e){
+        switch (e.getMessage()){
+            case SystemEvent.START_SOCKET_SERVER:
+                start();
+                break;
+            case SystemEvent.STOP_SOCKET_SERVER:
+                stop();
+                break;
+            case SystemEvent.RESTART_SOCKET_SERVER:
+                break;
+        }
+    }
+
+    private void start(){
         this.port = Config.getConf().getInt("socket.java_port");
-        serverThread = new Thread(this);
+        serverThread = new Thread(getRunnable());
         serverThread.start();
     }
 
-    public void stop(){
+    private void stop(){
         serverRunning = false;
         acceptClients = false;
     }
 
-
-    public boolean isRunning(){
-        return serverRunning;
-    }
-
-    public void run() {
-        serverRunning = true;
-        try {
-            serverAcceptSocket = new ServerSocket(port);
-            Log.add(DEBUG_TAG, "Server listens on port " + port);
-            while(acceptClients) {
-                // Accept
-                clientHandler.handleSocketClient(serverAcceptSocket.accept());
-                Log.add(DEBUG_TAG, "Client connected on port " + port);
+    private Runnable getRunnable() {
+        return new Runnable() {
+            public void run() {
+                serverRunning = true;
+                try {
+                    serverAcceptSocket = new ServerSocket(port);
+                    Log.add(DEBUG_TAG, "Server listens on port " + port);
+                    while(acceptClients) {
+                        // Accept
+                        clientHandler.handleSocketClient(serverAcceptSocket.accept());
+                        Log.add(DEBUG_TAG, "Client connected on port " + port);
+                    }
+                } catch (IOException e) {
+                    serverRunning = false;
+                    Log.add(DEBUG_TAG, "Server problem. Please restart.", e);
+                } finally {
+                    clientHandler.closeAllConnections();
+                }
             }
-        } catch (IOException e) {
-            serverRunning = false;
-            Log.add(DEBUG_TAG, "Server problem. Please restart", e);
-        } finally {
-            clientHandler.closeAllConnections();
-        }
+        };
     }
+
 }

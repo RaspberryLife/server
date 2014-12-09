@@ -1,48 +1,57 @@
 package system;
 
 
+import com.google.common.eventbus.Subscribe;
 import data.DataBaseManager;
-import event.EventBusService;
-import scheduling.ScheduleManager;
+import event.SystemEvent;
+import system.service.EventBusService;
+import protobuf.ProtobufInstructionResolver;
+import system.service.ScheduleService;
 import server.RBLSocketServer;
 import server.web.RBLWebSocketServer;
 import server.serial.SerialConnector;
+import util.Config;
 import util.Log;
 import util.NetworkUtil;
 
 public class SystemManager {
 
-    private static SystemManager instance = null;
+    private static SystemManager instance = new SystemManager();
 
     public static final String DEBUG_TAG = SystemManager.class.getSimpleName();
 
-    RBLSocketServer socketServer = null;
-    public static Thread webServerThread = null;
-    public static SerialConnector serialConnector = null;
-    public static InstructionHandler instructionHandler;
-
-
     public static boolean runDebugSetup;
 
+    public static void register(){
+        EventBusService.register(instance);
+    }
 
-    public static SystemManager getInstance(){
-        if(instance == null){
-            return instance = new SystemManager();
-        } else {
-            return instance;
+    /**
+     * Empty constructor for event access only
+     */
+    private SystemManager(){
+    }
+
+    @Subscribe
+    public void handleEvent(SystemEvent e){
+        switch (e.getMessage()){
+            case SystemEvent.START_SYSTEM:
+                start();
+                break;
+            case SystemEvent.STOP_SYSTEM:
+                stop();
+                break;
+            case SystemEvent.RESTART_SYSTEM:
+                restart();
+                break;
         }
     }
 
-    private SystemManager(){
-
-    }
-
-    public void start(){
+    private void start(){
         Log.printLogHeader();
-        initConfig();
+        loadConfig();
         NetworkUtil.listIPAddresses();
         initEventBus();
-        instructionHandler = new InstructionHandler();
         startSocketServer();
         startWebSocketServer();
         initSerialConnection();
@@ -53,24 +62,20 @@ public class SystemManager {
         }
     }
 
-    public void stop(){
+    private void stop(){
         Log.add(DEBUG_TAG, "Stopping ... (But not really)");
     }
 
-    public void restart(){
+    private void restart(){
         stop();
         start();
-    }
-
-    public InstructionHandler getInstructionHandler() {
-        return instructionHandler;
     }
 
     //----------------------------------------------------------------------------------------------
     //                                      STARTUP
     //----------------------------------------------------------------------------------------------
 
-    private void initConfig(){
+    private void loadConfig(){
         Log.add(DEBUG_TAG, "Loading configuration");
         Config.readConfig();
         runDebugSetup = Config.getConf().getBoolean("test.run_debug");
@@ -80,21 +85,21 @@ public class SystemManager {
 
     private void startSocketServer(){
         Log.add(DEBUG_TAG, "Starting RBLSocketServer");
-        RBLSocketServer server = new RBLSocketServer();
-        server.start();
+        RBLSocketServer.register();
+        EventBusService.post(new SystemEvent(SystemEvent.START_SOCKET_SERVER));
     }
 
     private void startWebSocketServer(){
         Log.add(DEBUG_TAG, "Starting RBLWebSocketServer");
-        RBLWebSocketServer webServer = new RBLWebSocketServer();
-        webServer.start();
+        RBLWebSocketServer.register();
+        EventBusService.post(new SystemEvent(SystemEvent.START_WEB_SOCKET_SERVER));
     }
 
     // Initialize the serial connector for module communication
     private void initSerialConnection(){
         Log.add(DEBUG_TAG, "Initializing serial connector");
-        serialConnector = new SerialConnector();
-        serialConnector.init();
+        SerialConnector.register();
+        EventBusService.post(new SystemEvent(SystemEvent.START_SERIAL_CONNECTION));
     }
 
     private void initDatabase(){
@@ -107,7 +112,7 @@ public class SystemManager {
 
     private void initScheduler(){
         Log.add(DEBUG_TAG, "Initializing scheduler");
-        ScheduleManager sm = new ScheduleManager();
+        ScheduleService sm = new ScheduleService();
         sm.test();
     }
 

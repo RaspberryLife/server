@@ -1,4 +1,4 @@
-package event;
+package system.service;
 
 
 import com.google.common.eventbus.EventBus;
@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class EventBusService {
 
-    private static EventBus eventBus;
+    private static EventBus eventBus = new EventBus();
 
     public static void init(){
         eventBus = new EventBus();

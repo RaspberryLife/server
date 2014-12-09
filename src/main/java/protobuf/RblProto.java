@@ -2112,7 +2112,7 @@ public final class RblProto {
     }
 
     public interface InstructionOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:RBLMessage.Instruction)
+        // @@protoc_insertion_point(interface_extends:RBLMessage.InstructionEvent)
         com.google.protobuf.MessageOrBuilder {
 
       /**
@@ -2178,13 +2178,13 @@ public final class RblProto {
       int getModuleId();
     }
     /**
-     * Protobuf type {@code RBLMessage.Instruction}
+     * Protobuf type {@code RBLMessage.InstructionEvent}
      */
     public static final class Instruction extends
         com.google.protobuf.GeneratedMessage implements
-        // @@protoc_insertion_point(message_implements:RBLMessage.Instruction)
+        // @@protoc_insertion_point(message_implements:RBLMessage.InstructionEvent)
         InstructionOrBuilder {
-      // Use Instruction.newBuilder() to construct.
+      // Use InstructionEvent.newBuilder() to construct.
       private Instruction(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
         this.unknownFields = builder.getUnknownFields();
@@ -2536,11 +2536,11 @@ public final class RblProto {
         return builder;
       }
       /**
-       * Protobuf type {@code RBLMessage.Instruction}
+       * Protobuf type {@code RBLMessage.InstructionEvent}
        */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-          // @@protoc_insertion_point(builder_implements:RBLMessage.Instruction)
+          // @@protoc_insertion_point(builder_implements:RBLMessage.InstructionEvent)
           protobuf.RblProto.RBLMessage.InstructionOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
@@ -2554,7 +2554,7 @@ public final class RblProto {
                   protobuf.RblProto.RBLMessage.Instruction.class, protobuf.RblProto.RBLMessage.Instruction.Builder.class);
         }
 
-        // Construct using protobuf.RblProto.RBLMessage.Instruction.newBuilder()
+        // Construct using protobuf.RblProto.RBLMessage.InstructionEvent.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
@@ -2917,7 +2917,7 @@ public final class RblProto {
           return this;
         }
 
-        // @@protoc_insertion_point(builder_scope:RBLMessage.Instruction)
+        // @@protoc_insertion_point(builder_scope:RBLMessage.InstructionEvent)
       }
 
       static {
@@ -2925,7 +2925,7 @@ public final class RblProto {
         defaultInstance.initFields();
       }
 
-      // @@protoc_insertion_point(class_scope:RBLMessage.Instruction)
+      // @@protoc_insertion_point(class_scope:RBLMessage.InstructionEvent)
     }
 
     public interface RunInstructionOrBuilder extends
@@ -2946,15 +2946,15 @@ public final class RblProto {
       protobuf.RblProto.RBLMessage.ActuatorOrBuilder getActuatorOrBuilder();
 
       /**
-       * <code>required .RBLMessage.Instruction instruction = 2;</code>
+       * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
        */
       boolean hasInstruction();
       /**
-       * <code>required .RBLMessage.Instruction instruction = 2;</code>
+       * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
        */
       protobuf.RblProto.RBLMessage.Instruction getInstruction();
       /**
-       * <code>required .RBLMessage.Instruction instruction = 2;</code>
+       * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
        */
       protobuf.RblProto.RBLMessage.InstructionOrBuilder getInstructionOrBuilder();
     }
@@ -3100,19 +3100,19 @@ public final class RblProto {
       public static final int INSTRUCTION_FIELD_NUMBER = 2;
       private protobuf.RblProto.RBLMessage.Instruction instruction_;
       /**
-       * <code>required .RBLMessage.Instruction instruction = 2;</code>
+       * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
        */
       public boolean hasInstruction() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required .RBLMessage.Instruction instruction = 2;</code>
+       * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
        */
       public protobuf.RblProto.RBLMessage.Instruction getInstruction() {
         return instruction_;
       }
       /**
-       * <code>required .RBLMessage.Instruction instruction = 2;</code>
+       * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
        */
       public protobuf.RblProto.RBLMessage.InstructionOrBuilder getInstructionOrBuilder() {
         return instruction_;
@@ -3534,13 +3534,13 @@ public final class RblProto {
         private com.google.protobuf.SingleFieldBuilder<
             protobuf.RblProto.RBLMessage.Instruction, protobuf.RblProto.RBLMessage.Instruction.Builder, protobuf.RblProto.RBLMessage.InstructionOrBuilder> instructionBuilder_;
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         public boolean hasInstruction() {
           return ((bitField0_ & 0x00000002) == 0x00000002);
         }
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         public protobuf.RblProto.RBLMessage.Instruction getInstruction() {
           if (instructionBuilder_ == null) {
@@ -3550,7 +3550,7 @@ public final class RblProto {
           }
         }
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         public Builder setInstruction(protobuf.RblProto.RBLMessage.Instruction value) {
           if (instructionBuilder_ == null) {
@@ -3566,7 +3566,7 @@ public final class RblProto {
           return this;
         }
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         public Builder setInstruction(
             protobuf.RblProto.RBLMessage.Instruction.Builder builderForValue) {
@@ -3580,7 +3580,7 @@ public final class RblProto {
           return this;
         }
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         public Builder mergeInstruction(protobuf.RblProto.RBLMessage.Instruction value) {
           if (instructionBuilder_ == null) {
@@ -3599,7 +3599,7 @@ public final class RblProto {
           return this;
         }
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         public Builder clearInstruction() {
           if (instructionBuilder_ == null) {
@@ -3612,7 +3612,7 @@ public final class RblProto {
           return this;
         }
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         public protobuf.RblProto.RBLMessage.Instruction.Builder getInstructionBuilder() {
           bitField0_ |= 0x00000002;
@@ -3620,7 +3620,7 @@ public final class RblProto {
           return getInstructionFieldBuilder().getBuilder();
         }
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         public protobuf.RblProto.RBLMessage.InstructionOrBuilder getInstructionOrBuilder() {
           if (instructionBuilder_ != null) {
@@ -3630,7 +3630,7 @@ public final class RblProto {
           }
         }
         /**
-         * <code>required .RBLMessage.Instruction instruction = 2;</code>
+         * <code>required .RBLMessage.InstructionEvent instruction = 2;</code>
          */
         private com.google.protobuf.SingleFieldBuilder<
             protobuf.RblProto.RBLMessage.Instruction, protobuf.RblProto.RBLMessage.Instruction.Builder, protobuf.RblProto.RBLMessage.InstructionOrBuilder> 
