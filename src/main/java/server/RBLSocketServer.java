@@ -4,7 +4,7 @@ import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
 import event.SystemEvent;
 import system.service.EventBusService;
-import util.Config;
+import data.Config;
 import util.Log;
 
 import java.io.IOException;

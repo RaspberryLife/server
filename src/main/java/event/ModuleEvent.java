@@ -2,13 +2,18 @@ package event;
 
 import util.StringUtil;
 
+import java.util.List;
+
 /**
  * Created by Peter Mösenthin.
  */
-public class ModuleEvent extends InstructionEvent {
+public class ModuleEvent {
 
     private int moduleType;
     private int moduleId;
+    private int instructionId;
+    private List<String> parameters;
+
     private static int messageSequenceNumber = 0;
 
     public String build(){
@@ -61,6 +66,22 @@ public class ModuleEvent extends InstructionEvent {
 
     public void setModuleId(int moduleId) {
         this.moduleId = moduleId;
+    }
+
+    public int getInstructionId() {
+        return instructionId;
+    }
+
+    public void setInstructionId(int instructionId) {
+        this.instructionId = instructionId;
+    }
+
+    public List<String> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<String> parameters) {
+        this.parameters = parameters;
     }
 
 

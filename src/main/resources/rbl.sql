@@ -33,3 +33,17 @@ actuator_table_id INT(10) NOT NULL,
 logic_table_id INT(10) NOT NULL,PRIMARY KEY (actuator_table_id, logic_table_id),
 CONSTRAINT FK_RECEIVE_ACTUATOR FOREIGN KEY (actuator_table_id) REFERENCES actuator (actuator_table_id),
 CONSTRAINT FK_RECEIVE_LOGIC FOREIGN KEY (logic_table_id) REFERENCES logic (logic_table_id));
+
+/* table to hold the logic initiator condition relations */
+CREATE TABLE IF NOT EXISTS logic_initiator_condition (
+# actuator_table_id INT(10) NOT NULL,
+# logic_table_id INT(10) NOT NULL,PRIMARY KEY (actuator_table_id, logic_table_id),
+# CONSTRAINT FK_RECEIVE_ACTUATOR FOREIGN KEY (actuator_table_id) REFERENCES actuator (actuator_table_id),
+# CONSTRAINT FK_RECEIVE_LOGIC FOREIGN KEY (logic_table_id) REFERENCES logic (logic_table_id));
+
+/* table to hold the logic receiver trigger relations */
+CREATE TABLE IF NOT EXISTS logic_receiver_trigger (
+# actuator_table_id INT(10) NOT NULL,
+# logic_table_id INT(10) NOT NULL,PRIMARY KEY (actuator_table_id, logic_table_id),
+# CONSTRAINT FK_RECEIVE_ACTUATOR FOREIGN KEY (actuator_table_id) REFERENCES actuator (actuator_table_id),
+# CONSTRAINT FK_RECEIVE_LOGIC FOREIGN KEY (logic_table_id) REFERENCES logic (logic_table_id));

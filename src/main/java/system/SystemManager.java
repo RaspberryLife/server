@@ -2,15 +2,15 @@ package system;
 
 
 import com.google.common.eventbus.Subscribe;
-import data.DataBaseManager;
+import event.DataBaseEvent;
+import system.service.DataBaseService;
 import event.SystemEvent;
 import system.service.EventBusService;
-import protobuf.ProtobufInstructionResolver;
 import system.service.ScheduleService;
 import server.RBLSocketServer;
 import server.web.RBLWebSocketServer;
 import server.serial.SerialConnector;
-import util.Config;
+import data.Config;
 import util.Log;
 import util.NetworkUtil;
 
@@ -104,10 +104,9 @@ public class SystemManager {
 
     private void initDatabase(){
         Log.add(DEBUG_TAG, "Initializing database");
-        DataBaseManager dbm = new DataBaseManager();
-        dbm.initSession();
-        dbm.runHibernateWriteTest();
-        dbm.runHibernateReadTest();
+        DataBaseService.register();
+        EventBusService.post(new DataBaseEvent(DataBaseEvent.START_SESSION));
+        EventBusService.post(new DataBaseEvent(DataBaseEvent.RUN_TEST));
     }
 
     private void initScheduler(){

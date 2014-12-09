@@ -1,8 +1,9 @@
-package util;
+package data;
 
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
+import util.Log;
 
 import java.io.*;
 import java.net.URLDecoder;

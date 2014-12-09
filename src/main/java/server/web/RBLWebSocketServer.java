@@ -2,13 +2,12 @@ package server.web;
 
 import com.google.common.eventbus.Subscribe;
 import event.SystemEvent;
-import server.RBLSocketServer;
 import system.service.EventBusService;
 import util.Log;
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 import org.webbitserver.handler.StaticFileHandler;
-import util.Config;
+import data.Config;
 
 /**
  * Created by Peter Mösenthin.

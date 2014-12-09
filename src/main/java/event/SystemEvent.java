@@ -3,7 +3,7 @@ package event;
 /**
  * Created by Peter Mösenthin.
  */
-public class SystemEvent extends InstructionEvent {
+public class SystemEvent {
 
     public static final int START_SYSTEM = 0;
     public static final int STOP_SYSTEM = 1;

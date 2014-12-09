@@ -6,7 +6,7 @@ import event.SystemEvent;
 import jssc.*;
 import event.SerialMessageEvent;
 import system.service.EventBusService;
-import util.Config;
+import data.Config;
 import util.Log;
 
 /**

@@ -1,6 +1,5 @@
 package data;
 
-import util.Config;
 import util.Log;
 
 import java.sql.*;
@@ -61,7 +60,7 @@ public class MySqlConnection {
         return false;
     }
 
-    public void createInitialStructure(){
+    public void createDatabaseInitial(){
         createDatabase();
         selectDatabase();
         createLogicTable();

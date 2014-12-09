@@ -7,7 +7,7 @@ import event.SerialMessageEvent;
 import protobuf.ProtoFactory;
 import protobuf.RblProto;
 import system.service.EventBusService;
-import util.Config;
+import data.Config;
 import util.Log;
 
 import java.util.ArrayList;
