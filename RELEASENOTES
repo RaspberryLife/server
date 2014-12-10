@@ -1,7 +1,7 @@
 #(1.1.1)
 Refactoring for more extensive event bus usage
 extend schedule functionality
-
+added email notifcation on server startup
 
 #1.1.0
 Added Hibernate for Database handling
