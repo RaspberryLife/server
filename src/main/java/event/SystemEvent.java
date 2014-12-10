@@ -5,34 +5,42 @@ package event;
  */
 public class SystemEvent {
 
-    public static final int START_SYSTEM = 0;
-    public static final int STOP_SYSTEM = 1;
-    public static final int RESTART_SYSTEM = 2;
 
-    public static final int START_SOCKET_SERVER = 3;
-    public static final int STOP_SOCKET_SERVER = 4;
-    public static final int RESTART_SOCKET_SERVER = 5;
+    public enum Type{
+        START_SYSTEM, STOP_SYSTEM, RESTART_SYSTEM,
+        START_SOCKET_SERVER, STOP_SOCKET_SERVER, RESTART_SOCKET_SERVER,
+        START_WEB_SOCKET_SERVER, STOP_WEB_SOCKET_SERVER,RESTART_WEB_SOCKET_SERVER,
+        START_SERIAL_CONNECTION, STOP_SERIAL_CONNECTION, RESTART_SERIAL_CONNECTION,
+        CLOSE_ALL_CONNECTIONS, CLOSE_SOCKET_CONNECTIONS, CLOSE_WEB_SOCKET_CONNECTIONS,
+        START_SCHEDULER, STOP_SCHEDULER, RESTART_SCHEDULER
 
-    public static final int START_WEB_SOCKET_SERVER = 6;
-    public static final int STOP_WEB_SOCKET_SERVER = 7;
-    public static final int RESTART_WEB_SOCKET_SERVER = 8;
-
-    public static final int START_SERIAL_CONNECTION = 9;
-    public static final int STOP_SERIAL_CONNECTION = 10;
-    public static final int RESTART_SERIAL_CONNECTION = 11;
-
-
-    private int message;
-
-    public SystemEvent(int type){
-        this.message = type;
     }
 
-    public int getMessage() {
+    private String message;
+    private Type type;
+
+    public SystemEvent(Type type) {
+        this.type = type;
+    }
+
+    public SystemEvent(String message, Type type) {
+        this.message = message;
+        this.type = type;
+    }
+
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(int message) {
+    public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }

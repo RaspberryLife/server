@@ -3,6 +3,7 @@ package server.serial;
 import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
 import event.ModuleEvent;
+import event.NotificationEvent;
 import event.SerialMessageEvent;
 import protobuf.ProtoFactory;
 import protobuf.RblProto;
@@ -148,15 +149,15 @@ public class SerialMessageHandler {
 
     private void broadcastDebug(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received debug " + message.rawContent);
-        ClientHandler.broadcastMessage(
-                ProtoFactory.buildPlainTextMessage(
-                        Config.getConf().getString("server.id"),
-                        RblProto.RBLMessage.MessageFlag.RESPONSE,
-                        "Serial connector received message: " +
-                                message.rawContent
-                ));
-        ModuleEvent mi = new ModuleEvent();
 
+        // Client broadcast
+        String bc_message = "Serial connector received message: " + message.rawContent;
+        NotificationEvent e = new NotificationEvent(
+                NotificationEvent.Type.CLIENT_BROADCAST,bc_message);
+        EventBusService.post(e);
+
+        // Module broadcast
+        ModuleEvent mi = new ModuleEvent();
         mi.setType(message.moduleType);
         mi.setModuleId(message.moduleId);
         mi.setInstructionId(message.instructionId);

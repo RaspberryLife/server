@@ -2,6 +2,7 @@ package server;
 
 import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
+import event.SocketEvent;
 import event.SystemEvent;
 import system.service.EventBusService;
 import data.Config;
@@ -24,7 +25,6 @@ public class RBLSocketServer{
 
     private boolean acceptClients = true;
     private int port = 0;
-    private ClientHandler clientHandler = ClientHandler.getInstance();
 
     private static final String DEBUG_TAG = RBLSocketServer.class.getSimpleName();
 
@@ -40,26 +40,27 @@ public class RBLSocketServer{
 
     @Subscribe
     public void handleEvent(SystemEvent e){
-        switch (e.getMessage()){
-            case SystemEvent.START_SOCKET_SERVER:
+        switch (e.getType()){
+            case START_SOCKET_SERVER:
                 start();
                 break;
-            case SystemEvent.STOP_SOCKET_SERVER:
+            case STOP_SOCKET_SERVER:
                 stop();
                 break;
-            case SystemEvent.RESTART_SOCKET_SERVER:
+            case RESTART_SOCKET_SERVER:
                 break;
         }
     }
 
     private void start(){
+        Log.add(DEBUG_TAG, "Starting...");
         this.port = Config.getConf().getInt("socket.java_port");
         serverThread = new Thread(getRunnable());
         serverThread.start();
     }
 
     private void stop(){
-        serverRunning = false;
+        Log.add(DEBUG_TAG, "Stopping...");
         acceptClients = false;
         if(serverThread != null){
             serverThread.interrupt();
@@ -79,13 +80,17 @@ public class RBLSocketServer{
                     Log.add(DEBUG_TAG, "Server listens on port " + port);
                     while(acceptClients) {
                         // Accept
-                        clientHandler.handleSocketClient(serverAcceptSocket.accept());
+                        SocketEvent e = new SocketEvent(
+                                SocketEvent.Type.SOCKET_ACCEPT,
+                                serverAcceptSocket.accept());
+                        EventBusService.post(e);
                         Log.add(DEBUG_TAG, "Client connected on port " + port);
                     }
                 } catch (IOException e) {
                     Log.add(DEBUG_TAG, "Server problem. Please restart.", e);
                 } finally {
-                    clientHandler.closeAllConnections();
+                    EventBusService.post(
+                            new SystemEvent(SystemEvent.Type.CLOSE_SOCKET_CONNECTIONS));
                 }
             }
         };

@@ -9,9 +9,9 @@ import protobuf.RblProto;
 public class WebSocketEvent {
 
     public enum Type {
-        TYPE_CONNECTION_OPEN,
-        TYPE_CONNECTION_CLOSE,
-        TYPE_MESSAGE
+        CONNECTION_OPEN,
+        CONNECTION_CLOSE,
+        MESSAGE
     }
 
 

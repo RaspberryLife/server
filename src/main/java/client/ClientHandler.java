@@ -1,10 +1,13 @@
 package client;
 
 import com.google.common.eventbus.Subscribe;
-import event.NewClientEvent;
+import data.Config;
+import event.NotificationEvent;
+import event.SocketEvent;
 import event.SystemEvent;
 import event.WebSocketEvent;
-import event.WebSocketMessageEvent;
+import protobuf.ProtoFactory;
+import protobuf.RblProto;
 import system.service.EventBusService;
 import util.Log;
 import interfaces.ConnectionListener;
@@ -30,32 +33,100 @@ public class ClientHandler {
 
     public static final String DEBUG_TAG = ClientHandler.class.getSimpleName();
 
+    //----------------------------------------------------------------------------------------------
+    //                                      LIFECYCLE
+    //----------------------------------------------------------------------------------------------
 
+    /**
+     * Private constructor for event access only
+     */
     private ClientHandler(){
     }
 
-    @Subscribe
-    public void handleNewClientEvent(NewClientEvent e){
-
+    public static void register(){
+        EventBusService.register(instance);
     }
+
+    //----------------------------------------------------------------------------------------------
+    //                                      EVENT RECEIVER
+    //----------------------------------------------------------------------------------------------
 
     @Subscribe
     public void handleSystemEvent(SystemEvent e){
-
+        switch(e.getType()){
+            case CLOSE_ALL_CONNECTIONS:
+                closeAllConnections();
+                break;
+            case CLOSE_SOCKET_CONNECTIONS:
+                closeSocketConnections();
+                break;
+            case CLOSE_WEB_SOCKET_CONNECTIONS:
+                closeWebSocketConnections();
+                break;
+        }
     }
 
     @Subscribe
     public void handleWebSocketEvent(WebSocketEvent e){
         switch (e.getType()){
-            case TYPE_CONNECTION_OPEN:
+            case CONNECTION_OPEN:
+                handleWebSocketClient(e);
                 break;
-            case TYPE_CONNECTION_CLOSE:
+            case CONNECTION_CLOSE:
+                closeWebSocketClient(e);
                 break;
-            case TYPE_MESSAGE:
+            case MESSAGE:
+                deliverWebSocketMessage(e);
                 break;
         }
+    }
 
-        RBLWebSocketClient c = getWebSocketClient(e.getConnection());
+    @Subscribe
+    public void handleSocketEvent(SocketEvent e){
+        switch (e.getType()){
+            case SOCKET_ACCEPT:
+                handleSocketClient(e);
+                break;
+        }
+    }
+
+    @Subscribe
+    public void handleNotificationEvent(NotificationEvent e){
+        if(e.getType() == NotificationEvent.Type.CLIENT_BROADCAST){
+
+        }
+    }
+
+
+    //----------------------------------------------------------------------------------------------
+    //                                      WEB SOCKET HANDLING
+    //----------------------------------------------------------------------------------------------
+
+    private void closeWebSocketClient(WebSocketEvent e){
+        RBLWebSocketClient c = getWebSocketClient(e);
+        c.closeConnection();
+    }
+
+    private void closeWebSocketConnections() {
+        for(RaspberryLifeClient client : clientList){
+            if(client instanceof RBLWebSocketClient){
+                client.closeConnection();
+            }
+        }
+    }
+
+    /**
+     * Handle a web socket as incoming connection.
+     * @param WebSocketEvent
+     */
+    private void handleWebSocketClient(final WebSocketEvent e){
+        final RaspberryLifeClient client = new RBLWebSocketClient(e.getConnection());
+        setUpConnectionListener(client);
+        clientList.add(client);
+    }
+
+    private void deliverWebSocketMessage(WebSocketEvent e){
+        RBLWebSocketClient c = getWebSocketClient(e);
         if(c != null){
             c.readMessage(e.getMessage());
         }else {
@@ -65,20 +136,40 @@ public class ClientHandler {
         }
     }
 
-    public static void register(){
-        EventBusService.register(instance);
+    /**
+     * Finds and returns a connection from the client list
+     * by comparing the hashcode of the connection.
+     * @param WebSocketEvent
+     * @return
+     */
+    private RBLWebSocketClient getWebSocketClient(WebSocketEvent e){
+        for(RaspberryLifeClient client : clientList){
+            if(client instanceof RBLWebSocketClient){
+                WebSocketConnection clientConn =
+                        ((RBLWebSocketClient) client).getWebSocketConnection();
+                if(clientConn.hashCode() == e.getConnection().hashCode()){
+                    return (RBLWebSocketClient) client;
+                }
+            }
+        }
+        return null;
     }
+
+
+    //----------------------------------------------------------------------------------------------
+    //                                      SOCKET HANDLING
+    //----------------------------------------------------------------------------------------------
 
 
     /**
      * Handles a regular Java socket as incoming connection.
      * @param clientSocket
      */
-    public void handleSocketClient(final Socket clientSocket){
+    private void handleSocketClient(final SocketEvent e){
         Thread handleThread = new Thread(new Runnable() {
             public void run() {
             final RaspberryLifeClient client =
-                    new RBLSocketClient(clientSocket);
+                    new RBLSocketClient(e.getSocket());
             setUpConnectionListener(client);
             clientList.add(client);
             }
@@ -86,15 +177,17 @@ public class ClientHandler {
         handleThread.start();
     }
 
-    /**
-     * Handle a websocket as incoming connection.
-     * @param connection
-     */
-    public void handleWebSocketClient(final WebSocketConnection connection){
-        final RaspberryLifeClient client = new RBLWebSocketClient(connection);
-        setUpConnectionListener(client);
-        clientList.add(client);
+    private void closeSocketConnections() {
+        for(RaspberryLifeClient client : clientList){
+            if(client instanceof RBLSocketClient){
+                client.closeConnection();
+            }
+        }
     }
+
+    //----------------------------------------------------------------------------------------------
+    //                                      GENERIC
+    //----------------------------------------------------------------------------------------------
 
 
 
@@ -132,28 +225,9 @@ public class ClientHandler {
     }
 
     /**
-     * Finds and returns a connection from the clientlist
-     * by comparing the hashcode of the connection.
-     * @param connection
-     * @return
-     */
-    public RBLWebSocketClient getWebSocketClient(WebSocketConnection connection){
-        for(RaspberryLifeClient client : clientList){
-            if(client instanceof RBLWebSocketClient){
-               WebSocketConnection clientConn =
-                       ((RBLWebSocketClient) client).getWebSocketConnection();
-                if(clientConn.hashCode() == connection.hashCode()){
-                    return (RBLWebSocketClient) client;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
      * Closes all connections of all clients in the clientlist
      */
-    public void closeAllConnections() {
+    private void closeAllConnections() {
         for(RaspberryLifeClient client : clientList){
             client.closeConnection();
         }
@@ -165,7 +239,7 @@ public class ClientHandler {
      * @return true if the client is in the clientlist and therefore
      * authenticated.
      */
-    public static boolean isAuthenticated(String clientID){
+    private static boolean isAuthenticated(String clientID){
         return getClientWithID(clientID) != null;
     }
 
@@ -175,9 +249,11 @@ public class ClientHandler {
      * @param id
      * @return
      */
-    public static RaspberryLifeClient getClientWithID(String id){
+    private static RaspberryLifeClient getClientWithID(String id){
         for(RaspberryLifeClient client : clientList){
-            if(client.getId().equals(id)){return client;}
+            if(client.getId().equals(id)){
+                return client;
+            }
         }
         return null;
     }
@@ -186,9 +262,15 @@ public class ClientHandler {
      * Sends a message to all clients
      * @param message
      */
-    public static void broadcastMessage(RBLMessage message){
+    private static void broadcastMessage(NotificationEvent e){
+        RBLMessage m = ProtoFactory.buildPlainTextMessage(
+                Config.getConf().getString("server.id"),
+                RblProto.RBLMessage.MessageFlag.RESPONSE,
+                "Serial connector received message: " + e.getMessage()
+                );
         for(RaspberryLifeClient client : clientList){
-           client.sendMessage(message);
+           client.sendMessage(m);
         }
     }
+
 }

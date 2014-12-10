@@ -26,6 +26,7 @@ public class HibernateHandler {
      * Initialize a new server session. Create database if needed.
      */
     public void initSession(){
+        Log.add(DEBUG_TAG, "Initializing session");
         if(mySqlConnection == null){
             mySqlConnection = new MySqlConnection();
         }

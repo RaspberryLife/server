@@ -32,20 +32,39 @@ public class RBLWebSocketServer {
 
     @Subscribe
     public void handleEvent(SystemEvent e){
-        switch (e.getMessage()){
-            case SystemEvent.START_WEB_SOCKET_SERVER:
+        switch (e.getType()){
+            case START_WEB_SOCKET_SERVER:
                 start();
                 break;
-            case SystemEvent.STOP_WEB_SOCKET_SERVER:
+            case STOP_WEB_SOCKET_SERVER:
+                stop();
                 break;
-            case SystemEvent.RESTART_WEB_SOCKET_SERVER:
+            case RESTART_WEB_SOCKET_SERVER:
+                restart();
                 break;
         }
     }
 
+    private void restart() {
+        stop();
+        start();
+    }
+
     private void start(){
+        Log.add(DEBUG_TAG, "Starting...");
         serverThread = new Thread(getRunnable());
         serverThread.start();
+    }
+
+    private void stop(){
+        Log.add(DEBUG_TAG, "Starting...");
+        if(webServer != null){
+            webServer.stop();
+        }
+        if(serverThread != null){
+            serverThread.interrupt();
+            serverThread = null;
+        }
     }
 
     private Runnable getRunnable() {

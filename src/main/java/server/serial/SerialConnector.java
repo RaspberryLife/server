@@ -34,14 +34,14 @@ public class SerialConnector {
     }
 
     public void handleEvent(SystemEvent e){
-        switch (e.getMessage()){
-            case SystemEvent.START_SERIAL_CONNECTION:
+        switch (e.getType()){
+            case START_SERIAL_CONNECTION:
                 start();
                 break;
-            case SystemEvent.STOP_SERIAL_CONNECTION:
+            case STOP_SERIAL_CONNECTION:
                 stop();
                 break;
-            case SystemEvent.RESTART_SERIAL_CONNECTION:
+            case RESTART_SERIAL_CONNECTION:
                 restart();
         }
     }
@@ -53,6 +53,7 @@ public class SerialConnector {
      * Sets up the serial port and opens it.
      */
     private void start(){
+        Log.add(DEBUG_TAG, "Starting...");
         mPortName = determinePortName();
         if(mPortName == null){
             Log.add(DEBUG_TAG, "No serial port found");

@@ -15,7 +15,7 @@ public class RaspberryLife {
 
     public static void main(String[] args){
         SystemManager.register();
-        EventBusService.post(new SystemEvent(SystemEvent.START_SYSTEM));
+        EventBusService.post(new SystemEvent(SystemEvent.Type.START_SYSTEM));
     }
 
 }

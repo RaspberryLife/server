@@ -4,6 +4,7 @@ package system;
 import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
 import event.DataBaseEvent;
+import event.ScheduleEvent;
 import system.service.DataBaseService;
 import event.SystemEvent;
 import system.service.EventBusService;
@@ -28,21 +29,21 @@ public class SystemManager {
     }
 
     /**
-     * Empty constructor for event access only
+     * Private constructor for event access only
      */
     private SystemManager(){
     }
 
     @Subscribe
     public void handleEvent(SystemEvent e){
-        switch (e.getMessage()){
-            case SystemEvent.START_SYSTEM:
+        switch (e.getType()){
+            case START_SYSTEM:
                 start();
                 break;
-            case SystemEvent.STOP_SYSTEM:
+            case STOP_SYSTEM:
                 stop();
                 break;
-            case SystemEvent.RESTART_SYSTEM:
+            case RESTART_SYSTEM:
                 restart();
                 break;
         }
@@ -50,17 +51,20 @@ public class SystemManager {
 
     private void start(){
         Log.printLogHeader();
+        // 1. Log load config
         loadConfig();
+        // 2. Init event bus
+        initEventBus();
+        // 3. Do the rest
         NetworkUtil.listIPAddresses();
         ClientHandler.register();
-        initEventBus();
         startSocketServer();
         startWebSocketServer();
         initSerialConnection();
+        initScheduler();
         if(runDebugSetup){
             Log.add(DEBUG_TAG, "Running debug setup");
             //initDatabase();
-            //initScheduler();
         }
     }
 
@@ -84,41 +88,44 @@ public class SystemManager {
         //Config.dumpConfig();
     }
 
+    private void initEventBus() {
+        EventBusService.init();
+    }
+
 
     private void startSocketServer(){
-        Log.add(DEBUG_TAG, "Starting RBLSocketServer");
         RBLSocketServer.register();
-        EventBusService.post(new SystemEvent(SystemEvent.START_SOCKET_SERVER));
+        EventBusService.post(new SystemEvent(SystemEvent.Type.START_SOCKET_SERVER));
     }
 
     private void startWebSocketServer(){
-        Log.add(DEBUG_TAG, "Starting RBLWebSocketServer");
         RBLWebSocketServer.register();
-        EventBusService.post(new SystemEvent(SystemEvent.START_WEB_SOCKET_SERVER));
+        EventBusService.post(new SystemEvent(SystemEvent.Type.START_WEB_SOCKET_SERVER));
     }
 
     // Initialize the serial connector for module communication
     private void initSerialConnection(){
-        Log.add(DEBUG_TAG, "Initializing serial connector");
         SerialConnector.register();
-        EventBusService.post(new SystemEvent(SystemEvent.START_SERIAL_CONNECTION));
+        EventBusService.post(new SystemEvent(SystemEvent.Type.START_SERIAL_CONNECTION));
     }
 
     private void initDatabase(){
-        Log.add(DEBUG_TAG, "Initializing database");
         DataBaseService.register();
         EventBusService.post(new DataBaseEvent(DataBaseEvent.START_SESSION));
         EventBusService.post(new DataBaseEvent(DataBaseEvent.RUN_TEST));
     }
 
     private void initScheduler(){
-        Log.add(DEBUG_TAG, "Initializing scheduler");
-        ScheduleService sm = new ScheduleService();
-        sm.test();
-    }
-
-    private void initEventBus() {
-        EventBusService.init();
+        ScheduleService.register();
+        EventBusService.post(new SystemEvent(SystemEvent.Type.START_SCHEDULER));
+        EventBusService.post(new ScheduleEvent(
+                "resource_check",120,
+                ScheduleEvent.Type.START_RESOURCE_LOG)
+        );
+        EventBusService.post(new ScheduleEvent(
+                        "time_log",600,
+                        ScheduleEvent.Type.START_TIME_LOG)
+        );
     }
 
 }

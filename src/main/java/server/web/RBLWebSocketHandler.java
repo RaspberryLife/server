@@ -1,12 +1,7 @@
 package server.web;
 
-import client.ClientHandler;
-import client.RBLWebSocketClient;
-import com.google.common.eventbus.Subscribe;
 import com.google.protobuf.InvalidProtocolBufferException;
-import event.NewClientEvent;
 import event.WebSocketEvent;
-import event.WebSocketMessageEvent;
 import system.service.EventBusService;
 import util.Log;
 import org.webbitserver.BaseWebSocketHandler;
@@ -30,7 +25,7 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
                         + connection.hashCode());
         WebSocketEvent wse = new WebSocketEvent();
         wse.setConnection(connection);
-        wse.setType(WebSocketEvent.TYPE_CONNECTION_OPEN);
+        wse.setType(WebSocketEvent.Type.CONNECTION_OPEN);
         EventBusService.post(wse);
     }
 
@@ -41,7 +36,7 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
                         + connection.hashCode());
         WebSocketEvent wse = new WebSocketEvent();
         wse.setConnection(connection);
-        wse.setType(WebSocketEvent.TYPE_CONNECTION_CLOSE);
+        wse.setType(WebSocketEvent.Type.CONNECTION_CLOSE);
         EventBusService.post(wse);
     }
 
@@ -61,7 +56,7 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
             WebSocketEvent wse = new WebSocketEvent();
             wse.setMessage(parsedMessage);
             wse.setConnection(connection);
-            wse.setType(WebSocketEvent.TYPE_MESSAGE);
+            wse.setType(WebSocketEvent.Type.MESSAGE);
             EventBusService.post(wse);
         }else {
             Log.add(DEBUG_TAG,
