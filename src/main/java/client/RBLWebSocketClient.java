@@ -11,14 +11,14 @@ import protobuf.RblProto.*;
  * This is the representaion of a RaspberryHomeClient using a Websocket
  * connection.
  */
-public class WebSocketClient extends RaspberryLifeClient {
-    public static final String DEBUG_TAG = WebSocketClient.class.getSimpleName();
+public class RBLWebSocketClient extends RaspberryLifeClient {
+    public static final String DEBUG_TAG = RBLWebSocketClient.class.getSimpleName();
 
     private WebSocketConnection connection;
     private final ProtobufMessageHandler messageHandler =
             new ProtobufMessageHandler(this);
 
-    public WebSocketClient(WebSocketConnection connection){
+    public RBLWebSocketClient(WebSocketConnection connection){
         this.connection = connection;
     }
 

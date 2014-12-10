@@ -1,8 +1,13 @@
 package server.web;
 
 import client.ClientHandler;
-import client.WebSocketClient;
+import client.RBLWebSocketClient;
+import com.google.common.eventbus.Subscribe;
 import com.google.protobuf.InvalidProtocolBufferException;
+import event.NewClientEvent;
+import event.WebSocketEvent;
+import event.WebSocketMessageEvent;
+import system.service.EventBusService;
 import util.Log;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
@@ -17,23 +22,27 @@ import protobuf.RblProto.*;
 public class RBLWebSocketHandler extends BaseWebSocketHandler{
 
     public static final String DEBUG_TAG = RBLWebSocketHandler.class.getSimpleName();
-    private ClientHandler clientHandler = ClientHandler.getInstance();
 
     @Override
     public void onOpen(WebSocketConnection connection) {
-        clientHandler.handleWebSocketClient(connection);
         Log.add(DEBUG_TAG,
                 "WebSocketConnection opened. Connection hashcode: "
                         + connection.hashCode());
+        WebSocketEvent wse = new WebSocketEvent();
+        wse.setConnection(connection);
+        wse.setType(WebSocketEvent.TYPE_CONNECTION_OPEN);
+        EventBusService.post(wse);
     }
 
     @Override
     public void onClose(WebSocketConnection connection) {
-        clientHandler.getWebSocketClient(connection)
-                .closeConnection();
         Log.add(DEBUG_TAG,
                 "WebSocketConnection closed. Connection hashcode: "
                         + connection.hashCode());
+        WebSocketEvent wse = new WebSocketEvent();
+        wse.setConnection(connection);
+        wse.setType(WebSocketEvent.TYPE_CONNECTION_CLOSE);
+        EventBusService.post(wse);
     }
 
     @Override
@@ -47,23 +56,19 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
-
         //pass message to receiving client
         if(parsedMessage != null) {
-                WebSocketClient client = clientHandler.getWebSocketClient(connection);
-                if(client != null) {
-                    client.readMessage(parsedMessage);
-                }else {
-                    Log.add(DEBUG_TAG,
-                            "Unable to pass message to receiving connection. " +
-                                    "Client was null.");
-                }
+            WebSocketEvent wse = new WebSocketEvent();
+            wse.setMessage(parsedMessage);
+            wse.setConnection(connection);
+            wse.setType(WebSocketEvent.TYPE_MESSAGE);
+            EventBusService.post(wse);
         }else {
             Log.add(DEBUG_TAG,
-                    "Unable to pass message to receiver connection. " +
+                    "Unable to pass message to connection. " +
                             "Message was null.");
         }
-    }
 
+    }
 
 }

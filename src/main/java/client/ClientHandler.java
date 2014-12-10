@@ -1,5 +1,11 @@
 package client;
 
+import com.google.common.eventbus.Subscribe;
+import event.NewClientEvent;
+import event.SystemEvent;
+import event.WebSocketEvent;
+import event.WebSocketMessageEvent;
+import system.service.EventBusService;
 import util.Log;
 import interfaces.ConnectionListener;
 import org.webbitserver.WebSocketConnection;
@@ -20,15 +26,47 @@ public class ClientHandler {
 
     private static List<RaspberryLifeClient> clientList = new ArrayList<RaspberryLifeClient>();
 
-    private static ClientHandler instance = null;
+    private static ClientHandler instance = new ClientHandler();
 
     public static final String DEBUG_TAG = ClientHandler.class.getSimpleName();
 
-    public static ClientHandler getInstance() {
-        if(instance == null){
-            instance = new ClientHandler();
+
+    private ClientHandler(){
+    }
+
+    @Subscribe
+    public void handleNewClientEvent(NewClientEvent e){
+
+    }
+
+    @Subscribe
+    public void handleSystemEvent(SystemEvent e){
+
+    }
+
+    @Subscribe
+    public void handleWebSocketEvent(WebSocketEvent e){
+        switch (e.getType()){
+            case TYPE_CONNECTION_OPEN:
+                break;
+            case TYPE_CONNECTION_CLOSE:
+                break;
+            case TYPE_MESSAGE:
+                break;
         }
-        return instance;
+
+        RBLWebSocketClient c = getWebSocketClient(e.getConnection());
+        if(c != null){
+            c.readMessage(e.getMessage());
+        }else {
+            Log.add(DEBUG_TAG,
+                    "Unable to deliver message to receiving connection. " +
+                            "Client not connection found.");
+        }
+    }
+
+    public static void register(){
+        EventBusService.register(instance);
     }
 
 
@@ -40,13 +78,24 @@ public class ClientHandler {
         Thread handleThread = new Thread(new Runnable() {
             public void run() {
             final RaspberryLifeClient client =
-                    new SocketClient(clientSocket);
+                    new RBLSocketClient(clientSocket);
             setUpConnectionListener(client);
             clientList.add(client);
             }
         });
         handleThread.start();
     }
+
+    /**
+     * Handle a websocket as incoming connection.
+     * @param connection
+     */
+    public void handleWebSocketClient(final WebSocketConnection connection){
+        final RaspberryLifeClient client = new RBLWebSocketClient(connection);
+        setUpConnectionListener(client);
+        clientList.add(client);
+    }
+
 
 
     /**
@@ -83,28 +132,18 @@ public class ClientHandler {
     }
 
     /**
-     * Handle a websocket as incoming connection.
-     * @param connection
-     */
-    public void handleWebSocketClient(final WebSocketConnection connection){
-        final RaspberryLifeClient client = new WebSocketClient(connection);
-        setUpConnectionListener(client);
-        clientList.add(client);
-    }
-
-    /**
      * Finds and returns a connection from the clientlist
      * by comparing the hashcode of the connection.
      * @param connection
      * @return
      */
-    public WebSocketClient getWebSocketClient(WebSocketConnection connection){
+    public RBLWebSocketClient getWebSocketClient(WebSocketConnection connection){
         for(RaspberryLifeClient client : clientList){
-            if(client instanceof WebSocketClient){
+            if(client instanceof RBLWebSocketClient){
                WebSocketConnection clientConn =
-                       ((WebSocketClient) client).getWebSocketConnection();
+                       ((RBLWebSocketClient) client).getWebSocketConnection();
                 if(clientConn.hashCode() == connection.hashCode()){
-                    return (WebSocketClient) client;
+                    return (RBLWebSocketClient) client;
                 }
             }
         }

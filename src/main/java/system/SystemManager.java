@@ -1,6 +1,7 @@
 package system;
 
 
+import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
 import event.DataBaseEvent;
 import system.service.DataBaseService;
@@ -51,6 +52,7 @@ public class SystemManager {
         Log.printLogHeader();
         loadConfig();
         NetworkUtil.listIPAddresses();
+        ClientHandler.register();
         initEventBus();
         startSocketServer();
         startWebSocketServer();

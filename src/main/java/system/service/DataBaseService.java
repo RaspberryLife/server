@@ -1,5 +1,6 @@
 package system.service;
 
+import com.google.common.eventbus.Subscribe;
 import data.HibernateHandler;
 import data.MySqlConnection;
 import data.model.Actuator;
@@ -36,6 +37,7 @@ public class DataBaseService {
     private DataBaseService(){
     }
 
+    @Subscribe
     public void handleDataBaseEvent(DataBaseEvent e){
         switch(e.getMessage()){
             case DataBaseEvent.START_SESSION:

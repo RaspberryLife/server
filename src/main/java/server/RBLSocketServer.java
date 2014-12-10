@@ -24,7 +24,6 @@ public class RBLSocketServer{
 
     private boolean acceptClients = true;
     private int port = 0;
-    private boolean serverRunning = false;
     private ClientHandler clientHandler = ClientHandler.getInstance();
 
     private static final String DEBUG_TAG = RBLSocketServer.class.getSimpleName();
@@ -62,12 +61,19 @@ public class RBLSocketServer{
     private void stop(){
         serverRunning = false;
         acceptClients = false;
+        if(serverThread != null){
+            serverThread.interrupt();
+        }
+    }
+
+    private void restart(){
+        stop();
+        start();
     }
 
     private Runnable getRunnable() {
         return new Runnable() {
             public void run() {
-                serverRunning = true;
                 try {
                     serverAcceptSocket = new ServerSocket(port);
                     Log.add(DEBUG_TAG, "Server listens on port " + port);
@@ -77,7 +83,6 @@ public class RBLSocketServer{
                         Log.add(DEBUG_TAG, "Client connected on port " + port);
                     }
                 } catch (IOException e) {
-                    serverRunning = false;
                     Log.add(DEBUG_TAG, "Server problem. Please restart.", e);
                 } finally {
                     clientHandler.closeAllConnections();

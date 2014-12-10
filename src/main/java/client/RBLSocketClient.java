@@ -16,19 +16,19 @@ import java.net.Socket;
  * This is the representaion of a RaspberryHomeClient using a Java socket
  * connection.
  */
-public class SocketClient extends RaspberryLifeClient {
+public class RBLSocketClient extends RaspberryLifeClient {
 
     private Socket socket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     protected final ProtobufMessageHandler messageHandler =
             new ProtobufMessageHandler(this);
-    public static final String DEBUG_TAG = SocketClient.class.getSimpleName();
+    public static final String DEBUG_TAG = RBLSocketClient.class.getSimpleName();
     private Thread readThread = null;
 
 
 
-    public SocketClient(Socket socket){
+    public RBLSocketClient(Socket socket){
         this.socket = socket;
         try {
             outputStream = new ObjectOutputStream(socket.getOutputStream());
