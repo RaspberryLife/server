@@ -5,4 +5,10 @@ package system.service;
  */
 public class NotificationService {
 
+    private static final NotificationService instance = new NotificationService();
+
+    public static void register(){
+        EventBusService.register(instance);
+    }
+
 }

@@ -1,5 +1,6 @@
 #(1.1.1)
 Refactoring for more extensive event bus usage
+extend schedule functionality
 
 
 #1.1.0

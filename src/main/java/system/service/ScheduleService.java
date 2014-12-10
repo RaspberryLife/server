@@ -102,10 +102,9 @@ public class ScheduleService {
                 .withIdentity(e.getIdentity() + "trigger", TRIGGER_GROUP)
                 .startNow()
                 .withSchedule(simpleSchedule()
-                        .withIntervalInSeconds(60)
+                        .withIntervalInSeconds(e.getInterval())
                         .repeatForever())
                 .build();
-
         addJob(job, trigger);
     }
 

@@ -12,7 +12,6 @@ import java.util.Properties;
  */
 public class MySqlConnection {
 
-
     private Connection mConnection;
 
     public static final String DEBUG_TAG = MySqlConnection.class.getSimpleName();

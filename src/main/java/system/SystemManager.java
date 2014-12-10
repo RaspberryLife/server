@@ -16,6 +16,12 @@ import data.Config;
 import util.Log;
 import util.NetworkUtil;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 public class SystemManager {
 
     private static SystemManager instance = new SystemManager();
@@ -119,11 +125,11 @@ public class SystemManager {
         ScheduleService.register();
         EventBusService.post(new SystemEvent(SystemEvent.Type.START_SCHEDULER));
         EventBusService.post(new ScheduleEvent(
-                "resource_check",120,
+                "resource_check",30,
                 ScheduleEvent.Type.START_RESOURCE_LOG)
         );
         EventBusService.post(new ScheduleEvent(
-                        "time_log",600,
+                        "time_log",60,
                         ScheduleEvent.Type.START_TIME_LOG)
         );
     }
