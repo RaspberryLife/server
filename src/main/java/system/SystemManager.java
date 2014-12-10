@@ -4,10 +4,12 @@ package system;
 import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
 import event.DataBaseEvent;
+import event.NotificationEvent;
 import event.ScheduleEvent;
 import system.service.DataBaseService;
 import event.SystemEvent;
 import system.service.EventBusService;
+import system.service.NotificationService;
 import system.service.ScheduleService;
 import server.RBLSocketServer;
 import server.web.RBLWebSocketServer;
@@ -62,16 +64,14 @@ public class SystemManager {
         // 2. Init event bus
         initEventBus();
         // 3. Do the rest
+        initNotifcationService();
         NetworkUtil.listIPAddresses();
         ClientHandler.register();
         startSocketServer();
         startWebSocketServer();
         initSerialConnection();
         initScheduler();
-        if(runDebugSetup){
-            Log.add(DEBUG_TAG, "Running debug setup");
-            //initDatabase();
-        }
+        //initDatabase();
     }
 
     private void stop(){
@@ -90,7 +90,6 @@ public class SystemManager {
     private void loadConfig(){
         Log.add(DEBUG_TAG, "Loading configuration");
         Config.readConfig();
-        runDebugSetup = Config.getConf().getBoolean("test.run_debug");
         //Config.dumpConfig();
     }
 
@@ -132,6 +131,10 @@ public class SystemManager {
                         "time_log",60,
                         ScheduleEvent.Type.START_TIME_LOG)
         );
+    }
+
+    private void initNotifcationService() {
+        NotificationService.register();
     }
 
 }

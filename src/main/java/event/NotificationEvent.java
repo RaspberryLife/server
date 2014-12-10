@@ -6,7 +6,8 @@ package event;
 public class NotificationEvent {
 
     public enum Type{
-        CLIENT_BROADCAST
+        CLIENT_BROADCAST,
+        CLIENT_EMAIL
     }
 
     private Type type;

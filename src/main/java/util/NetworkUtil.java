@@ -1,5 +1,8 @@
 package util;
 
+import event.NotificationEvent;
+import system.service.EventBusService;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -41,6 +44,8 @@ public class NetworkUtil {
                 }
             }
         }
+        String mail = "RaspberryLife server running on " + ipAddresses.toString();
+        EventBusService.post(new NotificationEvent(NotificationEvent.Type.CLIENT_EMAIL,mail));
         Log.add(DEBUG_TAG, "Server running on " + ipAddresses.toString());
     }
 }

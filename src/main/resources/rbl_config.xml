@@ -24,7 +24,11 @@
         <message_byte_length>34</message_byte_length>
         <override_port></override_port>
     </serial>
-    <test>
-        <run_debug>false</run_debug>
-    </test>
+    <email>
+        <admin>peter.moesenthin@gmail.com</admin>
+        <sender>
+            <email>rbltestuser01@gmail.com</email>
+            <pw>DELETE PASSWORD BEFORE COMMIT</pw>
+        </sender>
+    </email>
 </config>
