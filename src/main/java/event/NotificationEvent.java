@@ -12,10 +12,17 @@ public class NotificationEvent {
 
     private Type type;
     private String message;
+    private String subject;
 
     public NotificationEvent(Type type, String message) {
         this.type = type;
         this.message = message;
+    }
+
+    public NotificationEvent(String subject, String message, Type type) {
+        this.subject = subject;
+        this.message = message;
+        this.type = type;
     }
 
     public Type getType() {
@@ -28,6 +35,14 @@ public class NotificationEvent {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public void setMessage(String message) {

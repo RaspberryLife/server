@@ -3,11 +3,8 @@ package system;
 
 import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
-import event.DataBaseEvent;
-import event.NotificationEvent;
-import event.ScheduleEvent;
+import event.*;
 import system.service.DataBaseService;
-import event.SystemEvent;
 import system.service.EventBusService;
 import system.service.NotificationService;
 import system.service.ScheduleService;
@@ -17,12 +14,6 @@ import server.serial.SerialConnector;
 import data.Config;
 import util.Log;
 import util.NetworkUtil;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 public class SystemManager {
 
@@ -64,7 +55,7 @@ public class SystemManager {
         // 2. Init event bus
         initEventBus();
         // 3. Do the rest
-        initNotifcationService();
+        initNotificationService();
         NetworkUtil.listIPAddresses();
         ClientHandler.register();
         startSocketServer();
@@ -124,16 +115,18 @@ public class SystemManager {
         ScheduleService.register();
         EventBusService.post(new SystemEvent(SystemEvent.Type.START_SCHEDULER));
         EventBusService.post(new ScheduleEvent(
-                "resource_check",30,
+                "resource_check",120,
                 ScheduleEvent.Type.START_RESOURCE_LOG)
         );
+        /*
         EventBusService.post(new ScheduleEvent(
-                        "time_log",60,
+                        "time_log",120,
                         ScheduleEvent.Type.START_TIME_LOG)
         );
+        */
     }
 
-    private void initNotifcationService() {
+    private void initNotificationService() {
         NotificationService.register();
     }
 

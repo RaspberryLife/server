@@ -35,7 +35,7 @@ public class SerialMessageHandler {
 
     @Subscribe
     public void handleSerialMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received message: " + message.rawContent);
+        Log.add(DEBUG_TAG, "Received message " + message.rawContent);
         message.populateBase();
         preSwitchOnInstruction(message);
     }
@@ -133,6 +133,7 @@ public class SerialMessageHandler {
             params.add("01");
             params.add("01");
             params.add("04");
+            mi.setParameters(params);
             EventBusService.post(mi);
         }
     }

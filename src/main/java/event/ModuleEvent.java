@@ -35,12 +35,15 @@ public class ModuleEvent {
 
         // Parameters
         if(parameters != null && parameters.size() > 0){
-            serialMessage += ":";
-            serialMessage += StringUtil.getZeroPadded(parameters.get(0), 4, true);
+            for(String p : parameters){
+                serialMessage += ":";
+                //padding usually set to 4 (now to 2 since reed only ready two chars)
+                serialMessage += StringUtil.getZeroPadded(p, 2, true);
+            }
         }
-
         serialMessage += ":";
         serialMessage = StringUtil.getZeroPadded(serialMessage, 32, false);
+
         return serialMessage;
     }
 

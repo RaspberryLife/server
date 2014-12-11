@@ -44,8 +44,8 @@ public class NetworkUtil {
                 }
             }
         }
-        String mail = "RaspberryLife server running on " + ipAddresses.toString();
-        EventBusService.post(new NotificationEvent(NotificationEvent.Type.CLIENT_EMAIL,mail));
+        //String mail = "RaspberryLife server running on " + ipAddresses.toString();
+        //EventBusService.post(new NotificationEvent("RBL IP" ,mail, NotificationEvent.Type.CLIENT_EMAIL));
         Log.add(DEBUG_TAG, "Server running on " + ipAddresses.toString());
     }
 }

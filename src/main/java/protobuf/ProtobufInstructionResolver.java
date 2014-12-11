@@ -33,7 +33,7 @@ public class ProtobufInstructionResolver {
         RBLMessage.RunInstruction rI = message.getRunInstruction();
         if(rI != null){
             ModuleEvent mi = new ModuleEvent();
-            mi.setType(rI.getInstruction().getModuleType().getNumber());
+            mi.setType(rI.getInstruction().getModuleType().getNumber() + 1);
             mi.setModuleId(rI.getInstruction().getModuleId());
             mi.setInstructionId(rI.getInstruction().getInstructionId());
             mi.setParameters(rI.getInstruction().getParametersList());

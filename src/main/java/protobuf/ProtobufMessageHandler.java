@@ -39,6 +39,7 @@ public class ProtobufMessageHandler {
 
     private void switchType(RBLMessage message){
         RBLMessage.MessageType type = message.getMessageType();
+        Log.add(DEBUG_TAG,message.toString());
         switch (type) {
             case PLAIN_TEXT:
                 handlePlaintextMessage(message);
