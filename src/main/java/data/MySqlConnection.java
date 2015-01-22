@@ -61,11 +61,11 @@ public class MySqlConnection {
 
     public void createDatabaseInitial(){
         createDatabase();
-        selectDatabase();
-        createLogicTable();
-        createActuatorTable();
-        createLogicInitiatorTable();
-        createLogicReceiverTable();
+        //selectDatabase();
+        //createLogicTable();
+        //createActuatorTable();
+        //createLogicInitiatorTable();
+        //createLogicReceiverTable();
     }
 
     public void createDatabase(){

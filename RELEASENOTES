@@ -1,3 +1,7 @@
+#1.1.2
+MySQL table creation now done by hibernate
+Updated protobuf
+
 #1.1.1
 Refactoring for more extensive event bus usage
 extend schedule functionality
@@ -11,6 +15,5 @@ Updated Protobuf message types to handle N<->N logic and extended data handling
 Lots of debug output for Protobuf and serial messages
 Better handling for serial/proto messages
 Refactoring
-
 
 #For older version descriptions refer to https://github.com/RaspberryLife/server/releases

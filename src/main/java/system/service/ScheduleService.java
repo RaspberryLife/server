@@ -128,7 +128,7 @@ public class ScheduleService {
                 scheduler.scheduleJob(job, trigger);
             }
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            Log.add(DEBUG_TAG, "Unable to add job.");
         }
     }
 

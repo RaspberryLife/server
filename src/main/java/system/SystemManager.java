@@ -21,8 +21,6 @@ public class SystemManager {
 
     public static final String DEBUG_TAG = SystemManager.class.getSimpleName();
 
-    public static boolean runDebugSetup;
-
     public static void register(){
         EventBusService.register(instance);
     }
@@ -50,7 +48,7 @@ public class SystemManager {
 
     private void start(){
         Log.printLogHeader();
-        // 1. Log load config
+        // 1. Load config
         loadConfig();
         // 2. Init event bus
         initEventBus();
@@ -62,7 +60,7 @@ public class SystemManager {
         startWebSocketServer();
         initSerialConnection();
         initScheduler();
-        //initDatabase();
+        initDatabase();
     }
 
     private void stop(){

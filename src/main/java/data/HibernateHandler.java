@@ -56,6 +56,7 @@ public class HibernateHandler {
 
         } catch (Exception e) {
             Log.add(DEBUG_TAG, "Failed to create SessionFactory. ", e);
+            //e.printStackTrace();
             return null;
         }
     }

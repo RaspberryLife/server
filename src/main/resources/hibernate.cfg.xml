@@ -2,13 +2,16 @@
 <!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!-- <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property> -->
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 
         <!-- Database setup -->
         <property name="hibernate.connection.url">jdbc:mysql://localhost/rbl_data</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"></property>
+
+        <!-- Automatically create database structure on session start -->
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
