@@ -69,9 +69,9 @@ public class HibernateHandler {
      * Create basic database structure.
      */
     private void createInitialStructure(){
-        Log.add(DEBUG_TAG, "Creating database structure");
+        Log.add(DEBUG_TAG, "Creating database");
         if(mySqlConnection.open()){
-            mySqlConnection.createDatabaseInitial();
+            mySqlConnection.createDatabase();
             mySqlConnection.close();
         }
     }

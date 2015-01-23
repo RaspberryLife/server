@@ -1,6 +1,9 @@
 #1.1.2
 MySQL table creation now done by hibernate
 Updated protobuf
+update gradle to version 2.2.1
+replace jar build with distZip
+clean up MySQL connection
 
 #1.1.1
 Refactoring for more extensive event bus usage
