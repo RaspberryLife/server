@@ -1,22 +1,13 @@
 apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = 'RaspberryLife'
+// Build source with 'gradle distZip'
 
 //sourceCompatibility = 1.5
 version = '1.1.2'
 
 repositories {
     mavenCentral()
-}
-
-task fullJar(type: Jar) {
-    manifest {
-        attributes ('Implementation-Title': 'RBL Server',
-                'Implementation-Version': version,
-                'Implementation-Timestamp': new Date(),
-                'Main-Class': 'RaspberryLife')
-    }
-    baseName = project.name
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
 
 dependencies {
