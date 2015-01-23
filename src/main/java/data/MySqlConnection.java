@@ -70,6 +70,7 @@ public class MySqlConnection {
         }
     }
 
+
     public void close(){
         Log.add(DEBUG_TAG,"Closing connection");
         try {

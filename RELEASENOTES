@@ -4,6 +4,7 @@ Updated protobuf
 update gradle to version 2.2.1
 replace jar build with distZip
 clean up MySQL connection
+extend datamodel
 
 #1.1.1
 Refactoring for more extensive event bus usage

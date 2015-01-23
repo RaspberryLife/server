@@ -30,25 +30,31 @@ public class HibernateHandler {
         if(mySqlConnection == null){
             mySqlConnection = new MySqlConnection();
         }
+        String creationMode = null;
         if(mySqlConnection.open()){
             if(!mySqlConnection.databaseExists()){
                 Log.add(DEBUG_TAG, "Database does not exist creating new.   ");
                 createInitialStructure();
                 mySqlConnection.close();
+            }else {
+                creationMode = "update";
             }
         }
-        sessionFactory = buildSessionFactory();
+        sessionFactory = buildSessionFactory(creationMode);
     }
 
     /**
      * Build Hibernate session factory
      * @return
      */
-    private SessionFactory buildSessionFactory() {
+    private SessionFactory buildSessionFactory(String creationMode) {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
+            if(creationMode != null && !creationMode.isEmpty()){
+                configuration.setProperty("hibernate.hbm2ddl.auto", creationMode);
+            }
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
                     configuration.getProperties()).build();
@@ -76,6 +82,12 @@ public class HibernateHandler {
         }
     }
 
+
+
+
+    //----------------------------------------------------------------------------------------------
+    //                                      TESTING
+    //----------------------------------------------------------------------------------------------
 
     public List readLogic(){
         Session session = sessionFactory.openSession();

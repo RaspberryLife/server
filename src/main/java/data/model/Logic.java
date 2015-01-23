@@ -37,7 +37,6 @@ public class Logic {
 
     //private Condition condition;
 
-
     public int getLogic_table_id() {
         return logic_table_id;
     }

@@ -28,8 +28,13 @@
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
 
-        <!-- List of XML mapping files -->
+        <!-- List of mapping files -->
+
         <mapping class="data.model.Logic"/>
         <mapping class="data.model.Actuator"/>
+
+
+
+
     </session-factory>
 </hibernate-configuration>
