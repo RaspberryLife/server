@@ -22,11 +22,7 @@ public class Actuator {
     @Column(name="actuator_name")
     private String actuator_name;
 
-    @ManyToMany(mappedBy="logic_initiator")
-    private Set<Logic> logic_initiator;
 
-    @ManyToMany(mappedBy="logic_receiver")
-    private Set<Logic> logic_receiver;
 
     @Column(name="actuator_id", nullable=true)
     private int actuator_id;
@@ -42,21 +38,6 @@ public class Actuator {
         this.actuator_id = actuator_id;
     }
 
-    public Set<Logic> getLogic_initiator() {
-        return logic_initiator;
-    }
-
-    public void setLogic_initiator(Set<Logic> logic_initiator) {
-        this.logic_initiator = logic_initiator;
-    }
-
-    public Set<Logic> getLogic_receiver() {
-        return logic_receiver;
-    }
-
-    public void setLogic_receiver(Set<Logic> logic_receiver) {
-        logic_receiver = logic_receiver;
-    }
 
     public int getActuator_table_id() {
         return actuator_table_id;
