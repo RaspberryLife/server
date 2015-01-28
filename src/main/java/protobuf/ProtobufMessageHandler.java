@@ -58,7 +58,7 @@ public class ProtobufMessageHandler {
 
     private void handleLogicMessage(RBLMessage message) {
         RBLMessage.Logic l = message.getLogic();
-
+/*
         String initiators = "[ ";
         for(RBLMessage.Actuator a : l.getInitiatorList()){
             initiators += a.getName() + "(" + a.getActuatorId() + ") ";
@@ -99,6 +99,7 @@ public class ProtobufMessageHandler {
                 + " Receivers: " + receivers
                 + " Triggers: " + triggers
         );
+        */
     }
 
     private void handleDataSetMessage(RBLMessage message) {

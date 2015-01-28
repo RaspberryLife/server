@@ -14,7 +14,12 @@ public class LogicInitiator {
     @Column(name="logic_initiator_table_id")
     private int logic_initiator_table_id;
 
+    // One-to-One
     @Column(name="logic_initiator_actuator_id")
     private int logic_initiator_actuator_id;
+
+    // One-to-One
+    @Column(name="logic_initiator_condition")
+    private int logic_initiator_condition;
 
 }

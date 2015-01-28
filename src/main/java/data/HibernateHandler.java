@@ -89,6 +89,7 @@ public class HibernateHandler {
     //                                      TESTING
     //----------------------------------------------------------------------------------------------
 
+    /*
     public List readLogic(){
         Session session = sessionFactory.openSession();
         List logic_list = session.createQuery("from Logic").list();
@@ -149,5 +150,5 @@ public class HibernateHandler {
         session.getTransaction().commit();
         session.close();
     }
-
+*/
 }

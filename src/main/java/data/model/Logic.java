@@ -23,6 +23,13 @@ public class Logic {
     @Column(name="logic_name")
     private String name;
 
+    // One-to-One
+    @Column(name="logic_execution_frequency")
+    private ExecutionFrequency logic_execution_frequency;
+
+    @Column(name="logic_execution_requirement")
+    private String logic_execution_requirement;
+
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name="logic_initiator",
             joinColumns={@JoinColumn(name="logic_table_id")},
