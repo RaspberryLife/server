@@ -12,38 +12,29 @@ import java.util.Set;
 @Table(name="logic")
 public class Logic {
 
+    public static final String EXECUTION_REQUIREMENT_SINGLE = "SINGLE";
+    public static final String EXECUTION_REQUIREMENT_MAJORITY = "MAJORITY";
+    public static final String EXECUTION_REQUIREMENT_ALL = "ALL";
+
     @Id
     @GeneratedValue
-    @Column(name="logic_table_id")
-    private int logic_table_id;
-
     @Column(name="logic_id")
     private int logic_id;
 
     @Column(name="logic_name")
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name="logic_initiator",
-            joinColumns={@JoinColumn(name="logic_table_id")},
-            inverseJoinColumns={@JoinColumn(name="actuator_table_id")})
-    private Set<Actuator> logic_initiator = new HashSet<Actuator>();
+    @OneToOne(mappedBy="logic", cascade=CascadeType.ALL)
+    private ExecutionFrequency execution_frequency;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name="logic_receiver",
-            joinColumns={@JoinColumn(name="logic_table_id")},
-            inverseJoinColumns={@JoinColumn(name="actuator_table_id")})
-    private Set<Actuator> logic_receiver = new HashSet<Actuator>();
+    @Column(name="logic_execution_requirement")
+    private String execution_requirement;
 
-    //private Condition condition;
+    @OneToMany(mappedBy="logic")
+    private Set<LogicInitiator> logic_initiator;
 
-    public int getLogic_table_id() {
-        return logic_table_id;
-    }
-
-    public void setLogic_table_id(int logic_table_id) {
-        this.logic_table_id = logic_table_id;
-    }
+    @OneToMany(mappedBy="logic")
+    private Set<LogicReceiver> logic_receiver;
 
     public int getLogic_id() {
         return logic_id;
@@ -61,19 +52,35 @@ public class Logic {
         this.name = name;
     }
 
-    public Set<Actuator> getLogic_initiator() {
+    public ExecutionFrequency getExecution_frequency() {
+        return execution_frequency;
+    }
+
+    public void setExecution_frequency(ExecutionFrequency execution_frequency) {
+        this.execution_frequency = execution_frequency;
+    }
+
+    public String getExecution_requirement() {
+        return execution_requirement;
+    }
+
+    public void setExecution_requirement(String execution_requirement) {
+        this.execution_requirement = execution_requirement;
+    }
+
+    public Set<LogicInitiator> getLogic_initiator() {
         return logic_initiator;
     }
 
-    public void setLogic_initiator(Set<Actuator> logic_initiator) {
+    public void setLogic_initiator(Set<LogicInitiator> logic_initiator) {
         this.logic_initiator = logic_initiator;
     }
 
-    public Set<Actuator> getLogic_receiver() {
+    public Set<LogicReceiver> getLogic_receiver() {
         return logic_receiver;
     }
 
-    public void setLogic_receiver(Set<Actuator> logic_receiver) {
+    public void setLogic_receiver(Set<LogicReceiver> logic_receiver) {
         this.logic_receiver = logic_receiver;
     }
 }

@@ -31,6 +31,7 @@ public class HibernateHandler {
             mySqlConnection = new MySqlConnection();
         }
         String creationMode = null;
+
         if(mySqlConnection.open()){
             if(!mySqlConnection.databaseExists()){
                 Log.add(DEBUG_TAG, "Database does not exist creating new.   ");
@@ -89,7 +90,9 @@ public class HibernateHandler {
     //                                      TESTING
     //----------------------------------------------------------------------------------------------
 
+
     public List readLogic(){
+        /*
         Session session = sessionFactory.openSession();
         List logic_list = session.createQuery("from Logic").list();
         for(Object o : logic_list){
@@ -114,9 +117,12 @@ public class HibernateHandler {
         }
         session.close();
         return logic_list;
+        */
+        return null;
     }
 
     public void writeTestLogic(){
+        /*
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
@@ -148,6 +154,7 @@ public class HibernateHandler {
 
         session.getTransaction().commit();
         session.close();
+        */
     }
 
 }

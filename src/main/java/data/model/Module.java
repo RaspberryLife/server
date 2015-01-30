@@ -14,6 +14,7 @@ public class Module {
     public static final String TYPE_PIR_AND_RELAY = "PIR_AND_RELAY";
 
     private int id;
+
     private String type;
 
     public int getId() {

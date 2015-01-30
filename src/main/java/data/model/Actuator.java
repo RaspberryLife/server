@@ -16,23 +16,20 @@ public class Actuator {
 
     @Id
     @GeneratedValue
-    @Column(name="actuator_table_id")
-    private int actuator_table_id;
-
-    @Column(name="actuator_name")
-    private String actuator_name;
-
-    @ManyToMany(mappedBy="logic_initiator")
-    private Set<Logic> logic_initiator;
-
-    @ManyToMany(mappedBy="logic_receiver")
-    private Set<Logic> logic_receiver;
-
-    @Column(name="actuator_id", nullable=true)
+    @Column(name="actuator_id")
     private int actuator_id;
 
-    @Column(name="actuator_type")
+    @Column(name="name")
+    private String actuator_name;
+
+    @Column(name="type")
     private String type;
+
+    @OneToMany(mappedBy="actuator")
+    private Set<LogicInitiator> logic_initiator;
+
+    @OneToMany(mappedBy="actuator")
+    private Set<LogicReceiver> logic_receiver;
 
     public int getActuator_id() {
         return actuator_id;
@@ -40,34 +37,6 @@ public class Actuator {
 
     public void setActuator_id(int actuator_id) {
         this.actuator_id = actuator_id;
-    }
-
-    public Set<Logic> getLogic_initiator() {
-        return logic_initiator;
-    }
-
-    public void setLogic_initiator(Set<Logic> logic_initiator) {
-        this.logic_initiator = logic_initiator;
-    }
-
-    public Set<Logic> getLogic_receiver() {
-        return logic_receiver;
-    }
-
-    public void setLogic_receiver(Set<Logic> logic_receiver) {
-        logic_receiver = logic_receiver;
-    }
-
-    public int getActuator_table_id() {
-        return actuator_table_id;
-    }
-
-    public void setActuator_table_id(int actuator_table_id) {
-        this.actuator_table_id = actuator_table_id;
-    }
-
-    public String getType() {
-        return type;
     }
 
     public String getActuator_name() {
@@ -78,7 +47,27 @@ public class Actuator {
         this.actuator_name = actuator_name;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Set<LogicInitiator> getLogic_initiator() {
+        return logic_initiator;
+    }
+
+    public void setLogic_initiator(Set<LogicInitiator> logic_initiator) {
+        this.logic_initiator = logic_initiator;
+    }
+
+    public Set<LogicReceiver> getLogic_receiver() {
+        return logic_receiver;
+    }
+
+    public void setLogic_receiver(Set<LogicReceiver> logic_receiver) {
+        this.logic_receiver = logic_receiver;
     }
 }
