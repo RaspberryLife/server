@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="logic_receiver")
+@Table(name="logic_receiver_table")
 public class LogicReceiver {
 
     @Id
@@ -14,11 +14,11 @@ public class LogicReceiver {
     @Column(name="logic_receiver_id")
     private int logic_receiver_id;
 
-    @ManyToOne
-    @JoinColumn(name="logic_id")
+    @ManyToOne(cascade=CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private Logic logic;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="actuator")
     private Actuator actuator;
 

@@ -8,7 +8,7 @@ import java.util.Set;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="instruction")
+@Table(name="instruction_table")
 public class Instruction {
 
     @Id
@@ -22,7 +22,7 @@ public class Instruction {
     @Column(name="instruction_parameters")
     private String parameters;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private LogicInitiator logic_receiver;
 

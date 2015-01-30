@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="execution_frequency")
+@Table(name="execution_frequency_table")
 public class ExecutionFrequency {
 
     public static final int TYPE_IMMEDIATELY =  0;
@@ -21,24 +21,24 @@ public class ExecutionFrequency {
     @Column(name="execution_frequency_id")
     private int execution_frequency_id;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Logic logic;
 
-    @Column(name="execution_frequency_type")
-    private int execution_frequency_type;
+    @Column(name="type")
+    private int type;
 
-    @Column(name="execution_frequency_minute")
-    private int execution_frequency_minute;
+    @Column(name="minute")
+    private int minute;
 
-    @Column(name="execution_frequency_hour")
-    private int execution_frequency_hour;
+    @Column(name="hour")
+    private int hour;
 
-    @Column(name="execution_frequency_day")
-    private int execution_frequency_day;
+    @Column(name="day")
+    private int day;
 
-    @Column(name="execution_frequency_week")
-    private int execution_frequency_week;
+    @Column(name="week")
+    private int week;
 
     public int getExecution_frequency_id() {
         return execution_frequency_id;
@@ -52,43 +52,43 @@ public class ExecutionFrequency {
         this.logic = logic;
     }
 
-    public int getExecution_frequency_type() {
-        return execution_frequency_type;
+    public int getType() {
+        return type;
     }
 
-    public void setExecution_frequency_type(int execution_frequency_type) {
-        this.execution_frequency_type = execution_frequency_type;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public int getExecution_frequency_minute() {
-        return execution_frequency_minute;
+    public int getMinute() {
+        return minute;
     }
 
-    public void setExecution_frequency_minute(int execution_frequency_minute) {
-        this.execution_frequency_minute = execution_frequency_minute;
+    public void setMinute(int minute) {
+        this.minute = minute;
     }
 
-    public int getExecution_frequency_hour() {
-        return execution_frequency_hour;
+    public int getHour() {
+        return hour;
     }
 
-    public void setExecution_frequency_hour(int execution_frequency_hour) {
-        this.execution_frequency_hour = execution_frequency_hour;
+    public void setHour(int hour) {
+        this.hour = hour;
     }
 
-    public int getExecution_frequency_day() {
-        return execution_frequency_day;
+    public int getDay() {
+        return day;
     }
 
-    public void setExecution_frequency_day(int execution_frequency_day) {
-        this.execution_frequency_day = execution_frequency_day;
+    public void setDay(int day) {
+        this.day = day;
     }
 
-    public int getExecution_frequency_week() {
-        return execution_frequency_week;
+    public int getWeek() {
+        return week;
     }
 
-    public void setExecution_frequency_week(int execution_frequency_week) {
-        this.execution_frequency_week = execution_frequency_week;
+    public void setWeek(int week) {
+        this.week = week;
     }
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="condition")
+@Table(name="condition_table")
 public class Condition {
 
     @Id
@@ -23,12 +23,10 @@ public class Condition {
     @Column(name="threshold_under")
     private int threshold_under;
 
-    @Column(name="state")
-    private boolean state;
-
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private LogicInitiator logic_initiator;
+
 
     public int getCondition_id() {
         return condition_id;
@@ -56,14 +54,6 @@ public class Condition {
 
     public void setThreshold_under(int threshold_under) {
         this.threshold_under = threshold_under;
-    }
-
-    public boolean isState() {
-        return state;
-    }
-
-    public void setState(boolean state) {
-        this.state = state;
     }
 
     public LogicInitiator getLogic_initiator() {

@@ -7,7 +7,7 @@ import java.util.Set;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="actuator")
+@Table(name="actuator_table")
 public class Actuator {
 
     public static final String TYPE_SYSTEM = "SYSTEM";
@@ -25,10 +25,10 @@ public class Actuator {
     @Column(name="type")
     private String type;
 
-    @OneToMany(mappedBy="actuator")
+    @OneToMany(mappedBy="actuator", cascade=CascadeType.ALL)
     private Set<LogicInitiator> logic_initiator;
 
-    @OneToMany(mappedBy="actuator")
+    @OneToMany(mappedBy="actuator", cascade=CascadeType.ALL)
     private Set<LogicReceiver> logic_receiver;
 
     public int getActuator_id() {

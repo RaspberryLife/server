@@ -9,7 +9,7 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name="logic")
+@Table(name="logic_table")
 public class Logic {
 
     public static final String EXECUTION_REQUIREMENT_SINGLE = "SINGLE";
@@ -30,13 +30,11 @@ public class Logic {
     @Column(name="logic_execution_requirement")
     private String execution_requirement;
 
-    @OneToMany(cascade={CascadeType.ALL})
-    @JoinColumn(name="logic_id")
-    private Set<LogicInitiator> logic_initiator = new HashSet<>();
+    @OneToMany(mappedBy="logic", cascade=CascadeType.ALL)
+    private Set<LogicInitiator> logic_initiator = new HashSet<LogicInitiator>();
 
-    @OneToMany(cascade={CascadeType.ALL})
-    @JoinColumn(name="logic_id")
-    private Set<LogicReceiver> logic_receiver = new HashSet<>();
+    @OneToMany(mappedBy="logic", cascade=CascadeType.ALL)
+    private Set<LogicReceiver> logic_receiver = new HashSet<LogicReceiver>();
 
     public int getLogic_id() {
         return logic_id;

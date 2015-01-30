@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="logic_initiator")
+@Table(name="logic_initiator_table")
 public class LogicInitiator {
 
     @Id
@@ -14,11 +14,11 @@ public class LogicInitiator {
     @Column(name="logic_initiator_id")
     private int logic_initiator_id;
 
-    @ManyToOne
-    @JoinColumn(name="logic_id")
+    @ManyToOne(cascade=CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private Logic logic;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="actuator")
     private Actuator actuator;
 
