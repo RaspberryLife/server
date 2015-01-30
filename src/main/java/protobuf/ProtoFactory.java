@@ -104,7 +104,7 @@ public class ProtoFactory {
                 .setThresholdUnder(thresholdUnder)
                 .build();
     }
-
+/*
     public static RBLMessage.Trigger buildTrigger(
             int instructionId,
             Iterable<String> parameters){
@@ -112,9 +112,8 @@ public class ProtoFactory {
                 .setInstructionId(instructionId)
                 .addAllParameters(parameters)
                 .build();
-
     }
-
+*/
 
     public static RBLMessage.Range buildRange(
             int count,
@@ -127,6 +126,8 @@ public class ProtoFactory {
                 .build();
 
     }
+
+    /*
 
     public static RBLMessage buildLogicMessage(
             String id,
@@ -150,7 +151,7 @@ public class ProtoFactory {
                 .setLogic(logicMessage)
                 .build();
     }
-
+*/
     //----------------------------------------------------------------------------------------------
     //                                      DATA
     //----------------------------------------------------------------------------------------------

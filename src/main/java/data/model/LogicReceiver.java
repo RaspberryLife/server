@@ -56,4 +56,5 @@ public class LogicReceiver {
     public void setInstruction(Instruction instruction) {
         this.instruction = instruction;
     }
+
 }

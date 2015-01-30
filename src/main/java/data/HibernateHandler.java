@@ -90,7 +90,6 @@ public class HibernateHandler {
     //                                      TESTING
     //----------------------------------------------------------------------------------------------
 
-
     public List readLogic(){
         /*
         Session session = sessionFactory.openSession();
@@ -156,5 +155,4 @@ public class HibernateHandler {
         session.close();
         */
     }
-
 }

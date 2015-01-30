@@ -14,6 +14,7 @@ public class LogicInitiator {
     @Column(name="logic_initiator_id")
     private int logic_initiator_id;
 
+
     @ManyToOne
     @JoinColumn(name="logic_initiator")
     private Logic logic;
@@ -56,4 +57,5 @@ public class LogicInitiator {
     public void setCondition(Condition condition) {
         this.condition = condition;
     }
+
 }

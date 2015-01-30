@@ -30,7 +30,6 @@ public class Condition {
     @PrimaryKeyJoinColumn
     private LogicInitiator logic_initiator;
 
-
     public int getCondition_id() {
         return condition_id;
     }

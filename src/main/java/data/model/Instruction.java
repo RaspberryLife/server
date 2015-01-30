@@ -1,6 +1,8 @@
 package data.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Peter Mösenthin.
@@ -44,4 +46,5 @@ public class Instruction {
     public void setLogic_receiver(LogicInitiator logic_receiver) {
         this.logic_receiver = logic_receiver;
     }
+
 }
