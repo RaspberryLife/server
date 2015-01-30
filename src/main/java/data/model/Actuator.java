@@ -20,7 +20,7 @@ public class Actuator {
     private int actuator_id;
 
     @Column(name="name")
-    private String actuator_name;
+    private String name;
 
     @Column(name="type")
     private String type;
@@ -35,16 +35,12 @@ public class Actuator {
         return actuator_id;
     }
 
-    public void setActuator_id(int actuator_id) {
-        this.actuator_id = actuator_id;
+    public String getName() {
+        return name;
     }
 
-    public String getActuator_name() {
-        return actuator_name;
-    }
-
-    public void setActuator_name(String actuator_name) {
-        this.actuator_name = actuator_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getType() {

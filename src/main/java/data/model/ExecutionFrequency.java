@@ -18,8 +18,8 @@ public class ExecutionFrequency {
 
     @Id
     @GeneratedValue
-    @Column(name="execution_frequency_table_id")
-    private int execution_frequency_table_id;
+    @Column(name="execution_frequency_id")
+    private int execution_frequency_id;
 
     @OneToOne
     @PrimaryKeyJoinColumn
@@ -40,12 +40,8 @@ public class ExecutionFrequency {
     @Column(name="execution_frequency_week")
     private int execution_frequency_week;
 
-    public int getExecution_frequency_table_id() {
-        return execution_frequency_table_id;
-    }
-
-    public void setExecution_frequency_table_id(int execution_frequency_table_id) {
-        this.execution_frequency_table_id = execution_frequency_table_id;
+    public int getExecution_frequency_id() {
+        return execution_frequency_id;
     }
 
     public Logic getLogic() {

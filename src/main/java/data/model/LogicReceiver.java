@@ -15,7 +15,7 @@ public class LogicReceiver {
     private int logic_receiver_id;
 
     @ManyToOne
-    @JoinColumn(name="logic_receiver")
+    @JoinColumn(name="logic_id")
     private Logic logic;
 
     @ManyToOne

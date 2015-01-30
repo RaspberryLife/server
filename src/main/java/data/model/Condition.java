@@ -34,10 +34,6 @@ public class Condition {
         return condition_id;
     }
 
-    public void setCondition_id(int condition_id) {
-        this.condition_id = condition_id;
-    }
-
     public int getField_id() {
         return field_id;
     }

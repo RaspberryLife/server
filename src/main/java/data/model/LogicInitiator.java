@@ -14,9 +14,8 @@ public class LogicInitiator {
     @Column(name="logic_initiator_id")
     private int logic_initiator_id;
 
-
     @ManyToOne
-    @JoinColumn(name="logic_initiator")
+    @JoinColumn(name="logic_id")
     private Logic logic;
 
     @ManyToOne

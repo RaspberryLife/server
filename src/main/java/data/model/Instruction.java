@@ -16,6 +16,9 @@ public class Instruction {
     @Column(name="instruction_id")
     private int instruction_id;
 
+    @Column(name="field_id")
+    private int field_id;
+
     @Column(name="instruction_parameters")
     private String parameters;
 
@@ -27,8 +30,12 @@ public class Instruction {
         return instruction_id;
     }
 
-    public void setInstruction_id(int instruction_id) {
-        this.instruction_id = instruction_id;
+    public int getField_id() {
+        return field_id;
+    }
+
+    public void setField_id(int field_id) {
+        this.field_id = field_id;
     }
 
     public String getParameters() {

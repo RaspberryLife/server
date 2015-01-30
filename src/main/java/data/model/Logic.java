@@ -30,11 +30,13 @@ public class Logic {
     @Column(name="logic_execution_requirement")
     private String execution_requirement;
 
-    @OneToMany(mappedBy="logic")
-    private Set<LogicInitiator> logic_initiator;
+    @OneToMany(cascade={CascadeType.ALL})
+    @JoinColumn(name="logic_id")
+    private Set<LogicInitiator> logic_initiator = new HashSet<>();
 
-    @OneToMany(mappedBy="logic")
-    private Set<LogicReceiver> logic_receiver;
+    @OneToMany(cascade={CascadeType.ALL})
+    @JoinColumn(name="logic_id")
+    private Set<LogicReceiver> logic_receiver = new HashSet<>();
 
     public int getLogic_id() {
         return logic_id;

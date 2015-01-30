@@ -51,11 +51,11 @@ public class DataBaseService {
     }
 
     private void runHibernateWriteTest() {
-        //hibernateHandler.writeTestLogic();
+        hibernateHandler.writeTestLogic();
     }
 
     private void runHibernateReadTest(){
-        //hibernateHandler.readLogic();
+        hibernateHandler.readLogic();
     }
 
 }
