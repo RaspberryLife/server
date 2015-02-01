@@ -12,8 +12,10 @@ import protobuf.RblProto.*;
  */
 public class ProtobufMessageHandler {
 
-    private RaspberryLifeClient client;
     public static final String DEBUG_TAG = ProtobufMessageHandler.class.getSimpleName();
+
+    private RaspberryLifeClient client;
+
     private ProtobufInstructionResolver instructionResolver = new ProtobufInstructionResolver();
 
 

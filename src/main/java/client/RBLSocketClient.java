@@ -18,12 +18,13 @@ import java.net.Socket;
  */
 public class RBLSocketClient extends RaspberryLifeClient {
 
+    public static final String DEBUG_TAG = RBLSocketClient.class.getSimpleName();
+
     private Socket socket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     protected final ProtobufMessageHandler messageHandler =
             new ProtobufMessageHandler(this);
-    public static final String DEBUG_TAG = RBLSocketClient.class.getSimpleName();
     private Thread readThread = null;
 
 

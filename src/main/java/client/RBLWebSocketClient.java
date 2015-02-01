@@ -12,6 +12,7 @@ import protobuf.RblProto.*;
  * connection.
  */
 public class RBLWebSocketClient extends RaspberryLifeClient {
+
     public static final String DEBUG_TAG = RBLWebSocketClient.class.getSimpleName();
 
     private WebSocketConnection connection;

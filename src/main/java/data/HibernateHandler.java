@@ -15,10 +15,10 @@ import java.util.List;
  */
 public class HibernateHandler {
 
+    public final String DEBUG_TAG = HibernateHandler.class.getSimpleName();
+
     private SessionFactory sessionFactory;
     private MySqlConnection mySqlConnection;
-
-    public final String DEBUG_TAG = HibernateHandler.class.getSimpleName();
 
 
     /**

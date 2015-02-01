@@ -15,9 +15,9 @@ import java.net.URLDecoder;
  */
 public class Config {
 
-    private static XMLConfiguration mConfiguration;
     public static final String DEBUG_TAG = Config.class.getSimpleName();
 
+    private static XMLConfiguration mConfiguration;
     public static int DEBUG_LEVEL = 1;
 
 

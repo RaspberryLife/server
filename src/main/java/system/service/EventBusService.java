@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class EventBusService {
 
+    public final String DEBUG_TAG = EventBusService.class.getSimpleName();
+
     private static EventBus eventBus = new EventBus();
 
     public static void init(){

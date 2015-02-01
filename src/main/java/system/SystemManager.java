@@ -17,9 +17,9 @@ import util.NetworkUtil;
 
 public class SystemManager {
 
-    private static SystemManager instance = new SystemManager();
-
     public static final String DEBUG_TAG = SystemManager.class.getSimpleName();
+
+    private static SystemManager instance = new SystemManager();
 
     public static void register(){
         EventBusService.register(instance);

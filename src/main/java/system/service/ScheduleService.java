@@ -18,9 +18,9 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class ScheduleService {
 
-    private static ScheduleService instance = new ScheduleService();
-
     public static final String DEBUG_TAG = ScheduleService.class.getSimpleName();
+
+    private static ScheduleService instance = new ScheduleService();
 
     public static final String SCHEDULER_GROUP = "rbl_scheduler_group";
     public static final String TRIGGER_GROUP = "rbl_trigger_group";

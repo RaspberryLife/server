@@ -27,11 +27,10 @@ import java.util.List;
  */
 public class ClientHandler {
 
-    private static List<RaspberryLifeClient> clientList = new ArrayList<RaspberryLifeClient>();
-
-    private static ClientHandler instance = new ClientHandler();
-
     public static final String DEBUG_TAG = ClientHandler.class.getSimpleName();
+
+    private static List<RaspberryLifeClient> clientList = new ArrayList<RaspberryLifeClient>();
+    private static ClientHandler instance = new ClientHandler();
 
     //----------------------------------------------------------------------------------------------
     //                                      LIFECYCLE
