@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="condition_table")
+@Table(name="rbl_condition")
 public class Condition {
 
     @Id
@@ -27,6 +27,9 @@ public class Condition {
     @PrimaryKeyJoinColumn
     private LogicInitiator logic_initiator;
 
+    //----------------------------------------------------------------------------------------------
+    //                                      GETTER & SETTER
+    //----------------------------------------------------------------------------------------------
 
     public int getCondition_id() {
         return condition_id;

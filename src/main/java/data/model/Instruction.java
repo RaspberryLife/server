@@ -8,7 +8,7 @@ import java.util.Set;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="instruction_table")
+@Table(name="rbl_instruction")
 public class Instruction {
 
     @Id
@@ -25,6 +25,10 @@ public class Instruction {
     @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private LogicInitiator logic_receiver;
+
+    //----------------------------------------------------------------------------------------------
+    //                                      GETTER & SETTER
+    //----------------------------------------------------------------------------------------------
 
     public int getInstruction_id() {
         return instruction_id;

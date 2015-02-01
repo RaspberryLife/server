@@ -37,6 +37,7 @@
         <mapping class="data.model.LogicReceiver"/>
         <mapping class="data.model.LogicInitiator"/>
         <mapping class="data.model.Instruction"/>
+        <mapping class="data.model.NotificationMessage"/>
 
     </session-factory>
 </hibernate-configuration>

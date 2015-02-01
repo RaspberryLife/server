@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="logic_initiator_table")
+@Table(name="rbl_logic_initiator")
 public class LogicInitiator {
 
     @Id
@@ -24,6 +24,10 @@ public class LogicInitiator {
 
     @OneToOne(mappedBy="logic_initiator", cascade=CascadeType.ALL)
     private Condition condition;
+
+    //----------------------------------------------------------------------------------------------
+    //                                      GETTER & SETTER
+    //----------------------------------------------------------------------------------------------
 
     public int getLogic_initiator_id() {
         return logic_initiator_id;

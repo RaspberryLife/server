@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="execution_frequency_table")
+@Table(name="rbl_execution_frequency")
 public class ExecutionFrequency {
 
     public static final int TYPE_IMMEDIATELY =  0;
@@ -39,6 +39,10 @@ public class ExecutionFrequency {
 
     @Column(name="week")
     private int week;
+
+    //----------------------------------------------------------------------------------------------
+    //                                      GETTER & SETTER
+    //----------------------------------------------------------------------------------------------
 
     public int getExecution_frequency_id() {
         return execution_frequency_id;

@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="logic_receiver_table")
+@Table(name="rbl_logic_receiver")
 public class LogicReceiver {
 
     @Id
@@ -24,6 +24,10 @@ public class LogicReceiver {
 
     @OneToOne(mappedBy="logic_receiver", cascade=CascadeType.ALL)
     private Instruction instruction;
+
+    //----------------------------------------------------------------------------------------------
+    //                                      GETTER & SETTER
+    //----------------------------------------------------------------------------------------------
 
     public int getLogic_receiver_id() {
         return logic_receiver_id;
