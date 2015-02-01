@@ -104,16 +104,22 @@ public class ProtoFactory {
                 .setThresholdUnder(thresholdUnder)
                 .build();
     }
-/*
-    public static RBLMessage.Trigger buildTrigger(
-            int instructionId,
-            Iterable<String> parameters){
-        return RBLMessage.Trigger.newBuilder()
-                .setInstructionId(instructionId)
-                .addAllParameters(parameters)
+
+    public static RBLMessage.ExecutionFrequency buildExecutionFrequency(
+            RBLMessage.ExecutionType executionType,
+            int minute,
+            int hour,
+            int day,
+            int week
+    ){
+        return RBLMessage.ExecutionFrequency.newBuilder()
+                .setExeType(executionType)
+                .setMinute(minute)
+                .setHour(hour)
+                .setDay(day)
+                .setWeek(week)
                 .build();
     }
-*/
 
     public static RBLMessage.Range buildRange(
             int count,
@@ -124,34 +130,31 @@ public class ProtoFactory {
                 .setStartDateTime(startDateTime)
                 .setEndDateTime(endDateTime)
                 .build();
-
     }
-
-    /*
 
     public static RBLMessage buildLogicMessage(
             String id,
             RBLMessage.MessageFlag messageFlag,
+            RBLMessage.CrudType crudType,
             String name,
-            Iterable<RBLMessage.Actuator> initiator,
-            Iterable<RBLMessage.Condition> condition,
-            Iterable<RBLMessage.Actuator> receiver,
-            Iterable<RBLMessage.Trigger> trigger
-
+            Iterable<RBLMessage.LogicInitiator> initiator,
+            Iterable<RBLMessage.LogicReceiver> receiver,
+            RBLMessage.ExecutionFrequency executionFrequency,
+            RBLMessage.ExecutionRequirement executionRequirement
     ){
         RBLMessage.Logic.Builder logicMessage = RBLMessage.Logic.newBuilder();
-        logicMessage.setName(name);
-        logicMessage.addAllCondition(condition);
-        logicMessage.addAllInitiator(initiator);
-        logicMessage.addAllTrigger(trigger);
-        logicMessage.addAllReceiver(receiver);
+        logicMessage.setName(name)
+                .setCrudType(crudType)
+                .addAllLogicReceiver(receiver)
+                .addAllLogicInitiator(initiator)
+                .setExeFrequency(executionFrequency)
+                .setExeRequirement(executionRequirement);
         return createBaseMessage(
                 id, messageFlag,
                 RBLMessage.MessageType.LOGIC)
                 .setLogic(logicMessage)
                 .build();
     }
-*/
     //----------------------------------------------------------------------------------------------
     //                                      DATA
     //----------------------------------------------------------------------------------------------
