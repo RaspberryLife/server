@@ -1,5 +1,6 @@
 #1.1.3
 Extended database scheme for full logic support
+Added User and Notification message database model
 
 
 #1.1.2
