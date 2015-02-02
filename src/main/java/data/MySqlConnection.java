@@ -32,7 +32,7 @@ public class MySqlConnection {
                     connectionProps);
 
         } catch(Exception e) {
-            Log.add(DEBUG_TAG,"Could not open database: ", e);
+            Log.add(DEBUG_TAG,"Could not open database");
             return false;
         }
         return true;
@@ -75,8 +75,6 @@ public class MySqlConnection {
         Log.add(DEBUG_TAG,"Closing connection");
         try {
             mConnection.close();
-        } catch (SQLException e) {
-            Log.add(DEBUG_TAG, "Could not close connection: ", e);
         } catch (Exception e) {
             Log.add(DEBUG_TAG, "Could not close connection: ", e);
         }
