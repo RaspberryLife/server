@@ -20,7 +20,6 @@ public class Config {
     private static XMLConfiguration mConfiguration;
     public static int DEBUG_LEVEL = 1;
 
-
     public static void dumpConfig(){
         String configName =  "rbl_config_ext.xml";
         String path = Config.class.getProtectionDomain().getCodeSource().getLocation().getPath();
