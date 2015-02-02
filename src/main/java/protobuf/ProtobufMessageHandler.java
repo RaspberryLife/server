@@ -17,6 +17,7 @@ public class ProtobufMessageHandler {
     private RaspberryLifeClient client;
 
     private ProtobufInstructionResolver instructionResolver = new ProtobufInstructionResolver();
+    private ProtobufLogicResolver logicResolver = new ProtobufLogicResolver();
 
 
     public ProtobufMessageHandler(RaspberryLifeClient client){
@@ -59,49 +60,7 @@ public class ProtobufMessageHandler {
     }
 
     private void handleLogicMessage(RBLMessage message) {
-        RBLMessage.Logic l = message.getLogic();
-/*
-        String initiators = "[ ";
-        for(RBLMessage.Actuator a : l.getInitiatorList()){
-            initiators += a.getName() + "(" + a.getActuatorId() + ") ";
-        }
-        initiators += "]";
-
-        String receivers = "[ ";
-        for(RBLMessage.Actuator a : l.getReceiverList()){
-            receivers += a.getName() + "(" + a.getActuatorId() + ") ";
-        }
-        receivers += "]";
-
-        String conditions = "[ ";
-        for(RBLMessage.Condition c : l.getConditionList()){
-            conditions += "FID=" + c.getFieldId()
-                    + " TU=" + c.getThresholdUnder()
-                    + " TO=" + c.getThresholdOver()
-                    + " S=" + c.getState();
-        }
-        conditions += "]";
-
-        String triggers = "[ ";
-        for(RBLMessage.Trigger t : l.getTriggerList()){
-            triggers += "IID=" + t.getInstructionId() + " "
-                        + " PARAMS=( ";
-            for(String s : t.getParametersList()){
-                triggers += s + " ";
-            }
-            triggers += ")";
-        }
-        triggers += "]";
-
-        Log.add(DEBUG_TAG,
-                "Received Logic:"
-                + " Name: " + l.getName()
-                + " Initiators: " + initiators
-                + " Conditions: " + conditions
-                + " Receivers: " + receivers
-                + " Triggers: " + triggers
-        );
-        */
+        logicResolver.resolve(client, message);
     }
 
     private void handleDataSetMessage(RBLMessage message) {
@@ -121,7 +80,7 @@ public class ProtobufMessageHandler {
 
 
     private void handleRunInstruction(RBLMessage message) {
-        instructionResolver.resolve(message);
+        instructionResolver.resolve(client, message);
     }
 
     private void handlePlaintextMessage(RBLMessage message) {
