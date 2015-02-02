@@ -104,9 +104,8 @@ public class SystemManager {
     }
 
     private void initDatabase(){
-        DataBaseService.register();
-        EventBusService.post(new DataBaseEvent(DataBaseEvent.START_SESSION));
-        EventBusService.post(new DataBaseEvent(DataBaseEvent.RUN_TEST));
+        DataBaseService.getInstance().start();
+
     }
 
     private void initScheduler(){
