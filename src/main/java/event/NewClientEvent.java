@@ -7,23 +7,25 @@ import client.RaspberryLifeClient;
  */
 public class NewClientEvent {
 
-    public static final int TYPE_WEB_SOCKET = 0;
-    public static final int TYPE_JAVA_SOCKET = 1;
+    public enum Type {
+        TYPE_WEB_SOCKET,
+        TYPE_JAVA_SOCKET
+    }
 
-    private int type;
+    private Type type;
 
     private RaspberryLifeClient client;
 
-    public NewClientEvent(int type, RaspberryLifeClient client) {
+    public NewClientEvent(Type type, RaspberryLifeClient client) {
         this.type = type;
         this.client = client;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
