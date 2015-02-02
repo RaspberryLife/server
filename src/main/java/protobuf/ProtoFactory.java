@@ -46,7 +46,7 @@ public class ProtoFactory {
     //                                      INSTRUCTION
     //----------------------------------------------------------------------------------------------
 
-    public static RBLMessage.Instruction.Builder buildInstructionMessage(
+    public static RBLMessage.Instruction.Builder buildInstruction(
             int instructionId,
             List<String> stringParameters){
         RBLMessage.Instruction.Builder instruction = RBLMessage.Instruction.newBuilder();
@@ -54,7 +54,6 @@ public class ProtoFactory {
         if(stringParameters != null){
             instruction.addAllParameters(stringParameters);
         }
-
         return instruction;
     }
 
@@ -76,11 +75,36 @@ public class ProtoFactory {
     //                                      LOGIC
     //----------------------------------------------------------------------------------------------
 
-    public static RBLMessage.Actuator buildActuator(
+    public static RBLMessage buildLogicMessage(
+            String id,
+            RBLMessage.MessageFlag messageFlag,
+            RBLMessage.CrudType crudType,
+            int logic_id,
+            String name,
+            Iterable<RBLMessage.LogicInitiator> initiator,
+            Iterable<RBLMessage.LogicReceiver> receiver,
+            RBLMessage.ExecutionFrequency executionFrequency,
+            RBLMessage.ExecutionRequirement executionRequirement
+    ){
+        RBLMessage.Logic.Builder logicMessage = RBLMessage.Logic.newBuilder();
+        logicMessage.setName(name)
+                .setCrudType(crudType)
+                .setId(logic_id)
+                .addAllLogicReceiver(receiver)
+                .addAllLogicInitiator(initiator)
+                .setExeFrequency(executionFrequency)
+                .setExeRequirement(executionRequirement);
+        return createBaseMessage(
+                id, messageFlag,
+                RBLMessage.MessageType.LOGIC)
+                .setLogic(logicMessage)
+                .build();
+    }
+
+    public static RBLMessage.Actuator.Builder buildActuator(
             RBLMessage.ActuatorType actuatorType,
             int actuatorId,
             String name){
-
         RBLMessage.Actuator.Builder actuator =
                 RBLMessage.Actuator.newBuilder()
                 .setActuatorId(actuatorId)
@@ -89,10 +113,26 @@ public class ProtoFactory {
             actuator.setName(name);
         }
 
-        return actuator.build();
+        return actuator;
     }
 
-    public static RBLMessage.Condition buildCondition(
+    public static RBLMessage.LogicInitiator.Builder buildLogicInitiator(
+            RBLMessage.Actuator.Builder actuator,
+            RBLMessage.Condition.Builder condition){
+        return RBLMessage.LogicInitiator.newBuilder()
+                .setCondition(condition)
+                .setInitiator(actuator);
+    }
+
+    public static RBLMessage.LogicReceiver.Builder buildLogicReceiver(
+            RBLMessage.Actuator.Builder actuator,
+            RBLMessage.Instruction.Builder instruction){
+        return RBLMessage.LogicReceiver.newBuilder()
+                .setInstruction(instruction)
+                .setReceiver(actuator);
+    }
+
+    public static RBLMessage.Condition.Builder buildCondition(
             int fieldId,
             int thresholdOver,
             int thresholdUnder,
@@ -101,11 +141,10 @@ public class ProtoFactory {
                 .setFieldId(fieldId)
                 .setState(state)
                 .setThresholdOver(thresholdOver)
-                .setThresholdUnder(thresholdUnder)
-                .build();
+                .setThresholdUnder(thresholdUnder);
     }
 
-    public static RBLMessage.ExecutionFrequency buildExecutionFrequency(
+    public static RBLMessage.ExecutionFrequency.Builder buildExecutionFrequency(
             RBLMessage.ExecutionType executionType,
             int minute,
             int hour,
@@ -117,9 +156,13 @@ public class ProtoFactory {
                 .setMinute(minute)
                 .setHour(hour)
                 .setDay(day)
-                .setWeek(week)
-                .build();
+                .setWeek(week);
     }
+
+
+    //----------------------------------------------------------------------------------------------
+    //                                      DATA
+    //----------------------------------------------------------------------------------------------
 
     public static RBLMessage.Range buildRange(
             int count,
@@ -131,34 +174,6 @@ public class ProtoFactory {
                 .setEndDateTime(endDateTime)
                 .build();
     }
-
-    public static RBLMessage buildLogicMessage(
-            String id,
-            RBLMessage.MessageFlag messageFlag,
-            RBLMessage.CrudType crudType,
-            String name,
-            Iterable<RBLMessage.LogicInitiator> initiator,
-            Iterable<RBLMessage.LogicReceiver> receiver,
-            RBLMessage.ExecutionFrequency executionFrequency,
-            RBLMessage.ExecutionRequirement executionRequirement
-    ){
-        RBLMessage.Logic.Builder logicMessage = RBLMessage.Logic.newBuilder();
-        logicMessage.setName(name)
-                .setCrudType(crudType)
-                .addAllLogicReceiver(receiver)
-                .addAllLogicInitiator(initiator)
-                .setExeFrequency(executionFrequency)
-                .setExeRequirement(executionRequirement);
-        return createBaseMessage(
-                id, messageFlag,
-                RBLMessage.MessageType.LOGIC)
-                .setLogic(logicMessage)
-                .build();
-    }
-    //----------------------------------------------------------------------------------------------
-    //                                      DATA
-    //----------------------------------------------------------------------------------------------
-
 
     public static RBLMessage.DataSet buildDataSetMessage(
             RBLMessage.CrudType crudType,

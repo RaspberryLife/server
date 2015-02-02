@@ -7015,30 +7015,19 @@ public final class RblProto {
     public interface LogicReceiverOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
-      // repeated .RBLMessage.Actuator receiver = 1;
+      // required .RBLMessage.Actuator receiver = 1;
       /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+       * <code>required .RBLMessage.Actuator receiver = 1;</code>
        */
-      java.util.List<protobuf.RblProto.RBLMessage.Actuator> 
-          getReceiverList();
+      boolean hasReceiver();
       /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+       * <code>required .RBLMessage.Actuator receiver = 1;</code>
        */
-      protobuf.RblProto.RBLMessage.Actuator getReceiver(int index);
+      protobuf.RblProto.RBLMessage.Actuator getReceiver();
       /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+       * <code>required .RBLMessage.Actuator receiver = 1;</code>
        */
-      int getReceiverCount();
-      /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-       */
-      java.util.List<? extends protobuf.RblProto.RBLMessage.ActuatorOrBuilder> 
-          getReceiverOrBuilderList();
-      /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-       */
-      protobuf.RblProto.RBLMessage.ActuatorOrBuilder getReceiverOrBuilder(
-          int index);
+      protobuf.RblProto.RBLMessage.ActuatorOrBuilder getReceiverOrBuilder();
 
       // required .RBLMessage.Instruction instruction = 2;
       /**
@@ -7106,16 +7095,21 @@ public final class RblProto {
                 break;
               }
               case 10: {
-                if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                  receiver_ = new java.util.ArrayList<protobuf.RblProto.RBLMessage.Actuator>();
-                  mutable_bitField0_ |= 0x00000001;
+                protobuf.RblProto.RBLMessage.Actuator.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                  subBuilder = receiver_.toBuilder();
                 }
-                receiver_.add(input.readMessage(protobuf.RblProto.RBLMessage.Actuator.PARSER, extensionRegistry));
+                receiver_ = input.readMessage(protobuf.RblProto.RBLMessage.Actuator.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(receiver_);
+                  receiver_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000001;
                 break;
               }
               case 18: {
                 protobuf.RblProto.RBLMessage.Instruction.Builder subBuilder = null;
-                if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                if (((bitField0_ & 0x00000002) == 0x00000002)) {
                   subBuilder = instruction_.toBuilder();
                 }
                 instruction_ = input.readMessage(protobuf.RblProto.RBLMessage.Instruction.PARSER, extensionRegistry);
@@ -7123,7 +7117,7 @@ public final class RblProto {
                   subBuilder.mergeFrom(instruction_);
                   instruction_ = subBuilder.buildPartial();
                 }
-                bitField0_ |= 0x00000001;
+                bitField0_ |= 0x00000002;
                 break;
               }
             }
@@ -7134,9 +7128,6 @@ public final class RblProto {
           throw new com.google.protobuf.InvalidProtocolBufferException(
               e.getMessage()).setUnfinishedMessage(this);
         } finally {
-          if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-            receiver_ = java.util.Collections.unmodifiableList(receiver_);
-          }
           this.unknownFields = unknownFields.build();
           makeExtensionsImmutable();
         }
@@ -7169,40 +7160,26 @@ public final class RblProto {
       }
 
       private int bitField0_;
-      // repeated .RBLMessage.Actuator receiver = 1;
+      // required .RBLMessage.Actuator receiver = 1;
       public static final int RECEIVER_FIELD_NUMBER = 1;
-      private java.util.List<protobuf.RblProto.RBLMessage.Actuator> receiver_;
+      private protobuf.RblProto.RBLMessage.Actuator receiver_;
       /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+       * <code>required .RBLMessage.Actuator receiver = 1;</code>
        */
-      public java.util.List<protobuf.RblProto.RBLMessage.Actuator> getReceiverList() {
+      public boolean hasReceiver() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .RBLMessage.Actuator receiver = 1;</code>
+       */
+      public protobuf.RblProto.RBLMessage.Actuator getReceiver() {
         return receiver_;
       }
       /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+       * <code>required .RBLMessage.Actuator receiver = 1;</code>
        */
-      public java.util.List<? extends protobuf.RblProto.RBLMessage.ActuatorOrBuilder> 
-          getReceiverOrBuilderList() {
+      public protobuf.RblProto.RBLMessage.ActuatorOrBuilder getReceiverOrBuilder() {
         return receiver_;
-      }
-      /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-       */
-      public int getReceiverCount() {
-        return receiver_.size();
-      }
-      /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-       */
-      public protobuf.RblProto.RBLMessage.Actuator getReceiver(int index) {
-        return receiver_.get(index);
-      }
-      /**
-       * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-       */
-      public protobuf.RblProto.RBLMessage.ActuatorOrBuilder getReceiverOrBuilder(
-          int index) {
-        return receiver_.get(index);
       }
 
       // required .RBLMessage.Instruction instruction = 2;
@@ -7212,7 +7189,7 @@ public final class RblProto {
        * <code>required .RBLMessage.Instruction instruction = 2;</code>
        */
       public boolean hasInstruction() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required .RBLMessage.Instruction instruction = 2;</code>
@@ -7228,7 +7205,7 @@ public final class RblProto {
       }
 
       private void initFields() {
-        receiver_ = java.util.Collections.emptyList();
+        receiver_ = protobuf.RblProto.RBLMessage.Actuator.getDefaultInstance();
         instruction_ = protobuf.RblProto.RBLMessage.Instruction.getDefaultInstance();
       }
       private byte memoizedIsInitialized = -1;
@@ -7236,15 +7213,17 @@ public final class RblProto {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
 
+        if (!hasReceiver()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
         if (!hasInstruction()) {
           memoizedIsInitialized = 0;
           return false;
         }
-        for (int i = 0; i < getReceiverCount(); i++) {
-          if (!getReceiver(i).isInitialized()) {
-            memoizedIsInitialized = 0;
-            return false;
-          }
+        if (!getReceiver().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
         }
         if (!getInstruction().isInitialized()) {
           memoizedIsInitialized = 0;
@@ -7257,10 +7236,10 @@ public final class RblProto {
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         getSerializedSize();
-        for (int i = 0; i < receiver_.size(); i++) {
-          output.writeMessage(1, receiver_.get(i));
-        }
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeMessage(1, receiver_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
           output.writeMessage(2, instruction_);
         }
         getUnknownFields().writeTo(output);
@@ -7272,11 +7251,11 @@ public final class RblProto {
         if (size != -1) return size;
 
         size = 0;
-        for (int i = 0; i < receiver_.size(); i++) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(1, receiver_.get(i));
-        }
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(1, receiver_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(2, instruction_);
         }
@@ -7399,11 +7378,11 @@ public final class RblProto {
         public Builder clear() {
           super.clear();
           if (receiverBuilder_ == null) {
-            receiver_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000001);
+            receiver_ = protobuf.RblProto.RBLMessage.Actuator.getDefaultInstance();
           } else {
             receiverBuilder_.clear();
           }
+          bitField0_ = (bitField0_ & ~0x00000001);
           if (instructionBuilder_ == null) {
             instruction_ = protobuf.RblProto.RBLMessage.Instruction.getDefaultInstance();
           } else {
@@ -7438,17 +7417,16 @@ public final class RblProto {
           protobuf.RblProto.RBLMessage.LogicReceiver result = new protobuf.RblProto.RBLMessage.LogicReceiver(this);
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
           if (receiverBuilder_ == null) {
-            if (((bitField0_ & 0x00000001) == 0x00000001)) {
-              receiver_ = java.util.Collections.unmodifiableList(receiver_);
-              bitField0_ = (bitField0_ & ~0x00000001);
-            }
             result.receiver_ = receiver_;
           } else {
             result.receiver_ = receiverBuilder_.build();
           }
           if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-            to_bitField0_ |= 0x00000001;
+            to_bitField0_ |= 0x00000002;
           }
           if (instructionBuilder_ == null) {
             result.instruction_ = instruction_;
@@ -7471,31 +7449,8 @@ public final class RblProto {
 
         public Builder mergeFrom(protobuf.RblProto.RBLMessage.LogicReceiver other) {
           if (other == protobuf.RblProto.RBLMessage.LogicReceiver.getDefaultInstance()) return this;
-          if (receiverBuilder_ == null) {
-            if (!other.receiver_.isEmpty()) {
-              if (receiver_.isEmpty()) {
-                receiver_ = other.receiver_;
-                bitField0_ = (bitField0_ & ~0x00000001);
-              } else {
-                ensureReceiverIsMutable();
-                receiver_.addAll(other.receiver_);
-              }
-              onChanged();
-            }
-          } else {
-            if (!other.receiver_.isEmpty()) {
-              if (receiverBuilder_.isEmpty()) {
-                receiverBuilder_.dispose();
-                receiverBuilder_ = null;
-                receiver_ = other.receiver_;
-                bitField0_ = (bitField0_ & ~0x00000001);
-                receiverBuilder_ = 
-                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                     getReceiverFieldBuilder() : null;
-              } else {
-                receiverBuilder_.addAllMessages(other.receiver_);
-              }
-            }
+          if (other.hasReceiver()) {
+            mergeReceiver(other.getReceiver());
           }
           if (other.hasInstruction()) {
             mergeInstruction(other.getInstruction());
@@ -7505,15 +7460,17 @@ public final class RblProto {
         }
 
         public final boolean isInitialized() {
+          if (!hasReceiver()) {
+            
+            return false;
+          }
           if (!hasInstruction()) {
             
             return false;
           }
-          for (int i = 0; i < getReceiverCount(); i++) {
-            if (!getReceiver(i).isInitialized()) {
-              
-              return false;
-            }
+          if (!getReceiver().isInitialized()) {
+            
+            return false;
           }
           if (!getInstruction().isInitialized()) {
             
@@ -7541,239 +7498,116 @@ public final class RblProto {
         }
         private int bitField0_;
 
-        // repeated .RBLMessage.Actuator receiver = 1;
-        private java.util.List<protobuf.RblProto.RBLMessage.Actuator> receiver_ =
-          java.util.Collections.emptyList();
-        private void ensureReceiverIsMutable() {
-          if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-            receiver_ = new java.util.ArrayList<protobuf.RblProto.RBLMessage.Actuator>(receiver_);
-            bitField0_ |= 0x00000001;
-           }
-        }
-
-        private com.google.protobuf.RepeatedFieldBuilder<
+        // required .RBLMessage.Actuator receiver = 1;
+        private protobuf.RblProto.RBLMessage.Actuator receiver_ = protobuf.RblProto.RBLMessage.Actuator.getDefaultInstance();
+        private com.google.protobuf.SingleFieldBuilder<
             protobuf.RblProto.RBLMessage.Actuator, protobuf.RblProto.RBLMessage.Actuator.Builder, protobuf.RblProto.RBLMessage.ActuatorOrBuilder> receiverBuilder_;
-
         /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
          */
-        public java.util.List<protobuf.RblProto.RBLMessage.Actuator> getReceiverList() {
+        public boolean hasReceiver() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
+         */
+        public protobuf.RblProto.RBLMessage.Actuator getReceiver() {
           if (receiverBuilder_ == null) {
-            return java.util.Collections.unmodifiableList(receiver_);
+            return receiver_;
           } else {
-            return receiverBuilder_.getMessageList();
+            return receiverBuilder_.getMessage();
           }
         }
         /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
          */
-        public int getReceiverCount() {
+        public Builder setReceiver(protobuf.RblProto.RBLMessage.Actuator value) {
           if (receiverBuilder_ == null) {
-            return receiver_.size();
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            receiver_ = value;
+            onChanged();
           } else {
-            return receiverBuilder_.getCount();
+            receiverBuilder_.setMessage(value);
           }
+          bitField0_ |= 0x00000001;
+          return this;
         }
         /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public protobuf.RblProto.RBLMessage.Actuator getReceiver(int index) {
-          if (receiverBuilder_ == null) {
-            return receiver_.get(index);
-          } else {
-            return receiverBuilder_.getMessage(index);
-          }
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
          */
         public Builder setReceiver(
-            int index, protobuf.RblProto.RBLMessage.Actuator value) {
-          if (receiverBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureReceiverIsMutable();
-            receiver_.set(index, value);
-            onChanged();
-          } else {
-            receiverBuilder_.setMessage(index, value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public Builder setReceiver(
-            int index, protobuf.RblProto.RBLMessage.Actuator.Builder builderForValue) {
-          if (receiverBuilder_ == null) {
-            ensureReceiverIsMutable();
-            receiver_.set(index, builderForValue.build());
-            onChanged();
-          } else {
-            receiverBuilder_.setMessage(index, builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public Builder addReceiver(protobuf.RblProto.RBLMessage.Actuator value) {
-          if (receiverBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureReceiverIsMutable();
-            receiver_.add(value);
-            onChanged();
-          } else {
-            receiverBuilder_.addMessage(value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public Builder addReceiver(
-            int index, protobuf.RblProto.RBLMessage.Actuator value) {
-          if (receiverBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureReceiverIsMutable();
-            receiver_.add(index, value);
-            onChanged();
-          } else {
-            receiverBuilder_.addMessage(index, value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public Builder addReceiver(
             protobuf.RblProto.RBLMessage.Actuator.Builder builderForValue) {
           if (receiverBuilder_ == null) {
-            ensureReceiverIsMutable();
-            receiver_.add(builderForValue.build());
+            receiver_ = builderForValue.build();
             onChanged();
           } else {
-            receiverBuilder_.addMessage(builderForValue.build());
+            receiverBuilder_.setMessage(builderForValue.build());
           }
+          bitField0_ |= 0x00000001;
           return this;
         }
         /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
          */
-        public Builder addReceiver(
-            int index, protobuf.RblProto.RBLMessage.Actuator.Builder builderForValue) {
+        public Builder mergeReceiver(protobuf.RblProto.RBLMessage.Actuator value) {
           if (receiverBuilder_ == null) {
-            ensureReceiverIsMutable();
-            receiver_.add(index, builderForValue.build());
+            if (((bitField0_ & 0x00000001) == 0x00000001) &&
+                receiver_ != protobuf.RblProto.RBLMessage.Actuator.getDefaultInstance()) {
+              receiver_ =
+                protobuf.RblProto.RBLMessage.Actuator.newBuilder(receiver_).mergeFrom(value).buildPartial();
+            } else {
+              receiver_ = value;
+            }
             onChanged();
           } else {
-            receiverBuilder_.addMessage(index, builderForValue.build());
+            receiverBuilder_.mergeFrom(value);
           }
+          bitField0_ |= 0x00000001;
           return this;
         }
         /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public Builder addAllReceiver(
-            java.lang.Iterable<? extends protobuf.RblProto.RBLMessage.Actuator> values) {
-          if (receiverBuilder_ == null) {
-            ensureReceiverIsMutable();
-            super.addAll(values, receiver_);
-            onChanged();
-          } else {
-            receiverBuilder_.addAllMessages(values);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
          */
         public Builder clearReceiver() {
           if (receiverBuilder_ == null) {
-            receiver_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000001);
+            receiver_ = protobuf.RblProto.RBLMessage.Actuator.getDefaultInstance();
             onChanged();
           } else {
             receiverBuilder_.clear();
           }
+          bitField0_ = (bitField0_ & ~0x00000001);
           return this;
         }
         /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
          */
-        public Builder removeReceiver(int index) {
-          if (receiverBuilder_ == null) {
-            ensureReceiverIsMutable();
-            receiver_.remove(index);
-            onChanged();
-          } else {
-            receiverBuilder_.remove(index);
-          }
-          return this;
+        public protobuf.RblProto.RBLMessage.Actuator.Builder getReceiverBuilder() {
+          bitField0_ |= 0x00000001;
+          onChanged();
+          return getReceiverFieldBuilder().getBuilder();
         }
         /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
          */
-        public protobuf.RblProto.RBLMessage.Actuator.Builder getReceiverBuilder(
-            int index) {
-          return getReceiverFieldBuilder().getBuilder(index);
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public protobuf.RblProto.RBLMessage.ActuatorOrBuilder getReceiverOrBuilder(
-            int index) {
-          if (receiverBuilder_ == null) {
-            return receiver_.get(index);  } else {
-            return receiverBuilder_.getMessageOrBuilder(index);
-          }
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public java.util.List<? extends protobuf.RblProto.RBLMessage.ActuatorOrBuilder> 
-             getReceiverOrBuilderList() {
+        public protobuf.RblProto.RBLMessage.ActuatorOrBuilder getReceiverOrBuilder() {
           if (receiverBuilder_ != null) {
-            return receiverBuilder_.getMessageOrBuilderList();
+            return receiverBuilder_.getMessageOrBuilder();
           } else {
-            return java.util.Collections.unmodifiableList(receiver_);
+            return receiver_;
           }
         }
         /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
+         * <code>required .RBLMessage.Actuator receiver = 1;</code>
          */
-        public protobuf.RblProto.RBLMessage.Actuator.Builder addReceiverBuilder() {
-          return getReceiverFieldBuilder().addBuilder(
-              protobuf.RblProto.RBLMessage.Actuator.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public protobuf.RblProto.RBLMessage.Actuator.Builder addReceiverBuilder(
-            int index) {
-          return getReceiverFieldBuilder().addBuilder(
-              index, protobuf.RblProto.RBLMessage.Actuator.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .RBLMessage.Actuator receiver = 1;</code>
-         */
-        public java.util.List<protobuf.RblProto.RBLMessage.Actuator.Builder> 
-             getReceiverBuilderList() {
-          return getReceiverFieldBuilder().getBuilderList();
-        }
-        private com.google.protobuf.RepeatedFieldBuilder<
+        private com.google.protobuf.SingleFieldBuilder<
             protobuf.RblProto.RBLMessage.Actuator, protobuf.RblProto.RBLMessage.Actuator.Builder, protobuf.RblProto.RBLMessage.ActuatorOrBuilder> 
             getReceiverFieldBuilder() {
           if (receiverBuilder_ == null) {
-            receiverBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+            receiverBuilder_ = new com.google.protobuf.SingleFieldBuilder<
                 protobuf.RblProto.RBLMessage.Actuator, protobuf.RblProto.RBLMessage.Actuator.Builder, protobuf.RblProto.RBLMessage.ActuatorOrBuilder>(
                     receiver_,
-                    ((bitField0_ & 0x00000001) == 0x00000001),
                     getParentForChildren(),
                     isClean());
             receiver_ = null;
@@ -14397,7 +14231,7 @@ public final class RblProto {
       "icReceiver\032c\n\016LogicInitiator\022\'\n\tinitiato" +
       "r\030\001 \002(\0132\024.RBLMessage.Actuator\022(\n\tconditi" +
       "on\030\002 \002(\0132\025.RBLMessage.Condition\032e\n\rLogic",
-      "Receiver\022&\n\010receiver\030\001 \003(\0132\024.RBLMessage." +
+      "Receiver\022&\n\010receiver\030\001 \002(\0132\024.RBLMessage." +
       "Actuator\022,\n\013instruction\030\002 \002(\0132\027.RBLMessa" +
       "ge.Instruction\032Z\n\tCondition\022\017\n\007fieldId\030\001" +
       " \002(\005\022\025\n\rthresholdOver\030\002 \001(\005\022\026\n\016threshold" +

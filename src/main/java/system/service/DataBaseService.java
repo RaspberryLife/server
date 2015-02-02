@@ -82,7 +82,7 @@ public class DataBaseService {
     //----------------------------------------------------------------------------------------------
 
     public void writeLogic(Logic logic){
-
+        hibernateHandler.insert(logic);
     }
 
     public List<Logic> readAllLogic(){

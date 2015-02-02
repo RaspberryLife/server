@@ -1,7 +1,9 @@
 package data.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,10 +33,10 @@ public class Logic {
     private String execution_requirement;
 
     @OneToMany(mappedBy="logic", cascade=CascadeType.ALL)
-    private Set<LogicInitiator> logic_initiator = new HashSet<LogicInitiator>();
+    private List<LogicInitiator> logic_initiator = new ArrayList<LogicInitiator>();
 
     @OneToMany(mappedBy="logic", cascade=CascadeType.ALL)
-    private Set<LogicReceiver> logic_receiver = new HashSet<LogicReceiver>();
+    private List<LogicReceiver> logic_receiver = new ArrayList<LogicReceiver>();
 
     //----------------------------------------------------------------------------------------------
     //                                      GETTER & SETTER
@@ -72,19 +74,19 @@ public class Logic {
         this.execution_requirement = execution_requirement;
     }
 
-    public Set<LogicInitiator> getLogic_initiator() {
+    public List<LogicInitiator> getLogic_initiator() {
         return logic_initiator;
     }
 
-    public void setLogic_initiator(Set<LogicInitiator> logic_initiator) {
+    public void setLogic_initiator(List<LogicInitiator> logic_initiator) {
         this.logic_initiator = logic_initiator;
     }
 
-    public Set<LogicReceiver> getLogic_receiver() {
+    public List<LogicReceiver> getLogic_receiver() {
         return logic_receiver;
     }
 
-    public void setLogic_receiver(Set<LogicReceiver> logic_receiver) {
+    public void setLogic_receiver(List<LogicReceiver> logic_receiver) {
         this.logic_receiver = logic_receiver;
     }
 }

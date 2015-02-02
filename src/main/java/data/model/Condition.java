@@ -23,6 +23,9 @@ public class Condition {
     @Column(name="threshold_under")
     private int threshold_under;
 
+    @Column(name="state")
+    private boolean state;
+
     @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private LogicInitiator logic_initiator;
@@ -53,6 +56,14 @@ public class Condition {
 
     public int getThreshold_under() {
         return threshold_under;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
     }
 
     public void setThreshold_under(int threshold_under) {
