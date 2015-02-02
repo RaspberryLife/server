@@ -1,6 +1,7 @@
 package protobuf;
 
 
+import client.RaspberryLifeClient;
 import event.ModuleEvent;
 import system.service.EventBusService;
 import util.Log;
@@ -13,7 +14,7 @@ public class ProtobufInstructionResolver {
 
     public static final String DEBUG_TAG = ProtobufInstructionResolver.class.getSimpleName();
 
-    public void resolve(RBLMessage message){
+    public void resolve(RaspberryLifeClient client, RBLMessage message){
         RBLMessage.ActuatorType type = message.getRunInstruction().getActuator().getActuatorType();
         switch(type){
             case MODULE:
@@ -24,6 +25,7 @@ public class ProtobufInstructionResolver {
                 break;
             case CLIENT:
                 runClientInstruction(message);
+                break;
         }
     }
 
@@ -32,16 +34,16 @@ public class ProtobufInstructionResolver {
         Log.add(DEBUG_TAG, "Running module instruction");
         RBLMessage.RunInstruction rI = message.getRunInstruction();
         if(rI != null){
-            ModuleEvent mi = new ModuleEvent();
-            mi.setType(rI.getInstruction().getModuleType().getNumber() + 1);
-            mi.setModuleId(rI.getInstruction().getModuleId());
-            mi.setInstructionId(rI.getInstruction().getInstructionId());
-            mi.setParameters(rI.getInstruction().getParametersList());
-            Log.add(DEBUG_TAG, "MT=" + mi.getType()
-                    + " MID=" + mi.getModuleId()
-                    + " IID=" + mi.getInstructionId()
-                    + " INT_PARAMS=" + mi.getParameters());
-            EventBusService.post(mi);
+            ModuleEvent me = new ModuleEvent();
+            me.setType(rI.getInstruction().getModuleType().getNumber() + 1);
+            me.setModuleId(rI.getInstruction().getModuleId());
+            me.setInstructionId(rI.getInstruction().getInstructionId());
+            me.setParameters(rI.getInstruction().getParametersList());
+            Log.add(DEBUG_TAG, "MT=" + me.getType()
+                    + " MID=" + me.getModuleId()
+                    + " IID=" + me.getInstructionId()
+                    + " INT_PARAMS=" + me.getParameters());
+            EventBusService.post(me);
         }
     }
 
