@@ -76,7 +76,6 @@ public class SerialMessageHandler {
     //                                      NORMAL MESSAGES
     //----------------------------------------------------------------------------------------------
 
-
     private void switchModelType(SerialMessageEvent message) {
         switch(message.moduleType){
             case MODULE_OUTLET:

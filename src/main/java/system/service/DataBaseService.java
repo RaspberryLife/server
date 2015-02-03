@@ -6,6 +6,7 @@ import data.model.*;
 import util.Log;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -77,24 +78,34 @@ public class DataBaseService {
         }
     }
 
+    public void insert(Object o){
+        hibernateHandler.insert(o);
+    }
+
     //----------------------------------------------------------------------------------------------
     //                                      LOGIC
     //----------------------------------------------------------------------------------------------
-
-    public void writeLogic(Logic logic){
-        hibernateHandler.insert(logic);
-    }
 
     public List<Logic> readAllLogic(){
         return hibernateHandler.readList(HibernateHandler.DataType.LOGIC);
     }
 
-    public void updateLogic(Logic logic){
-
+    public Logic readLogic(int id){
+        //TODO implement
+        return null;
     }
 
-    public void deleteLogic(int id){
+    //----------------------------------------------------------------------------------------------
+    //                                      USER
+    //----------------------------------------------------------------------------------------------
 
+    public List<User> readAllUser(){
+        return hibernateHandler.readList(HibernateHandler.DataType.USER);
+    }
+
+    public User readUser(int id){
+        //TODO implement
+        return null;
     }
 
     //----------------------------------------------------------------------------------------------

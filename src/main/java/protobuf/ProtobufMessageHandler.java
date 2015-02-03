@@ -1,6 +1,8 @@
 package protobuf;
 
 import client.RaspberryLifeClient;
+import data.model.User;
+import system.service.DataBaseService;
 import util.Log;
 import util.NoAuth;
 import protobuf.RblProto.*;
@@ -56,7 +58,19 @@ public class ProtobufMessageHandler {
             case LOGIC:
                 handleLogicMessage(message);
                 break;
+            case USER:
+                handleUserMessage(message);
+                break;
         }
+    }
+
+    private void handleUserMessage(RBLMessage message) {
+        RBLMessage.User user = message.getUser(0);
+        User u = new User();
+        u.setEmail(user.getEmail());
+        u.setName(user.getName());
+        u.setId(user.getId());
+        DataBaseService.getInstance().insert(u);
     }
 
     private void handleLogicMessage(RBLMessage message) {
@@ -64,32 +78,33 @@ public class ProtobufMessageHandler {
     }
 
     private void handleDataSetMessage(RBLMessage message) {
-        RBLMessage.DataSet d = message.getDataSet();
-        Log.add(DEBUG_TAG,
-                "Received DataSet:"
-                + " CrudType: " + d.getCrudType()
-                + " DataType: " + d.getDataType()
-                + " Actuator: " + d.getActuator()
-                + " FieldId: " + d.getFieldId()
-                + " Range: "
-                        + " Start=" + d.getRange().getStartDateTime()
-                        + " End=" + d.getRange().getEndDateTime()
-                        + " Count=" + d.getRange().getCount()
-        );
+        for(RBLMessage.DataSet d: message.getDataSetList()){
+            Log.add(DEBUG_TAG,
+                    "Received DataSet:"
+                            + " CrudType: " + d.getCrudType()
+                            + " DataType: " + d.getDataType()
+                            + " Actuator: " + d.getActuator()
+                            + " FieldId: " + d.getFieldId()
+                            + " Range: "
+                            + " Start=" + d.getRange().getStartDateTime()
+                            + " End=" + d.getRange().getEndDateTime()
+                            + " Count=" + d.getRange().getCount()
+            );
+        }
     }
-
 
     private void handleRunInstruction(RBLMessage message) {
         instructionResolver.resolve(client, message);
     }
 
     private void handlePlaintextMessage(RBLMessage message) {
-        String text = message.getPlainText().getText();
-        Log.add(DEBUG_TAG, "Client " + client.getId() + " says: " + text);
+        for(RBLMessage.PlainText plainText : message.getPlainTextList()){
+            Log.add(DEBUG_TAG, "Client " + client.getId() + " says: " + plainText.getText());
+        }
     }
 
     private void handleAuthMessage(RBLMessage message) {
-        String key = message.getPlainText().getText();
+        String key = message.getPlainTextList().get(0).getText();
         boolean accepted = NoAuth.verify(key);
         client.setId(message.getId());
         if(accepted){

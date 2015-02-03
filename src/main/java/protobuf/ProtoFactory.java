@@ -34,12 +34,24 @@ public class ProtoFactory {
     public static RBLMessage buildPlainTextMessage(
             String id,
             RBLMessage.MessageFlag flag,
-            String plainText){
+            List<RBLMessage.PlainText> plainTexts){
         return createBaseMessage(id, flag, RBLMessage.MessageType.PLAIN_TEXT)
-                .setPlainText(
-                        RBLMessage.PlainText.newBuilder()
-                                .setText(plainText))
+                .addAllPlainText(plainTexts)
                 .build();
+    }
+
+    public static RBLMessage buildPlainTextMessage(
+            String id,
+            RBLMessage.MessageFlag flag,
+            RBLMessage.PlainText.Builder plainText){
+        return createBaseMessage(id, flag, RBLMessage.MessageType.PLAIN_TEXT)
+                .addPlainText(plainText)
+                .build();
+    }
+
+    public static RBLMessage.PlainText.Builder buildPlainText(String plainText){
+        return RBLMessage.PlainText.newBuilder()
+                .setText(plainText);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -60,24 +72,28 @@ public class ProtoFactory {
     public static RBLMessage buildRunInstructionMessage(
             String id,
             RBLMessage.MessageFlag messageFlag,
-            RBLMessage.Actuator actuator,
-            RBLMessage.Instruction.Builder instruction){
+            List<RBLMessage.RunInstruction> runInstructions){
         return createBaseMessage(
                 id, messageFlag,
                 RBLMessage.MessageType.RUN_INSTRUCTION)
-                .setRunInstruction(RBLMessage.RunInstruction.newBuilder()
-                                .setActuator(actuator)
-                                .setInstruction(instruction)
-                ).build();
+                .addAllRunInstruction(runInstructions)
+                .build();
+    }
+
+    public static RBLMessage.RunInstruction buildRunInstruction(
+            RBLMessage.Instruction instruction,
+            RBLMessage.Actuator actuator){
+        return RBLMessage.RunInstruction.newBuilder()
+                .setInstruction(instruction)
+                .setActuator(actuator)
+                .build();
     }
 
     //----------------------------------------------------------------------------------------------
     //                                      LOGIC
     //----------------------------------------------------------------------------------------------
 
-    public static RBLMessage buildLogicMessage(
-            String id,
-            RBLMessage.MessageFlag messageFlag,
+    public static RBLMessage.Logic.Builder buildLogic(
             RBLMessage.CrudType crudType,
             int logic_id,
             String name,
@@ -86,18 +102,23 @@ public class ProtoFactory {
             RBLMessage.ExecutionFrequency executionFrequency,
             RBLMessage.ExecutionRequirement executionRequirement
     ){
-        RBLMessage.Logic.Builder logicMessage = RBLMessage.Logic.newBuilder();
-        logicMessage.setName(name)
+        return RBLMessage.Logic.newBuilder().setName(name)
                 .setCrudType(crudType)
                 .setId(logic_id)
                 .addAllLogicReceiver(receiver)
                 .addAllLogicInitiator(initiator)
                 .setExeFrequency(executionFrequency)
                 .setExeRequirement(executionRequirement);
+    }
+
+    public static RBLMessage buildLogicMessage(
+            String id,
+            RBLMessage.MessageFlag messageFlag,
+    List<RBLMessage.Logic> logic){
         return createBaseMessage(
                 id, messageFlag,
                 RBLMessage.MessageType.LOGIC)
-                .setLogic(logicMessage)
+                .addAllLogic(logic)
                 .build();
     }
 
@@ -181,7 +202,7 @@ public class ProtoFactory {
             RBLMessage.Actuator actuator,
             int fieldId,
             RBLMessage.Range range,
-            RBLMessage.Data data
+            List<RBLMessage.Data> data
     ){
         RBLMessage.DataSet.Builder dataSet = RBLMessage.DataSet.newBuilder()
                 .setCrudType(crudType)
@@ -200,7 +221,7 @@ public class ProtoFactory {
         }
 
         if(data != null){
-            dataSet.setData(data);
+            dataSet.addAllData(data);
         }
 
         return dataSet.build();
@@ -208,27 +229,17 @@ public class ProtoFactory {
 
 
     public static RBLMessage.Data.Builder buildDataMessage(
-            Iterable<RBLMessage.Actuator> actuators,
-            Iterable<String> stringData,
-            Iterable<Integer> int32Data,
-            Iterable<Float> floatData){
+            RBLMessage.Actuator actuator,
+            String stringData,
+            Integer int32Data,
+            Float floatData){
         RBLMessage.Data.Builder dataMessage = RBLMessage.Data.newBuilder();
 
-        if(actuators != null){
-            dataMessage.addAllActuators(actuators);
-        }
-
-        if(stringData != null){
-            dataMessage.addAllStringData(stringData);
-        }
-
-        if(int32Data != null){
-            dataMessage.addAllInt32Data(int32Data);
-        }
-
-        if(floatData != null){
-            dataMessage.addAllFloatData(floatData);
-        }
+        RBLMessage.Data.newBuilder()
+                .setActuator(actuator)
+                .setStringData(stringData)
+                .setInt32Data(int32Data)
+                .setFloatData(floatData);
         return dataMessage;
     }
 
@@ -239,11 +250,18 @@ public class ProtoFactory {
     public static RBLMessage buildAuthMessage(
             String id,
             RBLMessage.MessageFlag messageFlag,
-            String key){
+            List<RBLMessage.PlainText> key){
         return createBaseMessage(id, messageFlag, RBLMessage.MessageType.AUTH)
-                .setPlainText(
-                        RBLMessage.PlainText.newBuilder()
-                        .setText(key))
+                .addAllPlainText(key)
+                .build();
+    }
+
+    public static RBLMessage buildAuthMessage(
+            String id,
+            RBLMessage.MessageFlag messageFlag,
+            RBLMessage.PlainText.Builder key){
+        return createBaseMessage(id, messageFlag, RBLMessage.MessageType.AUTH)
+                .addPlainText(key)
                 .build();
     }
 

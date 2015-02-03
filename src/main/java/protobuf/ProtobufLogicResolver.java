@@ -21,20 +21,21 @@ public class ProtobufLogicResolver {
 
     public void resolve(RaspberryLifeClient client, RblProto.RBLMessage message){
         this.client = client;
-        RblProto.RBLMessage.Logic logic = message.getLogic();
-        switch (logic.getCrudType()){
-            case CREATE:
-                createLogic(logic);
-                break;
-            case RETRIEVE:
-                retrieveLogic(logic);
-                break;
-            case UPDATE:
-                updateLogic(logic);
-                break;
-            case DELETE:
-                deleteLogic(logic);
-                break;
+        for(RblProto.RBLMessage.Logic logic : message.getLogicList()){
+            switch (logic.getCrudType()){
+                case CREATE:
+                    createLogic(logic);
+                    break;
+                case RETRIEVE:
+                    retrieveLogic(logic);
+                    break;
+                case UPDATE:
+                    updateLogic(logic);
+                    break;
+                case DELETE:
+                    deleteLogic(logic);
+                    break;
+            }
         }
     }
 
@@ -52,7 +53,7 @@ public class ProtobufLogicResolver {
         RblProto.RBLMessage m = ProtoFactory.buildPlainTextMessage(
                 Config.getConf().getString("server.id"),
                 RblProto.RBLMessage.MessageFlag.RESPONSE,
-                "Database entry created"
+                ProtoFactory.buildPlainText("Database entry created")
         );
         client.sendMessage(m);
     }
@@ -61,20 +62,23 @@ public class ProtobufLogicResolver {
 
     public void retrieveLogic(RblProto.RBLMessage.Logic logic){
         List<Logic> ll = DataBaseService.getInstance().readAllLogic();
+        List<RblProto.RBLMessage.Logic> logics = new ArrayList<RblProto.RBLMessage.Logic>();
         for(Logic l : ll){
-            RblProto.RBLMessage message = ProtoFactory.buildLogicMessage(
-                    Config.getConf().getString("server.id"),
-                    RblProto.RBLMessage.MessageFlag.RESPONSE,
+            RblProto.RBLMessage.Logic.Builder logic_i = ProtoFactory.buildLogic(
                     RblProto.RBLMessage.CrudType.RETRIEVE,
                     logic.getId(),
                     l.getName(),
                     mapProtobufLogicInitiatorList(l.getLogic_initiator()),
                     mapProtobufLogicReceiverList(l.getLogic_receiver()),
                     mapProtobufExecutionFrequency(l.getExecution_frequency()).build(),
-                    mapProtobufExecutionRequirement(l.getExecution_requirement())
-                    );
-            client.sendMessage(message);
+                    mapProtobufExecutionRequirement(l.getExecution_requirement()));
+            logics.add(logic_i.build());
         }
+        RblProto.RBLMessage message = ProtoFactory.buildLogicMessage(
+                Config.getConf().getString("server.id"),
+                RblProto.RBLMessage.MessageFlag.RESPONSE,
+                logics);
+        client.sendMessage(message);
     }
 
     public void updateLogic(RblProto.RBLMessage.Logic logic){

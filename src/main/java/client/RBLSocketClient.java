@@ -143,7 +143,8 @@ public class RBLSocketClient extends RaspberryLifeClient {
         RBLMessage m =
                 ProtoFactory.buildAuthMessage(Config.getConf().getString("server.id"),
                         RBLMessage.MessageFlag.RESPONSE,
-                        "Client denied. REASON=" + reason);
+                        ProtoFactory.buildPlainText("Client denied. REASON=" + reason)
+                );
         sendMessage(m);
     }
 
@@ -152,9 +153,10 @@ public class RBLSocketClient extends RaspberryLifeClient {
         RBLMessage m =
                 ProtoFactory.buildAuthMessage(Config.getConf().getString("server.id"),
                         RBLMessage.MessageFlag.RESPONSE,
-                        "Accepted client with id: "
+                        ProtoFactory.buildPlainText("Accepted client with id: "
                                 + getId()
-                                + " TIME= " + System.currentTimeMillis());
+                                + " TIME= " + System.currentTimeMillis())
+                        );
         sendMessage(m);
     }
 }

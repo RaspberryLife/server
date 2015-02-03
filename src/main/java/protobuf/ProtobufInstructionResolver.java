@@ -15,30 +15,30 @@ public class ProtobufInstructionResolver {
     public static final String DEBUG_TAG = ProtobufInstructionResolver.class.getSimpleName();
 
     public void resolve(RaspberryLifeClient client, RBLMessage message){
-        RBLMessage.ActuatorType type = message.getRunInstruction().getActuator().getActuatorType();
-        switch(type){
-            case MODULE:
-                runModuleInstruction(message);
-                break;
-            case SYSTEM:
-                runSystemInstruction(message);
-                break;
-            case CLIENT:
-                runClientInstruction(message);
-                break;
+        for(RBLMessage.RunInstruction ri : message.getRunInstructionList()){
+            switch(ri.getActuator().getActuatorType()){
+                case MODULE:
+                    runModuleInstruction(ri);
+                    break;
+                case SYSTEM:
+                    runSystemInstruction(ri);
+                    break;
+                case CLIENT:
+                    runClientInstruction(ri);
+                    break;
+            }
         }
     }
 
 
-    private void runModuleInstruction(RBLMessage message) {
+    private void runModuleInstruction(RBLMessage.RunInstruction runInstruction) {
         Log.add(DEBUG_TAG, "Running module instruction");
-        RBLMessage.RunInstruction rI = message.getRunInstruction();
-        if(rI != null){
+        if(runInstruction != null){
             ModuleEvent me = new ModuleEvent();
-            me.setType(rI.getInstruction().getModuleType().getNumber() + 1);
-            me.setModuleId(rI.getInstruction().getModuleId());
-            me.setInstructionId(rI.getInstruction().getInstructionId());
-            me.setParameters(rI.getInstruction().getParametersList());
+            me.setType(runInstruction.getActuator().getModuleType().getNumber() + 1);
+            me.setModuleId(runInstruction.getActuator().getModuleId());
+            me.setInstructionId(runInstruction.getInstruction().getInstructionId());
+            me.setParameters(runInstruction.getInstruction().getParametersList());
             Log.add(DEBUG_TAG, "MT=" + me.getType()
                     + " MID=" + me.getModuleId()
                     + " IID=" + me.getInstructionId()
@@ -47,11 +47,11 @@ public class ProtobufInstructionResolver {
         }
     }
 
-    private void runClientInstruction(RBLMessage message){
+    private void runClientInstruction(RBLMessage.RunInstruction runInstruction){
         Log.add(DEBUG_TAG, "Running client instruction");
     }
 
-    private void runSystemInstruction(RBLMessage message){
+    private void runSystemInstruction(RBLMessage.RunInstruction runInstruction){
         Log.add(DEBUG_TAG, "Running system instruction");
     }
 

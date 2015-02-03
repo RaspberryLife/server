@@ -265,8 +265,8 @@ public class ClientHandler {
         RBLMessage m = ProtoFactory.buildPlainTextMessage(
                 Config.getConf().getString("server.id"),
                 RblProto.RBLMessage.MessageFlag.RESPONSE,
-                "Serial connector received message: " + e.getMessage()
-                );
+                ProtoFactory.buildPlainText("Serial connector received message: " + e.getMessage()
+                ));
         for(RaspberryLifeClient client : clientList){
            client.sendMessage(m);
         }
