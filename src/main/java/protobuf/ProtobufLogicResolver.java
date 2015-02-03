@@ -48,6 +48,13 @@ public class ProtobufLogicResolver {
         logic_data.setLogic_receiver(mapModelLogicReceiverList(logic.getLogicReceiverList()));
 
         DataBaseService.getInstance().writeLogic(logic_data);
+        //TODO check if insert was successful and respond to client
+        RblProto.RBLMessage m = ProtoFactory.buildPlainTextMessage(
+                Config.getConf().getString("server.id"),
+                RblProto.RBLMessage.MessageFlag.RESPONSE,
+                "Database entry created"
+        );
+        client.sendMessage(m);
     }
 
 
@@ -369,9 +376,4 @@ public class ProtobufLogicResolver {
         }
         return requirement;
     }
-
-
-
-
-
 }

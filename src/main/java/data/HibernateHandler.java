@@ -93,10 +93,6 @@ public class HibernateHandler {
     //                                      INSERT
     //----------------------------------------------------------------------------------------------
 
-    public void insertList(List<Object> list){
-
-    }
-
     public void insert(Object object){
         try {
             Session session = sessionFactory.openSession();

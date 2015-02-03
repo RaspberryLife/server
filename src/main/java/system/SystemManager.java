@@ -105,7 +105,6 @@ public class SystemManager {
 
     private void initDatabase(){
         DataBaseService.getInstance().start();
-
     }
 
     private void initScheduler(){

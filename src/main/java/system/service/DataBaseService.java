@@ -86,7 +86,7 @@ public class DataBaseService {
     }
 
     public List<Logic> readAllLogic(){
-        return null;
+        return hibernateHandler.readList(HibernateHandler.DataType.LOGIC);
     }
 
     public void updateLogic(Logic logic){
