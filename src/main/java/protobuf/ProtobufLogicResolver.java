@@ -48,7 +48,7 @@ public class ProtobufLogicResolver {
         logic_data.setLogic_initiator(mapModelLogicInitiatorList(logic.getLogicInitiatorList()));
         logic_data.setLogic_receiver(mapModelLogicReceiverList(logic.getLogicReceiverList()));
 
-        DataBaseService.getInstance().writeLogic(logic_data);
+        DataBaseService.getInstance().insert(logic_data);
         //TODO check if insert was successful and respond to client
         RblProto.RBLMessage m = ProtoFactory.buildPlainTextMessage(
                 Config.getConf().getString("server.id"),
@@ -61,9 +61,10 @@ public class ProtobufLogicResolver {
 
 
     public void retrieveLogic(RblProto.RBLMessage.Logic logic){
-        List<Logic> ll = DataBaseService.getInstance().readAllLogic();
+        List ll = DataBaseService.getInstance().readAll(DataBaseService.DataType.LOGIC);
         List<RblProto.RBLMessage.Logic> logics = new ArrayList<RblProto.RBLMessage.Logic>();
-        for(Logic l : ll){
+        for(Object o : ll){
+            Logic l = (Logic) o;
             RblProto.RBLMessage.Logic.Builder logic_i = ProtoFactory.buildLogic(
                     RblProto.RBLMessage.CrudType.RETRIEVE,
                     logic.getId(),
@@ -94,7 +95,7 @@ public class ProtobufLogicResolver {
     //                                      MAPPINGS (PROTOBUF TO DATABASE MODEL)
     //----------------------------------------------------------------------------------------------
 
-    private void mapModelExecutionRequirement(RblProto.RBLMessage.ExecutionRequirement executionRequirement,
+    public static void mapModelExecutionRequirement(RblProto.RBLMessage.ExecutionRequirement executionRequirement,
                                               Logic logic){
         switch (executionRequirement){
             case SINGLE:
@@ -114,7 +115,7 @@ public class ProtobufLogicResolver {
      * @param actuator
      * @return
      */
-    private Actuator mapModelActuator(RblProto.RBLMessage.Actuator actuator){
+    public static Actuator mapModelActuator(RblProto.RBLMessage.Actuator actuator){
         Actuator a = new Actuator();
         switch (actuator.getActuatorType()){
             case SYSTEM:
@@ -136,7 +137,7 @@ public class ProtobufLogicResolver {
      * @param condition
      * @return
      */
-    private Condition mapModelCondition(RblProto.RBLMessage.Condition condition){
+    public static Condition mapModelCondition(RblProto.RBLMessage.Condition condition){
         Condition c = new Condition();
         c.setField_id(condition.getFieldId());
         c.setThreshold_over(condition.getThresholdOver());
@@ -151,7 +152,7 @@ public class ProtobufLogicResolver {
      * @param instruction
      * @return
      */
-    private Instruction mapModelInstruction(RblProto.RBLMessage.Instruction instruction){
+    public static Instruction mapModelInstruction(RblProto.RBLMessage.Instruction instruction){
         Instruction i = new Instruction();
         i.setField_id(instruction.getInstructionId());
         if(instruction.getParametersList().size() > 0){
@@ -170,7 +171,7 @@ public class ProtobufLogicResolver {
      * @param logicInitiators
      * @return
      */
-    private List<LogicInitiator> mapModelLogicInitiatorList(List<RblProto.RBLMessage.LogicInitiator> logicInitiators){
+    public static List<LogicInitiator> mapModelLogicInitiatorList(List<RblProto.RBLMessage.LogicInitiator> logicInitiators){
         List<LogicInitiator> li_list = new ArrayList<LogicInitiator>();
         for(RblProto.RBLMessage.LogicInitiator l : logicInitiators){
             LogicInitiator li = new LogicInitiator();
@@ -186,7 +187,7 @@ public class ProtobufLogicResolver {
      * @param logicReceivers
      * @return
      */
-    private List<LogicReceiver> mapModelLogicReceiverList(List<RblProto.RBLMessage.LogicReceiver> logicReceivers){
+    public static List<LogicReceiver> mapModelLogicReceiverList(List<RblProto.RBLMessage.LogicReceiver> logicReceivers){
         List<LogicReceiver> lr_list = new ArrayList<LogicReceiver>();
         for(RblProto.RBLMessage.LogicReceiver l : logicReceivers){
             LogicReceiver lr = new LogicReceiver();
@@ -202,7 +203,7 @@ public class ProtobufLogicResolver {
      * @param executionFrequency
      * @return
      */
-    private ExecutionFrequency mapModelExecutionFrequency(RblProto.RBLMessage.ExecutionFrequency executionFrequency){
+    public static ExecutionFrequency mapModelExecutionFrequency(RblProto.RBLMessage.ExecutionFrequency executionFrequency){
         ExecutionFrequency ef = new ExecutionFrequency();
         switch (executionFrequency.getExeType()){
             case IMMEDIATELY:
@@ -249,7 +250,7 @@ public class ProtobufLogicResolver {
      * @param actuator
      * @return
      */
-    private RblProto.RBLMessage.Actuator.Builder mapProtobufActuator(Actuator actuator){
+    public static RblProto.RBLMessage.Actuator.Builder mapProtobufActuator(Actuator actuator){
         RblProto.RBLMessage.ActuatorType type = null;
         switch (actuator.getType()){
             case Actuator.TYPE_SYSTEM:
@@ -270,7 +271,7 @@ public class ProtobufLogicResolver {
      * @param condition
      * @return
      */
-    private RblProto.RBLMessage.Condition.Builder mapProtobufCondition(Condition condition){
+    public static RblProto.RBLMessage.Condition.Builder mapProtobufCondition(Condition condition){
         return ProtoFactory.buildCondition(condition.getField_id(),
                 condition.getThreshold_over(),
                 condition.getThreshold_under(),
@@ -284,7 +285,7 @@ public class ProtobufLogicResolver {
      * @param instruction
      * @return
      */
-    private RblProto.RBLMessage.Instruction.Builder mapProtobufInstruction(Instruction instruction){
+    public static RblProto.RBLMessage.Instruction.Builder mapProtobufInstruction(Instruction instruction){
         String params = instruction.getParameters();
         List<String> paramList = new ArrayList<String>();
         if(params != null && !params.isEmpty()){
@@ -300,7 +301,7 @@ public class ProtobufLogicResolver {
      * @param logicInitiators
      * @return
      */
-    private List<RblProto.RBLMessage.LogicInitiator>
+    public static List<RblProto.RBLMessage.LogicInitiator>
     mapProtobufLogicInitiatorList(List<LogicInitiator> logicInitiators){
         List<RblProto.RBLMessage.LogicInitiator> li_list = new ArrayList<RblProto.RBLMessage.LogicInitiator>();
         for(LogicInitiator l : logicInitiators){
@@ -318,7 +319,7 @@ public class ProtobufLogicResolver {
      * @param logicReceivers
      * @return
      */
-    private List<RblProto.RBLMessage.LogicReceiver> mapProtobufLogicReceiverList(List<LogicReceiver> logicReceivers){
+    public static List<RblProto.RBLMessage.LogicReceiver> mapProtobufLogicReceiverList(List<LogicReceiver> logicReceivers){
         List<RblProto.RBLMessage.LogicReceiver> lr_list = new ArrayList<RblProto.RBLMessage.LogicReceiver>();
         for(LogicReceiver l : logicReceivers){
             RblProto.RBLMessage.LogicReceiver .Builder raw_lr
@@ -331,7 +332,7 @@ public class ProtobufLogicResolver {
     }
 
 
-    private RblProto.RBLMessage.ExecutionFrequency.Builder
+    public static RblProto.RBLMessage.ExecutionFrequency.Builder
     mapProtobufExecutionFrequency(ExecutionFrequency executionFrequency){
         RblProto.RBLMessage.ExecutionType type = null;
 
@@ -365,7 +366,7 @@ public class ProtobufLogicResolver {
 
     }
 
-    private RblProto.RBLMessage.ExecutionRequirement mapProtobufExecutionRequirement(String executionRequirement){
+    public static RblProto.RBLMessage.ExecutionRequirement mapProtobufExecutionRequirement(String executionRequirement){
         RblProto.RBLMessage.ExecutionRequirement requirement = null;
         switch (executionRequirement){
             case Logic.EXECUTION_REQUIREMENT_SINGLE:
