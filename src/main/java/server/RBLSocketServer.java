@@ -1,6 +1,5 @@
 package server;
 
-import client.ClientHandler;
 import com.google.common.eventbus.Subscribe;
 import event.SocketEvent;
 import event.SystemEvent;
