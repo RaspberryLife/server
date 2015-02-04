@@ -55,6 +55,21 @@ public class ProtoFactory {
     }
 
     //----------------------------------------------------------------------------------------------
+    //                                      USER
+    //----------------------------------------------------------------------------------------------
+
+    public static RBLMessage.User.Builder buildUser(int id, String email, String password){
+        RBLMessage.User.Builder ub = RBLMessage.User.newBuilder().setId(id);
+        if(email != null){
+            ub.setEmail(email);
+        }
+        if(password != null){
+            ub.setPassword(password);
+        }
+        return ub;
+    }
+
+    //----------------------------------------------------------------------------------------------
     //                                      INSTRUCTION
     //----------------------------------------------------------------------------------------------
 
