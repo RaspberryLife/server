@@ -1,7 +1,7 @@
 package system;
 
 
-import client.ClientHandler;
+import system.service.ClientService;
 import com.google.common.eventbus.Subscribe;
 import event.*;
 import system.service.DataBaseService;
@@ -55,7 +55,7 @@ public class SystemManager {
         // 3. Do the rest
         initNotificationService();
         NetworkUtil.listIPAddresses();
-        ClientHandler.register();
+        ClientService.register();
         startSocketServer();
         startWebSocketServer();
         initSerialConnection();
@@ -104,7 +104,7 @@ public class SystemManager {
     }
 
     private void initDatabase(){
-        DataBaseService.getInstance().start();
+        DataBaseService.getInstance().init();
     }
 
     private void initScheduler(){
@@ -114,12 +114,6 @@ public class SystemManager {
                 "resource_check",120,
                 ScheduleEvent.Type.START_RESOURCE_LOG)
         );
-        /*
-        EventBusService.post(new ScheduleEvent(
-                        "time_log",120,
-                        ScheduleEvent.Type.START_TIME_LOG)
-        );
-        */
     }
 
     private void initNotificationService() {
