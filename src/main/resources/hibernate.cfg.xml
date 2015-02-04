@@ -10,7 +10,7 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"></property>
 
-        <!-- Automatically create database structure on session start -->
+        <!-- Automatically create database structure on session init -->
         <property name="hibernate.hbm2ddl.auto">create</property>
 
         <!-- JDBC connection pool (use the built-in) -->
