@@ -1,5 +1,10 @@
 package util;
 
+import data.model.User;
+import system.service.DataBaseService;
+
+import java.util.List;
+
 /**
  * Created by Peter Mösenthin.
  *
@@ -14,4 +19,16 @@ public class NoAuth {
         Log.add(DEBUG_TAG, "Verifying key");
         return key.equals(keyToVerify);
     }
+
+
+    public static boolean verify(User user){
+        User u = (User) DataBaseService.getInstance().readId(DataBaseService.DataType.USER,
+                user.getId()).get(0);
+        String db_password,db_email;
+        db_email = u.getEmail();
+        db_password = u.getPassword();
+        return db_email.equals(user.getEmail()) && db_password.equals(user.getPassword());
+    }
+
+
 }
