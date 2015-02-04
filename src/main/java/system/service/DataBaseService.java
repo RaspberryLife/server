@@ -1,12 +1,15 @@
 package system.service;
 
-import data.HibernateHandler;
-import data.MySqlConnection;
+import data.MySQLConnection;
 import data.model.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import util.Log;
 
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -19,8 +22,25 @@ public class DataBaseService {
 
     private static final DataBaseService instance = new DataBaseService();
 
-    private HibernateHandler hibernateHandler = new HibernateHandler();
-    private MySqlConnection mySqlConnection;
+    private MySQLConnection databaseConnection;
+    private SessionFactory sessionFactory;
+
+    public enum CreationMode {
+        CREATE, // creates the schema, destroying previous data.
+        CREATE_DROP, //drop the schema at the end of the session.
+        UPDATE, //update the schema.
+        VALIDATE //validate the schema, makes no changes to the database.
+    }
+
+    public enum DataType{
+        LOGIC,
+        USER,
+        MESSAGE
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //                                      LIFECYCLE
+    //----------------------------------------------------------------------------------------------
 
     public static DataBaseService getInstance(){
         return instance;
@@ -29,27 +49,31 @@ public class DataBaseService {
     private DataBaseService(){
     }
 
-    public void start(){
+    public void init(){
         Log.add(DEBUG_TAG, "Starting...");
         if(dataBaseAvailable()){
             if(dataBaseSetUp()){
-                hibernateHandler.initSession(HibernateHandler.CreationMode.UPDATE);
+                initSession(CreationMode.UPDATE);
             } else {
-                hibernateHandler.initSession(HibernateHandler.CreationMode.CREATE);
+                initSession(CreationMode.CREATE);
             }
         } else {
             Log.add(DEBUG_TAG, "No database connection available");
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    //                                      CHECK
+    //----------------------------------------------------------------------------------------------
+
     /**
      * Checks if a database exists and creates one if not.
      */
     private boolean dataBaseSetUp(){
-        if(mySqlConnection == null){
-            mySqlConnection = new MySqlConnection();
+        if(databaseConnection == null){
+            databaseConnection = new MySQLConnection();
         }
-        if(!mySqlConnection.databaseExists()){
+        if(!databaseConnection.databaseExists()){
             Log.add(DEBUG_TAG, "Database does not exist. Creating new.");
             createDatabase();
             return false;
@@ -62,51 +86,143 @@ public class DataBaseService {
      * Checks if the server can connect to a database.
      */
     private boolean dataBaseAvailable(){
-        if(mySqlConnection == null){
-            mySqlConnection = new MySqlConnection();
+        if(databaseConnection == null){
+            databaseConnection = new MySQLConnection();
         }
-        return mySqlConnection.open();
+        return databaseConnection.open();
     }
 
     /**
      * Create the database.
      */
     private void createDatabase(){
-        if(mySqlConnection.open()){
-            mySqlConnection.createDatabase();
-            mySqlConnection.close();
+        if(databaseConnection.open()){
+            databaseConnection.createDatabase();
+            databaseConnection.close();
         }
     }
 
-    public void insert(Object o){
-        hibernateHandler.insert(o);
+    //----------------------------------------------------------------------------------------------
+    //                                      Hibernate
+    //----------------------------------------------------------------------------------------------
+
+
+    /**
+     * Initialize a new server session. Create database if needed.
+     */
+    public void initSession(CreationMode mode){
+
+        String creationMode = null;
+        switch (mode){
+            case CREATE:
+                creationMode = "create";
+                break;
+            case CREATE_DROP:
+                creationMode = "create-drop";
+                break;
+            case UPDATE:
+                creationMode = "update";
+                break;
+            case VALIDATE:
+                creationMode = "validate";
+                break;
+        }
+        Log.add(DEBUG_TAG, "Initializing session (MODE: " + creationMode + ")");
+        sessionFactory = buildSessionFactory(creationMode);
+    }
+
+
+
+    /**
+     * Build Hibernate session factory
+     * @return
+     */
+    private SessionFactory buildSessionFactory(String creationMode) {
+        try {
+            // Create the SessionFactory from hibernate.cfg.xml
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            if(creationMode != null && !creationMode.isEmpty()){
+                configuration.setProperty("hibernate.hbm2ddl.auto", creationMode);
+            }
+
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                    configuration.getProperties()).build();
+            return configuration.buildSessionFactory(serviceRegistry);
+
+        } catch (Exception e) {
+            Log.add(DEBUG_TAG, "Failed to create SessionFactory. ", e);
+            //e.printStackTrace();
+            return null;
+        }
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
     //----------------------------------------------------------------------------------------------
-    //                                      LOGIC
+    //                                      INSERT
     //----------------------------------------------------------------------------------------------
 
-    public List<Logic> readAllLogic(){
-        return hibernateHandler.readList(HibernateHandler.DataType.LOGIC);
-    }
+    public void insert(Object object){
+        try {
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
 
-    public Logic readLogic(int id){
-        //TODO implement
-        return null;
+            session.save(object);
+
+            session.getTransaction().commit();
+            session.close();
+        }catch (Exception e){
+            Log.add(DEBUG_TAG, "Could not write data");
+        }
     }
 
     //----------------------------------------------------------------------------------------------
-    //                                      USER
+    //                                      READ
     //----------------------------------------------------------------------------------------------
 
-    public List<User> readAllUser(){
-        return hibernateHandler.readList(HibernateHandler.DataType.USER);
+
+    public List readAll(DataType type){
+        String query = null;
+        switch (type){
+            case LOGIC:
+                query = "from Logic";
+                break;
+            case USER:
+                query = "from User";
+                break;
+            case MESSAGE:
+                query = "from User";
+                break;
+        }
+        Session session = sessionFactory.openSession();
+        List list = session.createQuery(query).list();
+        session.close();
+        return list;
     }
 
-    public User readUser(int id){
-        //TODO implement
-        return null;
+    public List readId(DataType type, int id){
+        String query = "from ";
+        switch (type){
+            case LOGIC:
+                query += "Logic";
+                break;
+            case USER:
+                query += "User";
+                break;
+            case MESSAGE:
+                query += "NotificationMessage";
+                break;
+        }
+        query += " where id=" + id;
+        Session session = sessionFactory.openSession();
+        List list = session.createQuery(query).list();
+        session.close();
+        return list;
     }
+
 
     //----------------------------------------------------------------------------------------------
     //                                      TEST
@@ -119,7 +235,6 @@ public class DataBaseService {
 
 
     public void writeTestLogic(){
-
         Actuator a = new Actuator();
         a.setType(Actuator.TYPE_CLIENT);
         a.setName("peters_nexus5");
@@ -168,11 +283,11 @@ public class DataBaseService {
         l1.getLogic_initiator().add(li1);
         l1.getLogic_receiver().add(lr);
 
-        hibernateHandler.insert(l1);
+        insert(l1);
     }
 
     public void readLogic(){
-        for(Object o : hibernateHandler.readList(HibernateHandler.DataType.LOGIC)){
+        for(Object o : readAll(DataType.LOGIC)){
             Logic l = (Logic) o;
             printLogic(l);
         }
