@@ -1,5 +1,7 @@
 package client;
 
+import data.Config;
+import protobuf.ProtoFactory;
 import util.Log;
 import org.webbitserver.WebSocketConnection;
 import protobuf.ProtobufMessageHandler;
@@ -34,12 +36,24 @@ public class RBLWebSocketClient extends RaspberryLifeClient {
 
     @Override
     protected void onConnectionDenied(String reason) {
-        //TODO implement
+        RBLMessage m =
+                ProtoFactory.buildAuthMessage(Config.getConf().getString("server.id"),
+                        RBLMessage.MessageFlag.RESPONSE,
+                        ProtoFactory.buildPlainText("Client denied. REASON=" + reason)
+                );
+        sendMessage(m);
     }
 
     @Override
     protected void onConnectionAccepted() {
-        //TODO implement
+        RBLMessage m =
+                ProtoFactory.buildAuthMessage(Config.getConf().getString("server.id"),
+                        RBLMessage.MessageFlag.RESPONSE,
+                        ProtoFactory.buildPlainText("Accepted client with id: "
+                                + getId()
+                                + " TIME= " + System.currentTimeMillis())
+                );
+        sendMessage(m);
     }
 
     //==========================================================================
