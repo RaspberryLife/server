@@ -1,5 +1,8 @@
-package client;
+package system.service;
 
+import client.RBLSocketClient;
+import client.RBLWebSocketClient;
+import client.RaspberryLifeClient;
 import com.google.common.eventbus.Subscribe;
 import data.Config;
 import event.NotificationEvent;
@@ -8,13 +11,11 @@ import event.SystemEvent;
 import event.WebSocketEvent;
 import protobuf.ProtoFactory;
 import protobuf.RblProto;
-import system.service.EventBusService;
 import util.Log;
 import interfaces.ConnectionListener;
 import org.webbitserver.WebSocketConnection;
 import protobuf.RblProto.*;
 
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +26,12 @@ import java.util.List;
  * websockets  as well as regular Java sockets.
  * All clients must be subtypes of RaspberryHomeClient.
  */
-public class ClientHandler {
+public class ClientService {
 
-    public static final String DEBUG_TAG = ClientHandler.class.getSimpleName();
+    public static final String DEBUG_TAG = ClientService.class.getSimpleName();
 
     private static List<RaspberryLifeClient> clientList = new ArrayList<RaspberryLifeClient>();
-    private static ClientHandler instance = new ClientHandler();
+    private static ClientService instance = new ClientService();
 
     //----------------------------------------------------------------------------------------------
     //                                      LIFECYCLE
@@ -39,7 +40,7 @@ public class ClientHandler {
     /**
      * Private constructor for event access only
      */
-    private ClientHandler(){
+    private ClientService(){
     }
 
     public static void register(){
@@ -92,7 +93,7 @@ public class ClientHandler {
     @Subscribe
     public void handleNotificationEvent(NotificationEvent e){
         if(e.getType() == NotificationEvent.Type.CLIENT_BROADCAST){
-
+            broadcastMessage(e);
         }
     }
 
@@ -116,7 +117,7 @@ public class ClientHandler {
 
     /**
      * Handle a web socket as incoming connection.
-     * @param WebSocketEvent
+     * @param e
      */
     private void handleWebSocketClient(final WebSocketEvent e){
         final RaspberryLifeClient client = new RBLWebSocketClient(e.getConnection());
@@ -138,7 +139,7 @@ public class ClientHandler {
     /**
      * Finds and returns a connection from the client list
      * by comparing the hashcode of the connection.
-     * @param WebSocketEvent
+     * @param e
      * @return
      */
     private RBLWebSocketClient getWebSocketClient(WebSocketEvent e){
@@ -162,7 +163,7 @@ public class ClientHandler {
 
     /**
      * Handles a regular Java socket as incoming connection.
-     * @param clientSocket
+     * @param e
      */
     private void handleSocketClient(final SocketEvent e){
         Thread handleThread = new Thread(new Runnable() {
@@ -259,7 +260,7 @@ public class ClientHandler {
 
     /**
      * Sends a message to all clients
-     * @param message
+     * @param e
      */
     private static void broadcastMessage(NotificationEvent e){
         RBLMessage m = ProtoFactory.buildPlainTextMessage(

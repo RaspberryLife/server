@@ -10,11 +10,11 @@ import java.util.Properties;
  *
  * Class to handle the actual MySQL Database.
  */
-public class MySqlConnection {
+public class MySQLConnection {
 
     private Connection mConnection;
 
-    public static final String DEBUG_TAG = MySqlConnection.class.getSimpleName();
+    public static final String DEBUG_TAG = MySQLConnection.class.getSimpleName();
 
     public boolean open(){
         Log.add(DEBUG_TAG,"Opening database connection");
