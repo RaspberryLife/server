@@ -104,8 +104,14 @@ public class ProtobufMessageHandler {
     }
 
     private void handleAuthMessage(RBLMessage message) {
-        String key = message.getPlainTextList().get(0).getText();
-        boolean accepted = NoAuth.verify(key);
+        boolean accepted = false;
+        if(!message.getPlainTextList().isEmpty()){
+            String key = message.getPlainTextList().get(0).getText();
+            accepted = NoAuth.verify(key);
+        }
+        if(!message.getUserList().isEmpty()){
+            NoAuth.verify(ProtobufUserResolver.mapModelUser(message.getUser(0)));
+        }
         client.setId(message.getId());
         if(accepted){
             client.acceptConnection();
@@ -113,6 +119,7 @@ public class ProtobufMessageHandler {
             client.denyConnection("Bad key");
         }
     }
+
 
 
 }
