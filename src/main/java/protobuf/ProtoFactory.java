@@ -3,6 +3,7 @@ package protobuf;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.protobuf.ByteString;
 import protobuf.RblProto.*;
 
 /**
@@ -247,15 +248,14 @@ public class ProtoFactory {
             RBLMessage.Actuator actuator,
             String stringData,
             Integer int32Data,
-            Float floatData){
-        RBLMessage.Data.Builder dataMessage = RBLMessage.Data.newBuilder();
-
-        RBLMessage.Data.newBuilder()
+            Float floatData,
+            byte[] byteData){
+        return RBLMessage.Data.newBuilder()
                 .setActuator(actuator)
                 .setStringData(stringData)
                 .setInt32Data(int32Data)
-                .setFloatData(floatData);
-        return dataMessage;
+                .setFloatData(floatData)
+                .setByteData(ByteString.copyFrom(byteData));
     }
 
     //----------------------------------------------------------------------------------------------
