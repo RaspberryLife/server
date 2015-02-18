@@ -1,5 +1,6 @@
 package system.service;
 
+import com.sun.corba.se.spi.ior.ObjectKey;
 import data.MySQLConnection;
 import data.model.*;
 import org.hibernate.Session;
@@ -35,7 +36,8 @@ public class DataBaseService {
     public enum DataType{
         LOGIC,
         USER,
-        MESSAGE
+        MESSAGE,
+        MODULE,
     }
 
     //----------------------------------------------------------------------------------------------
@@ -110,7 +112,7 @@ public class DataBaseService {
     /**
      * Initialize a new server session. Create database if needed.
      */
-    public void initSession(CreationMode mode){
+    private void initSession(CreationMode mode){
 
         String creationMode = null;
         switch (mode){
@@ -194,7 +196,10 @@ public class DataBaseService {
                 query = "from User";
                 break;
             case MESSAGE:
-                query = "from User";
+                query = "from NotificationMessage";
+                break;
+            case MODULE:
+                query = "Module";
                 break;
         }
         Session session = sessionFactory.openSession();
@@ -215,12 +220,44 @@ public class DataBaseService {
             case MESSAGE:
                 query += "NotificationMessage";
                 break;
+            case MODULE:
+                query += "Module";
+                break;
         }
         query += " where id=" + id;
         Session session = sessionFactory.openSession();
         List list = session.createQuery(query).list();
         session.close();
         return list;
+    }
+
+    public boolean moduleExists(String serialAddress){
+        List l = readAll(DataBaseService.DataType.MODULE);
+        for (Object o : l){
+            if(((Module) o).getSerial_address().equalsIgnoreCase(serialAddress)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String generateSerialAddress(){
+        List l = readAll(DataBaseService.DataType.MODULE);
+        String base = "C2C2C2C2";
+        String[] lead = {"A","B","C","D"};
+        for(String s : lead){
+            for(int i = 1; i <= 6; i++){
+                String currentTry = base + s + i;
+                boolean available = false;
+                for (Object o : l){
+                    available = ((Module) o).getSerial_address().equalsIgnoreCase(currentTry);
+                }
+                if(available){
+                    return currentTry;
+                }
+            }
+        }
+        return null;
     }
 
 

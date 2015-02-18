@@ -1,9 +1,11 @@
 package server.serial;
 
 import com.google.common.eventbus.Subscribe;
+import data.model.Module;
 import event.ModuleEvent;
 import event.NotificationEvent;
 import event.SerialMessageEvent;
+import protobuf.RblProto;
 import system.service.DataBaseService;
 import system.service.EventBusService;
 import util.Log;
@@ -81,22 +83,74 @@ public class SerialMessageHandler {
     }
 
     private void manageAddress(SerialMessageEvent message) {
-        if(message.parameters.isEmpty()){
-            //TODO generate new address
+        if(message.parameters.isEmpty()){ // Module is requesting
             Log.add(DEBUG_TAG, "Module requested address");
-            //TODO check available modules in database
-            //TODO dont give addresses to outlet modules
-            ModuleEvent me = new ModuleEvent();
-            me.setType(message.moduleType);
-            me.setModuleId(message.moduleId);
-            me.setInstructionId(IID_MANAGE_ADDRESS);
-            DataBaseService.getInstance();
-            me.getParameters().add("01");
-            EventBusService.post(me);
-        } else {
+            if(message.moduleType == MODULE_OUTLET){
+                Log.add(DEBUG_TAG, "Requesting module is of type OUTLET. Not generating address");
+            } else {
+                String address = DataBaseService.getInstance().generateSerialAddress();
+                sendAddressMessage(message, address);
+                Module m = new Module();
+                m.setSerial_address(address);
+                m.setType(matchDatabaseType(message.moduleType));
+                DataBaseService.getInstance().insert(m);
+            }
+        } else { // Module has address
             String address = message.parameters.get(0);
             Log.add(DEBUG_TAG, "Module sent address: " + address);
+            if(DataBaseService.getInstance().moduleExists(address)){
+                sendAddressMessage(message, address);
+                //TODO update database entry
+            }
         }
+    }
+
+    private String matchDatabaseType(int type){
+        switch(type){
+            case MODULE_OUTLET:
+                return Module.TYPE_OUTLET;
+            case MODULE_TEMP:
+                return Module.TYPE_TEMP;
+            case MODULE_PIR:
+                return Module.TYPE_PIR;
+            case MODULE_REED:
+                return Module.TYPE_REED;
+            case MODULE_LUMINOSITY:
+                return Module.TYPE_LUMINOSITY;
+            case MODULE_RELAY:
+                return Module.TYPE_RELAY;
+            case MODULE_PIR_AND_RELAY:
+                return Module.TYPE_PIR_AND_RELAY;
+        }
+        return null;
+    }
+
+    private void sendAddressMessage(SerialMessageEvent message, String address){
+        ModuleEvent me = new ModuleEvent();
+        me.setType(message.moduleType);
+        me.setModuleId(message.moduleId);
+        me.setInstructionId(IID_MANAGE_ADDRESS);
+        List modules = DataBaseService.getInstance().readAll(DataBaseService.DataType.MODULE);
+        me.getParameters().add(address);
+        EventBusService.post(me);
+    }
+
+    private void broadcastDebug(SerialMessageEvent message) {
+        Log.add(DEBUG_TAG, "Received debug " + message.rawContent);
+
+        // Client broadcast
+        String bc_message = "Serial connector received message: " + message.rawContent;
+        NotificationEvent e = new NotificationEvent(
+                NotificationEvent.Type.CLIENT_BROADCAST,bc_message);
+        EventBusService.post(e);
+
+        // Module broadcast
+        ModuleEvent mi = new ModuleEvent();
+        mi.setType(message.moduleType);
+        mi.setModuleId(message.moduleId);
+        mi.setInstructionId(message.instructionId);
+        mi.setParameters(message.parameters);
+        EventBusService.post(mi);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -173,25 +227,5 @@ public class SerialMessageHandler {
         Log.add(DEBUG_TAG, "Received outlet " + message.rawContent);
         //TODO implement
     }
-
-    private void broadcastDebug(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received debug " + message.rawContent);
-
-        // Client broadcast
-        String bc_message = "Serial connector received message: " + message.rawContent;
-        NotificationEvent e = new NotificationEvent(
-                NotificationEvent.Type.CLIENT_BROADCAST,bc_message);
-        EventBusService.post(e);
-
-        // Module broadcast
-        ModuleEvent mi = new ModuleEvent();
-        mi.setType(message.moduleType);
-        mi.setModuleId(message.moduleId);
-        mi.setInstructionId(message.instructionId);
-        mi.setParameters(message.parameters);
-        EventBusService.post(mi);
-    }
-
-
 
 }
