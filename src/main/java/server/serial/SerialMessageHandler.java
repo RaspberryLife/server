@@ -44,8 +44,13 @@ public class SerialMessageHandler {
                 break;
             case 98:
                 readHeartbeat(message);
+                break;
+            case 97:
+                manageAddress(message);
+                break;
             default:
                 switchModelType(message);
+                break;
         }
     }
 
@@ -55,8 +60,8 @@ public class SerialMessageHandler {
 
     private void readHeartbeat(SerialMessageEvent message) {
         String voltage = "";
-        String preColon = message.parameters.get(2).substring(0,1);
-        String postColon = message.parameters.get(2).substring(2,3);
+        String preColon = message.parameters.get(2).substring(0, 1);
+        String postColon = message.parameters.get(2).substring(2, 3);
         voltage = preColon + "," + postColon + "V";
 
         Log.add(DEBUG_TAG, "Received heartbeat "
@@ -66,6 +71,26 @@ public class SerialMessageHandler {
                 + "Frequency: " + message.parameters.get(1)
                 + "Battery voltage : " + voltage
         );
+    }
+
+    private void manageAddress(SerialMessageEvent message) {
+        if(message.parameters.isEmpty()){
+            //TODO generate new address
+            Log.add(DEBUG_TAG, "Module requested address");
+            //TODO check available modules in database
+            //TODO dont give addresses to outlet modules
+            ModuleEvent me = new ModuleEvent();
+            me.setType(message.moduleType);
+            me.setModuleId(message.moduleId);
+            me.setInstructionId(97);
+            List<String> params = new ArrayList<String>();
+            params.add("01");
+            me.setParameters(params);
+            EventBusService.post(me);
+        } else {
+            String address = message.parameters.get(0);
+            Log.add(DEBUG_TAG, "Module sent address: " + address);
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -120,16 +145,16 @@ public class SerialMessageHandler {
 
     private void handlePirMessage(SerialMessageEvent message) {
         if(message.instructionId == 1){
-            ModuleEvent mi = new ModuleEvent();
-            mi.setType(MODULE_OUTLET);
-            mi.setModuleId(1);
-            mi.setInstructionId(1);
+            ModuleEvent me = new ModuleEvent();
+            me.setType(MODULE_OUTLET);
+            me.setModuleId(1);
+            me.setInstructionId(1);
             List<String> params = new ArrayList<String>();
             params.add("01");
             params.add("01");
             params.add("04");
-            mi.setParameters(params);
-            EventBusService.post(mi);
+            me.setParameters(params);
+            EventBusService.post(me);
         }
     }
 
