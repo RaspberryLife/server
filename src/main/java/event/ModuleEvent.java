@@ -2,6 +2,7 @@ package event;
 
 import util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public class ModuleEvent {
     private int moduleType;
     private int moduleId;
     private int instructionId;
-    private List<String> parameters;
+    private List<String> parameters = new ArrayList<String>();
 
     private static int messageSequenceNumber = 0;
 
