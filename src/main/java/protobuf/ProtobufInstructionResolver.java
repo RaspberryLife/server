@@ -49,6 +49,11 @@ public class ProtobufInstructionResolver {
 
     private void runClientInstruction(RBLMessage.RunInstruction runInstruction){
         Log.add(DEBUG_TAG, "Running client instruction");
+        switch(runInstruction.getInstruction().getInstructionId()){
+            case 0:
+                //TODO notify user
+                break;
+        }
     }
 
     private void runSystemInstruction(RBLMessage.RunInstruction runInstruction){
