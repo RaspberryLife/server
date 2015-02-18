@@ -212,7 +212,7 @@ public class ProtoFactory {
                 .build();
     }
 
-    public static RBLMessage.DataSet buildDataSetMessage(
+    public static RBLMessage.DataSet buildDataSet(
             RBLMessage.CrudType crudType,
             RBLMessage.DataType dataType,
             RBLMessage.Actuator actuator,
@@ -241,6 +241,16 @@ public class ProtoFactory {
         }
 
         return dataSet.build();
+    }
+
+    public static RBLMessage buildDataSetMessage(
+            String id,
+            RBLMessage.MessageFlag messageFlag,
+            List<RBLMessage.DataSet> data
+    ){
+        return createBaseMessage(id,messageFlag, RBLMessage.MessageType.DATASET)
+                .addAllDataSet(data)
+                .build();
     }
 
 

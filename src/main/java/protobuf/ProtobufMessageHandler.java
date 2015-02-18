@@ -20,6 +20,7 @@ public class ProtobufMessageHandler {
 
     private ProtobufInstructionResolver instructionResolver = new ProtobufInstructionResolver();
     private ProtobufLogicResolver logicResolver = new ProtobufLogicResolver();
+    private ProtobufDataSetResolver dataSetResolver = new ProtobufDataSetResolver();
 
 
     public ProtobufMessageHandler(RaspberryLifeClient client){
@@ -78,19 +79,7 @@ public class ProtobufMessageHandler {
     }
 
     private void handleDataSetMessage(RBLMessage message) {
-        for(RBLMessage.DataSet d: message.getDataSetList()){
-            Log.add(DEBUG_TAG,
-                    "Received DataSet:"
-                            + " CrudType: " + d.getCrudType()
-                            + " DataType: " + d.getDataType()
-                            + " Actuator: " + d.getActuator()
-                            + " FieldId: " + d.getFieldId()
-                            + " Range: "
-                            + " Start=" + d.getRange().getStartDateTime()
-                            + " End=" + d.getRange().getEndDateTime()
-                            + " Count=" + d.getRange().getCount()
-            );
-        }
+        dataSetResolver.resolve(client, message);
     }
 
     private void handleRunInstruction(RBLMessage message) {
