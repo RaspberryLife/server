@@ -25,8 +25,11 @@ public class Module {
     @Column(name="module_type")
     private String type;
 
-    @Column(name="serial_id")
-    private String serial_id;
+    @Column(name="serial_address")
+    private String serial_address;
+
+    @Column(name="name")
+    private String name;
 
     //----------------------------------------------------------------------------------------------
     //                                      GETTER & SETTER
@@ -44,11 +47,19 @@ public class Module {
         this.type = type;
     }
 
-    public String getSerial_id() {
-        return serial_id;
+    public String getSerial_address() {
+        return serial_address;
     }
 
-    public void setSerial_id(String serial_id) {
-        this.serial_id = serial_id;
+    public void setSerial_address(String serial_address) {
+        this.serial_address = serial_address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
