@@ -4,6 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import event.ModuleEvent;
 import event.NotificationEvent;
 import event.SerialMessageEvent;
+import system.service.DataBaseService;
 import system.service.EventBusService;
 import util.Log;
 
@@ -17,6 +18,7 @@ public class SerialMessageHandler {
 
     public static final String DEBUG_TAG = SerialMessageHandler.class.getSimpleName();
 
+    // Module types
     public static final int MODULE_OUTLET = 1;
     public static final int MODULE_TEMP = 2;
     public static final int MODULE_PIR = 3;
@@ -24,6 +26,11 @@ public class SerialMessageHandler {
     public static final int MODULE_LUMINOSITY = 5;
     public static final int MODULE_RELAY = 6;
     public static final int MODULE_PIR_AND_RELAY = 7;
+
+    // Instruction ID - used to detect system types early on
+    public static final int IID_DEBUG_BROADCAST = 99;
+    public static final int IID_HEARTBEAT = 98;
+    public static final int IID_MANAGE_ADDRESS = 95;
 
     //----------------------------------------------------------------------------------------------
     //                                      POPULATION & SYSTEM CHECK
@@ -39,13 +46,13 @@ public class SerialMessageHandler {
 
     private void preSwitchOnInstruction(SerialMessageEvent message){
         switch (message.instructionId){
-            case 99:
+            case IID_DEBUG_BROADCAST:
                 broadcastDebug(message);
                 break;
-            case 98:
+            case IID_HEARTBEAT :
                 readHeartbeat(message);
                 break;
-            case 97:
+            case IID_MANAGE_ADDRESS:
                 manageAddress(message);
                 break;
             default:
@@ -82,10 +89,9 @@ public class SerialMessageHandler {
             ModuleEvent me = new ModuleEvent();
             me.setType(message.moduleType);
             me.setModuleId(message.moduleId);
-            me.setInstructionId(97);
-            List<String> params = new ArrayList<String>();
-            params.add("01");
-            me.setParameters(params);
+            me.setInstructionId(IID_MANAGE_ADDRESS);
+            DataBaseService.getInstance();
+            me.getParameters().add("01");
             EventBusService.post(me);
         } else {
             String address = message.parameters.get(0);
