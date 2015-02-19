@@ -200,7 +200,16 @@ public class SerialMessageHandler {
 
     private void handleReedMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received Reed " + message.rawContent);
-        //TODO implement
+            ModuleEvent me = new ModuleEvent();
+            me.setType(MODULE_OUTLET);
+            me.setModuleId(1);
+            me.setInstructionId(2);
+            List<String> params = new ArrayList<String>();
+            params.add("01");
+            params.add("01");
+            params.add("04");
+            me.setParameters(params);
+            EventBusService.post(me);
     }
 
     private void handlePirMessage(SerialMessageEvent message) {
