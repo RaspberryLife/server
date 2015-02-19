@@ -199,7 +199,7 @@ public class DataBaseService {
                 query = "from NotificationMessage";
                 break;
             case MODULE:
-                query = "Module";
+                query = "from Module";
                 break;
         }
         Session session = sessionFactory.openSession();
