@@ -1,13 +1,17 @@
 package system.service;
 
 import com.google.common.eventbus.Subscribe;
+import data.model.Logic;
 import event.ScheduleEvent;
 import event.SystemEvent;
 import org.quartz.*;
+import scheduling.InstructionJob;
 import scheduling.ResourceLogJob;
 import scheduling.TimeLogJob;
 import util.Log;
 import org.quartz.impl.StdSchedulerFactory;
+
+import java.util.List;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -59,6 +63,9 @@ public class ScheduleService {
             case START_RESOURCE_LOG:
                 startResourceLogJob(e);
                 break;
+            case REBUILD_DATABASE:
+                buildFromDatabase();
+                break;
         }
     }
 
@@ -94,9 +101,38 @@ public class ScheduleService {
         }
     }
 
+    private void buildFromDatabase(){
+        Log.add(DEBUG_TAG, "Building schedule from database");
+        try{
+            List l = DataBaseService.getInstance().readAll(DataBaseService.DataType.LOGIC);
+            for(Object o : l){
+                Logic lc = (Logic) o;
+                JobDetail job = newJob(InstructionJob.class)
+                        .withIdentity(lc.getName() + "dbjob")
+                        .withDescription(lc.getName() + "dbjob")
+                        .build();
+                //Build schedule
+                ScheduleBuilder sb = CalendarIntervalScheduleBuilder.calendarIntervalSchedule()
+                        .withIntervalInDays(1)
+                        .withIntervalInHours(17)
+                        .withIntervalInMinutes(1);
+
+                Trigger trigger = newTrigger()
+                        .withIdentity(lc.getName() + " logic", TRIGGER_GROUP)
+                        .withSchedule(sb)
+                        .build();
+                addJob(job, trigger);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     private void startResourceLogJob(ScheduleEvent e) {
+        Log.add(DEBUG_TAG, "Starting resource log");
         JobDetail job = newJob(ResourceLogJob.class)
                 .withIdentity(e.getIdentity(), SCHEDULER_GROUP)
+                .withDescription("ResourceLogJob")
                 .build();
         Trigger trigger = newTrigger()
                 .withIdentity(e.getIdentity() + "trigger", TRIGGER_GROUP)
@@ -109,8 +145,10 @@ public class ScheduleService {
     }
 
     private void startTimeLogJob(ScheduleEvent e) {
+        Log.add(DEBUG_TAG, "Starting time log job");
         JobDetail job = newJob(TimeLogJob.class)
                 .withIdentity(e.getIdentity(), SCHEDULER_GROUP)
+                .withDescription("TimeLogJob")
                 .build();
         Trigger trigger = newTrigger()
                 .withIdentity(e.getIdentity() + "trigger", TRIGGER_GROUP)
@@ -123,12 +161,13 @@ public class ScheduleService {
     }
 
     private void addJob(JobDetail job, Trigger trigger){
+        Log.add(DEBUG_TAG, "Adding job " + job.getDescription());
         try {
             if (scheduler != null) {
                 scheduler.scheduleJob(job, trigger);
             }
         } catch (SchedulerException e) {
-            Log.add(DEBUG_TAG, "Unable to add job.");
+            Log.add(DEBUG_TAG, "Unable to add job.",e);
         }
     }
 

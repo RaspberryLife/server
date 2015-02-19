@@ -7,7 +7,8 @@ public class ScheduleEvent {
 
     public enum Type{
         START_TIME_LOG,
-        START_RESOURCE_LOG
+        START_RESOURCE_LOG,
+        REBUILD_DATABASE
     }
 
     private Type type;

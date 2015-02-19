@@ -59,8 +59,8 @@ public class SystemManager {
         startSocketServer();
         startWebSocketServer();
         initSerialConnection();
-        initScheduler();
         initDatabase();
+        initScheduler();
     }
 
     private void stop(){
@@ -114,6 +114,7 @@ public class SystemManager {
                 "resource_check",120,
                 ScheduleEvent.Type.START_RESOURCE_LOG)
         );
+        EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
     }
 
     private void initNotificationService() {
