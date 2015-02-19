@@ -63,7 +63,6 @@ public class RBLWebSocketHandler extends BaseWebSocketHandler{
                     "Unable to pass message to connection. " +
                             "Message was null.");
         }
-
     }
 
 }

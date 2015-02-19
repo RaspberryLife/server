@@ -1,6 +1,7 @@
 package system.service;
 
 import com.google.common.eventbus.Subscribe;
+import data.model.ExecutionFrequency;
 import data.model.Logic;
 import event.ScheduleEvent;
 import event.SystemEvent;
@@ -104,22 +105,31 @@ public class ScheduleService {
     private void buildFromDatabase(){
         Log.add(DEBUG_TAG, "Building schedule from database");
         try{
+            scheduler.clear();
             List l = DataBaseService.getInstance().readAll(DataBaseService.DataType.LOGIC);
             for(Object o : l){
                 Logic lc = (Logic) o;
                 JobDetail job = newJob(InstructionJob.class)
                         .withIdentity(lc.getName() + "dbjob")
                         .withDescription(lc.getName() + "dbjob")
+                        .usingJobData("id", lc.getLogic_id())
                         .build();
-                //Build schedule
-                ScheduleBuilder sb = CalendarIntervalScheduleBuilder.calendarIntervalSchedule()
-                        .withIntervalInDays(1)
-                        .withIntervalInHours(17)
-                        .withIntervalInMinutes(1);
+                ScheduleBuilder sb = null;
+                switch (lc.getExecution_frequency().getType()) {
+                    case ExecutionFrequency.TYPE_IMMEDIATELY:
+                        sb = simpleSchedule()
+                                .withIntervalInSeconds(1);
+                        break;
+                    case ExecutionFrequency.TYPE_MINUTELY:
+                        sb = simpleSchedule()
+                                .withIntervalInMinutes(1);
+                        break;
+                }
 
                 Trigger trigger = newTrigger()
                         .withIdentity(lc.getName() + " logic", TRIGGER_GROUP)
                         .withSchedule(sb)
+                        .startNow()
                         .build();
                 addJob(job, trigger);
             }

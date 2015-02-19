@@ -132,7 +132,7 @@ public class ClientService {
         }else {
             Log.add(DEBUG_TAG,
                     "Unable to deliver message to receiving connection. " +
-                            "Client not connection found.");
+                            "Client connection not found.");
         }
     }
 

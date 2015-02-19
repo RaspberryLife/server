@@ -3,7 +3,9 @@ package protobuf;
 import client.RaspberryLifeClient;
 import data.Config;
 import data.model.*;
+import event.ScheduleEvent;
 import system.service.DataBaseService;
+import system.service.EventBusService;
 import util.Log;
 
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ public class ProtobufLogicResolver {
         logic_data.setLogic_receiver(mapModelLogicReceiverList(logic.getLogicReceiverList()));
 
         DataBaseService.getInstance().insert(logic_data);
+        //EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
         //TODO check if insert was successful and respond to client
         RblProto.RBLMessage m = ProtoFactory.buildPlainTextMessage(
                 Config.getConf().getString("server.id"),
@@ -79,6 +82,7 @@ public class ProtobufLogicResolver {
                 Config.getConf().getString("server.id"),
                 RblProto.RBLMessage.MessageFlag.RESPONSE,
                 logics);
+        Log.add(DEBUG_TAG,"Sending message: " + message);
         client.sendMessage(message);
     }
 

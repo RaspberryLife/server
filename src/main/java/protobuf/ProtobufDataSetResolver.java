@@ -4,6 +4,7 @@ import client.RaspberryLifeClient;
 import data.Config;
 import data.model.Module;
 import system.service.DataBaseService;
+import util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +69,13 @@ public class ProtobufDataSetResolver {
         );
         List<RblProto.RBLMessage.DataSet> dsl = new ArrayList<RblProto.RBLMessage.DataSet>();
         dsl.add(ds);
-        client.sendMessage(ProtoFactory.buildDataSetMessage(
+        RblProto.RBLMessage m = ProtoFactory.buildDataSetMessage(
                 Config.getConf().getString("server.id"),
                 RblProto.RBLMessage.MessageFlag.RESPONSE,
                 dsl
-        ));
+        );
+        Log.add(DEBUG_TAG, "Sending: " + m.toString());
+        client.sendMessage(m);
     }
 
 

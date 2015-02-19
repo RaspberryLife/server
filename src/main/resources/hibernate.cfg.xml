@@ -34,6 +34,7 @@
         <mapping class="data.model.Actuator"/>
         <mapping class="data.model.ExecutionFrequency"/>
         <mapping class="data.model.Condition"/>
+        <mapping class="data.model.Module"/>
         <mapping class="data.model.LogicReceiver"/>
         <mapping class="data.model.LogicInitiator"/>
         <mapping class="data.model.Instruction"/>
