@@ -1,6 +1,4 @@
 # RaspberryLife Server
-
-This is the server of the RaspberryLife home automation project.
 This is the server of the RaspberryLife home automation project.
 
 ## Overview
@@ -10,11 +8,11 @@ See [Wiki](https://github.com/RaspberryLife/server/wiki)
 Although the server is able to run without a database it is recommended that you install a MySQL database. 
 The server will store all the data within this database.
 
-For database access configuration refer to [Configuration](https://github.com/RaspberryLife/server/wiki/Configuration)
+For database access configuration refer to [Configuration](https://github.com/RaspberryLife/server/wiki/Configuration).
 
 ## Installation / Build
 Download the latest release [here](https://github.com/RaspberryLife/server/releases).
-Run `bin/server` or `bin/server.bat` to start the server
+Run `bin/server` or `bin/server.bat` to start the server.
 
 If you want to build the server from source run `gradle distZip` from the command line in the main directory.
 
