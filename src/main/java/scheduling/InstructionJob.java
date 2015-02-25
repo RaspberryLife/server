@@ -14,6 +14,11 @@ import system.service.DataBaseService;
 public class InstructionJob implements Job {
 
 
+    /**
+     * Run Logic instructions
+     * @param context
+     * @throws JobExecutionException
+     */
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         /*

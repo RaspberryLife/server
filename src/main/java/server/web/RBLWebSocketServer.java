@@ -67,6 +67,10 @@ public class RBLWebSocketServer {
         }
     }
 
+    /**
+     * Create the server runnable.
+     * @return
+     */
     private Runnable getRunnable() {
         return new Runnable() {
             public void run() {

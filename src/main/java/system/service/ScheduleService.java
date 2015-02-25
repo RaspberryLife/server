@@ -102,6 +102,9 @@ public class ScheduleService {
         }
     }
 
+    /**
+     * Read Logic from database and set up all the scheduling 
+     */
     private void buildFromDatabase(){
         Log.add(DEBUG_TAG, "Building schedule from database");
         try{
@@ -138,6 +141,10 @@ public class ScheduleService {
         }
     }
 
+    /**
+     * Start a job to log the availiable memory
+     * @param e
+     */
     private void startResourceLogJob(ScheduleEvent e) {
         Log.add(DEBUG_TAG, "Starting resource log");
         JobDetail job = newJob(ResourceLogJob.class)
@@ -154,6 +161,11 @@ public class ScheduleService {
         addJob(job, trigger);
     }
 
+
+    /**
+     * Start a job to log the current time 
+     * @param e
+     */
     private void startTimeLogJob(ScheduleEvent e) {
         Log.add(DEBUG_TAG, "Starting time log job");
         JobDetail job = newJob(TimeLogJob.class)
@@ -170,6 +182,11 @@ public class ScheduleService {
         addJob(job, trigger);
     }
 
+    /**
+     * Add a job to the scheduler
+     * @param job
+     * @param trigger
+     */
     private void addJob(JobDetail job, Trigger trigger){
         Log.add(DEBUG_TAG, "Adding job " + job.getDescription());
         try {

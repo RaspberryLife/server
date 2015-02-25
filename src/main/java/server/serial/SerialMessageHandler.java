@@ -45,7 +45,10 @@ public class SerialMessageHandler {
         preSwitchOnInstruction(message);
     }
 
-
+    /**
+     * Pass message to IID method 
+     * @param message
+     */
     private void preSwitchOnInstruction(SerialMessageEvent message){
         switch (message.instructionId){
             case IID_DEBUG_BROADCAST:
@@ -67,6 +70,10 @@ public class SerialMessageHandler {
     //                                      SYSTEM FUNCTIONALITY
     //----------------------------------------------------------------------------------------------
 
+    /**
+     * Handle module heartbeat message
+     * @param message
+     */
     private void readHeartbeat(SerialMessageEvent message) {
         String voltage = "";
         String preColon = message.parameters.get(2).substring(0, 1);
@@ -82,13 +89,17 @@ public class SerialMessageHandler {
         );
     }
 
+    /**
+     * Handle address request by modules
+     * @param message
+     */
     private void manageAddress(SerialMessageEvent message) {
         if(message.parameters.isEmpty()){ // Module is requesting
             Log.add(DEBUG_TAG, "Module requested address");
             if(message.moduleType == MODULE_OUTLET){
                 Log.add(DEBUG_TAG, "Requesting module is of type OUTLET. Not generating address");
             } else {
-                String address = DataBaseService.getInstance().generateSerialAddress();
+                String address = SerialAddress.generate();
                 sendAddressMessage(message, address);
                 Module m = new Module();
                 m.setSerial_address(address);
@@ -105,6 +116,10 @@ public class SerialMessageHandler {
         }
     }
 
+    /**
+     * Matches the serial module type to the database model
+     * @param message
+     */
     private String matchDatabaseType(int type){
         switch(type){
             case MODULE_OUTLET:
@@ -125,16 +140,25 @@ public class SerialMessageHandler {
         return null;
     }
 
+    /**
+     *  Send a message containing the generated address to the requesting module
+     * @param message
+     * @param address
+     */
     private void sendAddressMessage(SerialMessageEvent message, String address){
         ModuleEvent me = new ModuleEvent();
         me.setType(message.moduleType);
         me.setModuleId(message.moduleId);
         me.setInstructionId(IID_MANAGE_ADDRESS);
-        List modules = DataBaseService.getInstance().readAll(DataBaseService.DataType.MODULE);
+        //List modules = DataBaseService.getInstance().readAll(DataBaseService.DataType.MODULE);
         me.getParameters().add(address);
         EventBusService.post(me);
     }
 
+    /**
+     * Notify every client with a message from a module
+     * @param message
+     */
     private void broadcastDebug(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received debug " + message.rawContent);
 
@@ -156,6 +180,7 @@ public class SerialMessageHandler {
     //----------------------------------------------------------------------------------------------
     //                                      NORMAL MESSAGES
     //----------------------------------------------------------------------------------------------
+
 
     private void switchModelType(SerialMessageEvent message) {
         switch(message.moduleType){

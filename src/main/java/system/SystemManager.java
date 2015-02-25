@@ -15,6 +15,9 @@ import data.Config;
 import util.Log;
 import util.NetworkUtil;
 
+/**
+ * Created by Peter Mösenthin.
+ */
 public class SystemManager {
 
     public static final String DEBUG_TAG = SystemManager.class.getSimpleName();
@@ -46,6 +49,9 @@ public class SystemManager {
         }
     }
 
+    /**
+     * Starts the server 
+     */
     private void start(){
         Log.printLogHeader();
         // 1. Load config
@@ -76,37 +82,56 @@ public class SystemManager {
     //                                      STARTUP
     //----------------------------------------------------------------------------------------------
 
+    /**
+     * Load the server configurtion
+     */
     private void loadConfig(){
         Log.add(DEBUG_TAG, "Loading configuration");
         Config.readConfig();
         //Config.dumpConfig();
     }
 
+    /**
+     * Start the eventbus service
+     */
     private void initEventBus() {
         EventBusService.init();
     }
-
-
+    
+    /**
+     * start the socket server
+     */
     private void startSocketServer(){
         RBLSocketServer.register();
         EventBusService.post(new SystemEvent(SystemEvent.Type.START_SOCKET_SERVER));
     }
 
+    /**
+     * Register and start the websocket server in the eventbus
+     */
     private void startWebSocketServer(){
         RBLWebSocketServer.register();
         EventBusService.post(new SystemEvent(SystemEvent.Type.START_WEB_SOCKET_SERVER));
     }
-
-    // Initialize the serial connector for module communication
+    
+    /**
+     * Register the serial connector in the eventbus for module communication
+     */
     private void initSerialConnection(){
         SerialConnector.register();
         EventBusService.post(new SystemEvent(SystemEvent.Type.START_SERIAL_CONNECTION));
     }
 
+    /**
+     * Initialize the database
+     */
     private void initDatabase(){
         DataBaseService.getInstance().init();
     }
 
+    /**
+     * Register the scheduler in the eventbus and load additional jobs
+     */
     private void initScheduler(){
         ScheduleService.register();
         EventBusService.post(new SystemEvent(SystemEvent.Type.START_SCHEDULER));
@@ -117,6 +142,9 @@ public class SystemManager {
         EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
     }
 
+    /**
+     * Register the NotificationService in the eventbus
+     */
     private void initNotificationService() {
         NotificationService.register();
     }

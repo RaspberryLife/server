@@ -51,6 +51,9 @@ public class DataBaseService {
     private DataBaseService(){
     }
 
+    /**
+     * Initialize the database if necessary. Set mode to update if it exists
+     */
     public void init(){
         Log.add(DEBUG_TAG, "Starting...");
         if(dataBaseAvailable()){
@@ -167,6 +170,10 @@ public class DataBaseService {
     //                                      INSERT
     //----------------------------------------------------------------------------------------------
 
+    /**
+     * Insert an Object into the database. Object must be from the package 'data.model'
+     * @param object
+     */
     public void insert(Object object){
         try {
             Session session = sessionFactory.openSession();
@@ -186,6 +193,11 @@ public class DataBaseService {
     //----------------------------------------------------------------------------------------------
 
 
+    /**
+     * Read a list of objects from the database. Reads all entries
+     * @param type
+     * @return
+     */
     public List readAll(DataType type){
         String query = null;
         switch (type){
@@ -208,6 +220,12 @@ public class DataBaseService {
         return list;
     }
 
+    /**
+     * Read a specific object from the database. Identified by the id. 
+     * @param type
+     * @param id
+     * @return
+     */
     public List readId(DataType type, int id){
         String query = "from ";
         switch (type){
@@ -241,24 +259,7 @@ public class DataBaseService {
         return false;
     }
 
-    public String generateSerialAddress(){
-        List l = readAll(DataBaseService.DataType.MODULE);
-        String base = "C2C2C2C2";
-        String[] lead = {"A","B","C","D"};
-        for(String s : lead){
-            for(int i = 1; i <= 6; i++){
-                String currentTry = base + s + i;
-                boolean available = false;
-                for (Object o : l){
-                    available = ((Module) o).getSerial_address().equalsIgnoreCase(currentTry);
-                }
-                if(available){
-                    return currentTry;
-                }
-            }
-        }
-        return null;
-    }
+
 
 
     //----------------------------------------------------------------------------------------------

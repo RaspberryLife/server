@@ -14,6 +14,12 @@ public class TimeLogJob implements Job {
 
     public static final String DEBUG_TAG = TimeLogJob.class.getSimpleName();
 
+    /**
+     * Write the current time to the log output
+     * @param context
+     * @throws JobExecutionException
+     */
+    @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());

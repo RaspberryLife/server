@@ -170,6 +170,11 @@ public class SerialConnector {
     }
 
 
+    /**
+     * Filters the serial event for a message defined as ?...(32bytes message)...! 
+     * @param e
+     * @return
+     */
     private int filterEventString(String e){
         if(e.contains(PREFIX) && e.contains(SUFFIX)){
             int pp = findFirstOccurrence(e, PREFIX);
@@ -183,6 +188,12 @@ public class SerialConnector {
         return -1;
     }
 
+    /**
+     * find the first occurance of a string in another string
+     * @param s
+     * @param find
+     * @return
+     */
     private int findFirstOccurrence(String s, String find){
         char[] compareSplit = s.toCharArray();
         char match = find.charAt(0);

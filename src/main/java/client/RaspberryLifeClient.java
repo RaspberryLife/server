@@ -104,5 +104,4 @@ public abstract class RaspberryLifeClient {
      */
     public abstract void sendMessage(RBLMessage message);
 
-    //public abstract void readMessage(RBLMessage message);
 }

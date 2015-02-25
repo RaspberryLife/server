@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by Peter Mösenthin.
  *
- * The ClientHandler is responsible for organizing connected clients with
+ * The ClientService is responsible for organizing connected clients with
  * websockets  as well as regular Java sockets.
  * All clients must be subtypes of RaspberryHomeClient.
  */

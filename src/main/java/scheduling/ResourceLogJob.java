@@ -14,6 +14,12 @@ public class ResourceLogJob implements Job {
 
     public static final String DEBUG_TAG = ResourceLogJob.class.getSimpleName();
 
+    /**
+     * Write the current memory usage to the log output 
+     * @param context
+     * @throws JobExecutionException
+     */
+    @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         Runtime runtime = Runtime.getRuntime();
 

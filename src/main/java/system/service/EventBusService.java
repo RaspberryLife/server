@@ -5,6 +5,9 @@ import com.google.common.eventbus.EventBus;
 
 import java.util.Objects;
 
+/**
+ * Created by Peter Mösenthin.
+ */
 public class EventBusService {
 
     public final String DEBUG_TAG = EventBusService.class.getSimpleName();

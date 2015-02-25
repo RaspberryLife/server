@@ -25,6 +25,10 @@ public class NotificationService {
 
     @Subscribe
     public void handleNotificationEvent(final NotificationEvent e){
+        sendTestMail(e);
+    }
+    
+    private void sendTestMail(final NotificationEvent e){
         Thread notThread = new Thread(new Runnable() {
             public void run() {
                 String email_address = Config.getConf().getString("email.admin");
