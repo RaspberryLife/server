@@ -1,4 +1,4 @@
-package interfaces;
+package client;
 
 /**
  * Created by Peter Mösenthin.

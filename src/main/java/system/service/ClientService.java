@@ -12,7 +12,7 @@ import event.WebSocketEvent;
 import protobuf.ProtoFactory;
 import protobuf.RblProto;
 import util.Log;
-import interfaces.ConnectionListener;
+import client.ConnectionListener;
 import org.webbitserver.WebSocketConnection;
 import protobuf.RblProto.*;
 

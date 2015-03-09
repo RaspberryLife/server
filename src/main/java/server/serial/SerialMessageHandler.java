@@ -5,7 +5,6 @@ import data.model.Module;
 import event.ModuleEvent;
 import event.NotificationEvent;
 import event.SerialMessageEvent;
-import protobuf.RblProto;
 import system.service.DataBaseService;
 import system.service.EventBusService;
 import util.Log;
@@ -41,7 +40,7 @@ public class SerialMessageHandler {
     @Subscribe
     public void handleSerialMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received message " + message.rawContent);
-        message.populateBase();
+        message.buildModel();
         preSwitchOnInstruction(message);
     }
 
@@ -59,9 +58,6 @@ public class SerialMessageHandler {
                 break;
             case IID_MANAGE_ADDRESS:
                 manageAddress(message);
-                break;
-            default:
-                switchModelType(message);
                 break;
         }
     }
@@ -115,12 +111,12 @@ public class SerialMessageHandler {
             }
         }
     }
-
+    
     /**
      * Matches the serial module type to the database model
      * @param message
      */
-    private String matchDatabaseType(int type){
+    public static String matchDatabaseType(int type){
         switch(type){
             case MODULE_OUTLET:
                 return Module.TYPE_OUTLET;
@@ -139,6 +135,7 @@ public class SerialMessageHandler {
         }
         return null;
     }
+
 
     /**
      *  Send a message containing the generated address to the requesting module
@@ -169,97 +166,12 @@ public class SerialMessageHandler {
         EventBusService.post(e);
 
         // Module broadcast
-        ModuleEvent mi = new ModuleEvent();
-        mi.setType(message.moduleType);
-        mi.setModuleId(message.moduleId);
-        mi.setInstructionId(message.instructionId);
-        mi.setParameters(message.parameters);
-        EventBusService.post(mi);
+        ModuleEvent me = new ModuleEvent();
+        me.setType(message.moduleType);
+        me.setModuleId(message.moduleId);
+        me.setInstructionId(message.instructionId);
+        me.setParameters(message.parameters);
+        EventBusService.post(me);
     }
-
-    //----------------------------------------------------------------------------------------------
-    //                                      NORMAL MESSAGES
-    //----------------------------------------------------------------------------------------------
-
-
-    private void switchModelType(SerialMessageEvent message) {
-        switch(message.moduleType){
-            case MODULE_OUTLET:
-                handleOutletMessage(message);
-                break;
-            case MODULE_TEMP:
-                handleTempMessage(message);
-                break;
-            case MODULE_PIR:
-                handlePirMessage(message);
-                break;
-            case MODULE_REED:
-                handleReedMessage(message);
-                break;
-            case MODULE_LUMINOSITY:
-                handleLuminosityMessage(message);
-                break;
-            case MODULE_RELAY:
-                handleRelayMessage(message);
-                break;
-            case MODULE_PIR_AND_RELAY:
-                handlePirAndRelayMessage(message);
-                break;
-        }
-    }
-
-    private void handlePirAndRelayMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received Pir/Relay " + message.rawContent);
-        //TODO implement
-    }
-
-    private void handleRelayMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received Relay" + message.rawContent);
-        //TODO implement
-    }
-
-    private void handleLuminosityMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received luminosity " + message.rawContent);
-        //TODO implement
-    }
-
-    private void handleReedMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received Reed " + message.rawContent);
-            ModuleEvent me = new ModuleEvent();
-            me.setType(MODULE_OUTLET);
-            me.setModuleId(1);
-            me.setInstructionId(2);
-            List<String> params = new ArrayList<String>();
-            params.add("01");
-            params.add("01");
-            params.add("04");
-            me.setParameters(params);
-            EventBusService.post(me);
-    }
-
-    private void handlePirMessage(SerialMessageEvent message) {
-        if(message.instructionId == 1){
-            ModuleEvent me = new ModuleEvent();
-            me.setType(MODULE_OUTLET);
-            me.setModuleId(1);
-            me.setInstructionId(1);
-            List<String> params = new ArrayList<String>();
-            params.add("01");
-            params.add("01");
-            params.add("04");
-            me.setParameters(params);
-            EventBusService.post(me);
-        }
-    }
-
-    private void handleTempMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received Temp " + message.rawContent);
-        //TODO implement
-    }
-
-    private void handleOutletMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received outlet " + message.rawContent);
-        //TODO implement
-    }
-
+    
 }

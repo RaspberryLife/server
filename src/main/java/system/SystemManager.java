@@ -1,6 +1,7 @@
 package system;
 
 
+import extension.FabLabExtension;
 import system.service.ClientService;
 import com.google.common.eventbus.Subscribe;
 import event.*;
@@ -147,6 +148,12 @@ public class SystemManager {
      */
     private void initNotificationService() {
         NotificationService.register();
+    }
+    
+    
+    private void setUpFabLab(){
+        FabLabExtension e = new FabLabExtension();
+        e.init();
     }
 
 }
