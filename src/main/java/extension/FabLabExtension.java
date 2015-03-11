@@ -5,6 +5,8 @@ import event.SerialMessageEvent;
 import system.service.EventBusService;
 import util.Log;
 
+import java.util.HashMap;
+
 /**
  * Created by Peter Mösenthin.
  */
@@ -20,76 +22,47 @@ public class FabLabExtension implements Extension{
     public static final int MODULE_RELAY = 6;
     public static final int MODULE_PIR_AND_RELAY = 7;
 
+    private HashMap<Integer,Integer> moduleStates = new HashMap<>();
+
 
     @Override
     public void init() {
         EventBusService.register(this);
+
     }
     
     @Subscribe
     public void handleSerialMessageEvent(SerialMessageEvent message){
         switch(message.moduleType){
-            case MODULE_OUTLET:
-                handleOutletMessage(message);
-                break;
-            case MODULE_TEMP:
-                handleTempMessage(message);
-                break;
-            case MODULE_PIR:
-                handlePirMessage(message);
-                break;
             case MODULE_REED:
                 handleReedMessage(message);
-                break;
-            case MODULE_LUMINOSITY:
-                handleLuminosityMessage(message);
-                break;
-            case MODULE_RELAY:
-                handleRelayMessage(message);
-                break;
-            case MODULE_PIR_AND_RELAY:
-                handlePirAndRelayMessage(message);
                 break;
         }
     }
 
-    private void handlePirAndRelayMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received Pir/Relay " + message.rawContent);
-        //TODO implement
-    }
+    private void startDailyCheckJob(){
 
-    private void handleRelayMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received Relay" + message.rawContent);
-        //TODO implement
-    }
-
-    private void handleLuminosityMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received luminosity " + message.rawContent);
-        //TODO implement
     }
 
     private void handleReedMessage(SerialMessageEvent message) {
         Log.add(DEBUG_TAG, "Received Reed " + message.rawContent);
-        if(message.instructionId == 1){ // Reed status update
-
+        if(message.instructionId == 1){ // Reed status update / new status
+            message.buildModel();
+            int param0 = Integer.parseInt(message.parameters.get(0)); // 0 = open / 1 = closed
+            moduleStates.put(message.moduleId, param0);
+            updateDisplay();
         }
     }
 
-    private void handlePirMessage(SerialMessageEvent message) {
-        if(message.instructionId == 1){ // Peer registered movement
-
+    private void updateDisplay(){
+        if(moduleStates.containsValue(0)){
+            String displayText = "Fensterstatus: " + moduleStates.toString();
+            //TODO send text to display
         }
     }
 
-    private void handleTempMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received Temp " + message.rawContent);
-        //TODO implement
-    }
 
-    private void handleOutletMessage(SerialMessageEvent message) {
-        Log.add(DEBUG_TAG, "Received outlet " + message.rawContent);
-        //TODO implement
-    }
+
 
 
 

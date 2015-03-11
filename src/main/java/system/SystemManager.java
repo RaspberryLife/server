@@ -68,6 +68,7 @@ public class SystemManager {
         initSerialConnection();
         initDatabase();
         initScheduler();
+        initExtensions();
     }
 
     private void stop(){
@@ -140,7 +141,7 @@ public class SystemManager {
                 "resource_check",120,
                 ScheduleEvent.Type.START_RESOURCE_LOG)
         );
-        EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
+        //EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
     }
 
     /**
@@ -151,7 +152,7 @@ public class SystemManager {
     }
     
     
-    private void setUpFabLab(){
+    private void initExtensions(){
         FabLabExtension e = new FabLabExtension();
         e.init();
     }
