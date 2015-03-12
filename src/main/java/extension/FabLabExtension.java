@@ -1,7 +1,13 @@
 package extension;
 
 import com.google.common.eventbus.Subscribe;
+import event.ModuleEvent;
+import event.ScheduleEvent;
 import event.SerialMessageEvent;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import scheduling.RepeatInterval;
 import system.service.EventBusService;
 import util.Log;
 
@@ -10,7 +16,7 @@ import java.util.HashMap;
 /**
  * Created by Peter Mösenthin.
  */
-public class FabLabExtension implements Extension{
+public class FabLabExtension implements Extension, Job {
 
     public static final String DEBUG_TAG = FabLabExtension.class.getSimpleName();
 
@@ -28,7 +34,7 @@ public class FabLabExtension implements Extension{
     @Override
     public void init() {
         EventBusService.register(this);
-
+        startDailyCheckJob();
     }
     
     @Subscribe
@@ -41,7 +47,12 @@ public class FabLabExtension implements Extension{
     }
 
     private void startDailyCheckJob(){
-
+        ScheduleEvent e = new ScheduleEvent(ScheduleEvent.Type.EXTENSION);
+        e.setJob(this);
+        e.setIdentity("FabLabExtensionJob");
+        e.getInterval().put(RepeatInterval.HOUR, 17);
+        e.getInterval().put(RepeatInterval.MINUTE,0);
+        EventBusService.post(e);
     }
 
     private void handleReedMessage(SerialMessageEvent message) {
@@ -57,17 +68,21 @@ public class FabLabExtension implements Extension{
     private void updateDisplay(){
         if(moduleStates.containsValue(0)){
             String displayText = "Fensterstatus: " + moduleStates.toString();
+            ModuleEvent me = new ModuleEvent();
+            //me.setType(message.moduleType);
+            //me.setModuleId(message.moduleId);
+            //me.setInstructionId(message.instructionId);
+            me.getParameters().add(displayText);
+            EventBusService.post(me);
             //TODO send text to display
         }
     }
 
 
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
 
-
-
-
-
-
+    }
 
 
 }

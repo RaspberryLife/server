@@ -1,12 +1,14 @@
 package system.service;
 
 import com.google.common.eventbus.Subscribe;
+import com.google.common.util.concurrent.AbstractScheduledService;
 import data.model.ExecutionFrequency;
 import data.model.Logic;
 import event.ScheduleEvent;
 import event.SystemEvent;
 import org.quartz.*;
 import scheduling.InstructionJob;
+import scheduling.RepeatInterval;
 import scheduling.ResourceLogJob;
 import scheduling.TimeLogJob;
 import util.Log;
@@ -66,6 +68,9 @@ public class ScheduleService {
                 break;
             case REBUILD_DATABASE:
                 buildFromDatabase();
+                break;
+            case EXTENSION:
+                startExtensionTimerJob(e);
                 break;
         }
     }
@@ -151,14 +156,15 @@ public class ScheduleService {
                 .withIdentity(e.getIdentity(), SCHEDULER_GROUP)
                 .withDescription("ResourceLogJob")
                 .build();
-        Trigger trigger = newTrigger()
+        TriggerBuilder trigger = newTrigger()
                 .withIdentity(e.getIdentity() + "trigger", TRIGGER_GROUP)
-                .startNow()
-                .withSchedule(simpleSchedule()
-                        .withIntervalInSeconds(e.getInterval())
-                        .repeatForever())
-                .build();
-        addJob(job, trigger);
+                .startNow();
+         SimpleScheduleBuilder schedule = simpleSchedule().repeatForever();
+        if(e.getInterval().containsKey(RepeatInterval.SECOND)){
+            schedule.withIntervalInSeconds(e.getInterval().get(RepeatInterval.SECOND));
+        }
+        trigger.withSchedule(schedule);
+        addJob(job, trigger.build());
     }
 
 
@@ -172,14 +178,31 @@ public class ScheduleService {
                 .withIdentity(e.getIdentity(), SCHEDULER_GROUP)
                 .withDescription("TimeLogJob")
                 .build();
-        Trigger trigger = newTrigger()
+        TriggerBuilder trigger = newTrigger()
                 .withIdentity(e.getIdentity() + "trigger", TRIGGER_GROUP)
-                .startNow()
-                .withSchedule(simpleSchedule()
-                        .withIntervalInSeconds(e.getInterval())
-                        .repeatForever())
+                .startNow();
+        SimpleScheduleBuilder schedule = simpleSchedule().repeatForever();
+        if(e.getInterval().containsKey(RepeatInterval.SECOND)){
+            schedule.withIntervalInSeconds(e.getInterval().get(RepeatInterval.SECOND));
+        }
+        trigger.withSchedule(schedule);
+        addJob(job, trigger.build());
+    }
+
+    private void startExtensionTimerJob(ScheduleEvent e){
+        Log.add(DEBUG_TAG, "Starting time log job");
+        JobDetail job = newJob(TimeLogJob.class)
+                .withIdentity(e.getIdentity(), SCHEDULER_GROUP)
+                .withDescription("ExtensionJob")
                 .build();
-        addJob(job, trigger);
+        TriggerBuilder trigger = newTrigger()
+                .withIdentity(e.getIdentity() + "trigger", TRIGGER_GROUP)
+                .startNow();
+        DailyTimeIntervalScheduleBuilder schedule = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule();
+        TimeOfDay tod = TimeOfDay.hourAndMinuteOfDay(e.getInterval().get(RepeatInterval.HOUR), e.getInterval().get(RepeatInterval.MINUTE));
+        schedule.endingDailyAt(tod);
+        trigger.withSchedule(schedule);
+        addJob(job, trigger.build());
     }
 
     /**

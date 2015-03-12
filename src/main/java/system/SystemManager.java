@@ -2,6 +2,7 @@ package system;
 
 
 import extension.FabLabExtension;
+import scheduling.RepeatInterval;
 import system.service.ClientService;
 import com.google.common.eventbus.Subscribe;
 import event.*;
@@ -15,6 +16,8 @@ import server.serial.SerialConnector;
 import data.Config;
 import util.Log;
 import util.NetworkUtil;
+
+import java.util.HashMap;
 
 /**
  * Created by Peter Mösenthin.
@@ -137,10 +140,12 @@ public class SystemManager {
     private void initScheduler(){
         ScheduleService.register();
         EventBusService.post(new SystemEvent(SystemEvent.Type.START_SCHEDULER));
-        EventBusService.post(new ScheduleEvent(
-                "resource_check",120,
-                ScheduleEvent.Type.START_RESOURCE_LOG)
-        );
+
+        ScheduleEvent scheduleEvent = new ScheduleEvent(ScheduleEvent.Type.START_RESOURCE_LOG);
+        scheduleEvent.getInterval().put(RepeatInterval.SECOND, 120);
+        scheduleEvent.setIdentity("resource_check");
+
+        EventBusService.post(scheduleEvent);
         //EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
     }
 
