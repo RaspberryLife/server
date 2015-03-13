@@ -2,7 +2,8 @@ package protobuf;
 
 
 import client.RaspberryLifeClient;
-import event.ModuleEvent;
+
+import event.SerialMessageEvent;
 import system.service.EventBusService;
 import util.Log;
 import protobuf.RblProto.*;
@@ -34,12 +35,13 @@ public class ProtobufInstructionResolver {
     private void runModuleInstruction(RBLMessage.RunInstruction runInstruction) {
         Log.add(DEBUG_TAG, "Running module instruction");
         if(runInstruction != null){
-            ModuleEvent me = new ModuleEvent();
-            me.setType(runInstruction.getActuator().getModuleType().getNumber() + 1);
+            SerialMessageEvent me = new SerialMessageEvent();
+			me.setMessageType(SerialMessageEvent.Type.SEND);
+            me.setModuleType(runInstruction.getActuator().getModuleType().getNumber() + 1);
             me.setModuleId(runInstruction.getActuator().getModuleId());
             me.setInstructionId(runInstruction.getInstruction().getInstructionId());
             me.setParameters(runInstruction.getInstruction().getParametersList());
-            Log.add(DEBUG_TAG, "MT=" + me.getType()
+            Log.add(DEBUG_TAG, "MT=" + me.getModuleType()
                     + " MID=" + me.getModuleId()
                     + " IID=" + me.getInstructionId()
                     + " INT_PARAMS=" + me.getParameters());

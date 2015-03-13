@@ -1,7 +1,7 @@
 package server.serial;
 
 import com.google.common.eventbus.Subscribe;
-import event.ModuleEvent;
+import com.sun.org.apache.regexp.internal.RESyntaxException;
 import event.SerialMessageEvent;
 import event.SystemEvent;
 import jssc.*;
@@ -117,16 +117,19 @@ public class SerialConnector {
      * Send a message via the serial connection.
      */
     @Subscribe
-    public void send(ModuleEvent instruction){
-        final String message = PREFIX + instruction.build() + SUFFIX;
-        Log.add(DEBUG_TAG,"Sending serial message " + message
-                + " Length=" + message.getBytes().length);
+    public void send(SerialMessageEvent message){
+		if(message.getMessageType() == SerialMessageEvent.Type.RECEIVE){
+			return;
+		}
+        final String serialMessage = PREFIX + message.buildSerial() + SUFFIX;
+        Log.add(DEBUG_TAG,"Sending serial message " + serialMessage
+                + " Length=" + serialMessage.getBytes().length + "Bytes");
 
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
                     if(mSerialPort != null){
-                        mSerialPort.writeBytes(message.getBytes());
+                        mSerialPort.writeBytes(serialMessage.getBytes());
                     } else{
                         Log.add(DEBUG_TAG,"Failed to send message. Serial port was null");
                     }
@@ -182,7 +185,9 @@ public class SerialConnector {
             Log.add(DEBUG_TAG, "Found delimiter: PRE@=" + pp + " SUF@=" + ps);
             String cleaned = e.substring(pp + 1,pp + 32);
             Log.add(DEBUG_TAG,"Cleaned String: " + cleaned);
-            EventBusService.post(new SerialMessageEvent(cleaned));
+			SerialMessageEvent sme = new SerialMessageEvent(cleaned);
+			sme.setMessageType(SerialMessageEvent.Type.RECEIVE);
+            EventBusService.post(sme);
             return ps;
         }
         return -1;

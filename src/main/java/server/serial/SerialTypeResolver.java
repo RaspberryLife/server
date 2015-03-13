@@ -1,5 +1,7 @@
 package server.serial;
 
+import data.model.Module;
+
 /**
  * Created by Peter Mösenthin.
  */
@@ -15,6 +17,29 @@ public class SerialTypeResolver {
 	public static final int MODULE_PIR_AND_RELAY = 7;
 	public static final int MODULE_STATUS_MONITOR = 8;
 
-
+	/**
+	 * Matches the serial module type to the database model
+	 *
+	 * @param message
+	 */
+	public static String matchDatabaseType(int type) {
+		switch (type) {
+			case SerialTypeResolver.MODULE_OUTLET:
+				return Module.TYPE_OUTLET;
+			case SerialTypeResolver.MODULE_TEMP:
+				return Module.TYPE_TEMP;
+			case SerialTypeResolver.MODULE_PIR:
+				return Module.TYPE_PIR;
+			case SerialTypeResolver.MODULE_REED:
+				return Module.TYPE_REED;
+			case SerialTypeResolver.MODULE_LUMINOSITY:
+				return Module.TYPE_LUMINOSITY;
+			case SerialTypeResolver.MODULE_RELAY:
+				return Module.TYPE_RELAY;
+			case SerialTypeResolver.MODULE_PIR_AND_RELAY:
+				return Module.TYPE_PIR_AND_RELAY;
+		}
+		return null;
+	}
 
 }

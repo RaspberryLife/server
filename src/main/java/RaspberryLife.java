@@ -2,6 +2,7 @@
 import event.SystemEvent;
 import system.SystemManager;
 import system.service.EventBusService;
+import util.Log;
 
 
 /**
@@ -14,7 +15,8 @@ public class RaspberryLife {
     public static final String DEBUG_TAG = RaspberryLife.class.getSimpleName();
 
     public static void main(String[] args){
-        SystemManager.register();
+		Log.init();
+		SystemManager.register();
         EventBusService.post(new SystemEvent(SystemEvent.Type.START_SYSTEM));
     }
 

@@ -1,7 +1,6 @@
 package extension;
 
 import com.google.common.eventbus.Subscribe;
-import event.ModuleEvent;
 import event.NotificationEvent;
 import event.ScheduleEvent;
 import event.SerialMessageEvent;
@@ -22,27 +21,24 @@ public class FabLabExtension implements Extension, Job {
 
 	public static final String DEBUG_TAG = FabLabExtension.class.getSimpleName();
 
-	public static final int MODULE_OUTLET = 1;
-	public static final int MODULE_TEMP = 2;
-	public static final int MODULE_PIR = 3;
-	public static final int MODULE_REED = 4;
-	public static final int MODULE_LUMINOSITY = 5;
-	public static final int MODULE_RELAY = 6;
-	public static final int MODULE_PIR_AND_RELAY = 7;
-
-	private HashMap<Integer,Integer> moduleStates = new HashMap<>();
-
+	private static HashMap<Integer,Integer> moduleStates = new HashMap<>();
 
 	@Override
 	public void init() {
 		EventBusService.register(this);
 		startDailyCheckJob();
+		test();
 	}
 
 	@Subscribe
-	public void handleSerialMessageEvent(SerialMessageEvent message){
-		switch(message.moduleType){
-			case MODULE_REED:
+	public void handleSerialMessageEvent(SerialMessageEvent message) {
+		if(message.getMessageType() == SerialMessageEvent.Type.SEND){
+			return;
+		}
+		Log.add(DEBUG_TAG, "Received message " + message.toString());
+		message.buildModel();
+		switch (message.getModuleType()) {
+			case SerialTypeResolver.MODULE_REED:
 				handleReedMessage(message);
 				break;
 		}
@@ -52,26 +48,26 @@ public class FabLabExtension implements Extension, Job {
 		ScheduleEvent e = new ScheduleEvent(ScheduleEvent.Type.EXTENSION);
 		e.setJob(this);
 		e.setIdentity("FabLabExtensionJob");
-		e.getInterval().put(RepeatInterval.HOUR, 17);
-		e.getInterval().put(RepeatInterval.MINUTE,0);
+		e.getInterval().put(RepeatInterval.HOUR, 19);
+		e.getInterval().put(RepeatInterval.MINUTE, 49);
 		EventBusService.post(e);
 	}
 
 	private void handleReedMessage(SerialMessageEvent message) {
-		Log.add(DEBUG_TAG, "Received Reed " + message.rawContent);
-		if(message.instructionId == 1){ // Reed status update / new status
-			message.buildModel();
-			int param0 = Integer.parseInt(message.parameters.get(0)); // 0 = open / 1 = closed
-			moduleStates.put(message.moduleId, param0);
+		Log.add(DEBUG_TAG, "Received Reed " + message.getRawContent());
+		if(message.getInstructionId() == 1){ // Reed status update / new status
+			int param0 = Integer.parseInt(message.getParameters().get(0)); // 0 = open / 1 = closed
+			moduleStates.put(message.getModuleId(), param0);
 			updateDisplay(moduleStates.containsValue(0));
 		}
 	}
 
 	private void updateDisplay(boolean open){
 		if(moduleStates.containsValue(0)){
-			String displayText = "Fensterstatus: " + moduleStates.toString();
-			ModuleEvent me = new ModuleEvent();
-			me.setType(SerialTypeResolver.MODULE_STATUS_MONITOR);
+			String displayText = getDisplayText();
+			SerialMessageEvent me = new SerialMessageEvent();
+			me.setMessageType(SerialMessageEvent.Type.SEND);
+			me.setModuleType(SerialTypeResolver.MODULE_STATUS_MONITOR);
 			me.setModuleId(1);
 			me.setInstructionId(1);
 			if(open){
@@ -84,12 +80,29 @@ public class FabLabExtension implements Extension, Job {
 		}
 	}
 
+	private String getDisplayText(){
+		return "Fensterstatus: " + moduleStates.toString();
+	}
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		NotificationEvent ne = new NotificationEvent(NotificationEvent.Type.CLIENT_EMAIL, "Fenster ist noch offen");
+		NotificationEvent ne = new NotificationEvent(NotificationEvent.Type.CLIENT_EMAIL, "Fenster ist noch offen!\n" + getDisplayText());
 		EventBusService.post(ne);
 	}
 
+	private void test(){
+		Log.add(DEBUG_TAG,"Testing");
+		SerialMessageEvent sme;
+		for (int i = 0; i< 10; i++){
+			sme = new SerialMessageEvent();
+			sme.setMessageType(SerialMessageEvent.Type.RECEIVE);
+			sme.setModuleType(SerialTypeResolver.MODULE_REED);
+			sme.setInstructionId(1);
+			sme.setModuleId(i);
+			sme.getParameters().add("" + i % 2);
+			sme.buildSerial();
+			EventBusService.post(sme);
+		}
+	}
 
 }
