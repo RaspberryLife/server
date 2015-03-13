@@ -10,7 +10,7 @@
         <port>3306</port>
         <db>rbl_data</db>
         <user>root</user>
-        <password></password>
+        <password>YOUR DATABASE PASSWORD</password>
     </database>
     <socket>
         <java_port>6666</java_port>
@@ -25,10 +25,10 @@
         <override_port></override_port>
     </serial>
     <email>
-        <admin>peter.moesenthin@gmail.com</admin>
+        <admin>ADMIN EMAIL</admin>
         <sender>
-            <email>rbltestuser01@gmail.com</email>
-            <pw>DELETE PASSWORD BEFORE COMMIT</pw>
+            <email>YOUR GMAIL ACCOUNT</email>
+            <pw>YOUR GMAIL PASSWORD</pw>
         </sender>
     </email>
 </config>
