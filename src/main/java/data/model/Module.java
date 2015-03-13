@@ -16,6 +16,7 @@ public class Module {
     public static final String TYPE_LUMINOSITY = "LUMINOSITY";
     public static final String TYPE_RELAY = "RELAY";
     public static final String TYPE_PIR_AND_RELAY = "PIR_AND_RELAY";
+	public static final String TYPE_STATUS_MONITOR = "STATUS_MONITOR";
 
     @Id
     @GeneratedValue
