@@ -4,7 +4,7 @@ mainClassName = 'RaspberryLife'
 // Build source with 'gradle distZip'
 
 //sourceCompatibility = 1.5
-version = '1.1.4'
+version = '1.1.5'
 
 repositories {
     mavenCentral()
