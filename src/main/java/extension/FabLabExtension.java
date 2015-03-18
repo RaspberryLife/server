@@ -64,7 +64,6 @@ public class FabLabExtension implements Extension, Job {
 
 	private void updateDisplay(boolean open){
 		if(moduleStates.containsValue(0)){
-			String displayText = getDisplayText();
 			SerialMessageEvent me = new SerialMessageEvent();
 			me.setMessageType(SerialMessageEvent.Type.SEND);
 			me.setModuleType(SerialTypeResolver.MODULE_STATUS_MONITOR);
@@ -75,7 +74,6 @@ public class FabLabExtension implements Extension, Job {
 			} else {
 				me.getParameters().add("1");
 			}
-			me.getParameters().add(displayText);
 			EventBusService.post(me);
 		}
 	}
