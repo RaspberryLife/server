@@ -6,31 +6,34 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name="rbl_notification_message")
-public class NotificationMessage {
+@Table(name = "rbl_notification_message")
+public class NotificationMessage
+{
 
-    @Id
-    @GeneratedValue
-    @Column(name="notification_id")
-    private int id;
+	@Id
+	@GeneratedValue
+	@Column(name = "notification_id")
+	private int id;
 
-    @Column(name="message")
-    private int message;
+	@Column(name = "message")
+	private int message;
 
-    //----------------------------------------------------------------------------------------------
-    //                                      GETTER & SETTER
-    //----------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//                                      GETTER & SETTER
+	//----------------------------------------------------------------------------------------------
 
+	public int getId()
+	{
+		return id;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public int getMessage()
+	{
+		return message;
+	}
 
-    public int getMessage() {
-        return message;
-    }
-
-    public void setMessage(int message) {
-        this.message = message;
-    }
+	public void setMessage(int message)
+	{
+		this.message = message;
+	}
 }

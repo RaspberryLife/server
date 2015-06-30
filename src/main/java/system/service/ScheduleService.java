@@ -6,12 +6,12 @@ import data.model.Logic;
 import event.ScheduleEvent;
 import event.SystemEvent;
 import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import scheduling.InstructionJob;
 import scheduling.RepeatInterval;
 import scheduling.ResourceLogJob;
 import scheduling.TimeLogJob;
 import util.Log;
-import org.quartz.impl.StdSchedulerFactory;
 
 import java.util.List;
 
@@ -22,7 +22,8 @@ import static org.quartz.TriggerBuilder.newTrigger;
 /**
  * Created by Peter Mösenthin.
  */
-public class ScheduleService {
+public class ScheduleService
+{
 
 	public static final String DEBUG_TAG = ScheduleService.class.getSimpleName();
 
@@ -33,17 +34,20 @@ public class ScheduleService {
 
 	private Scheduler scheduler = null;
 
-	public static void register() {
+	public static void register()
+	{
 		EventBusService.register(instance);
 	}
 
-	private ScheduleService() {
+	private ScheduleService()
+	{
 	}
 
-
 	@Subscribe
-	public void handleSystemEvent(SystemEvent e) {
-		switch (e.getType()) {
+	public void handleSystemEvent(SystemEvent e)
+	{
+		switch (e.getType())
+		{
 			case START_SCHEDULER:
 				start();
 				break;
@@ -57,8 +61,10 @@ public class ScheduleService {
 	}
 
 	@Subscribe
-	public void handleScheduleEvent(ScheduleEvent e) {
-		switch (e.getType()) {
+	public void handleScheduleEvent(ScheduleEvent e)
+	{
+		switch (e.getType())
+		{
 			case START_TIME_LOG:
 				startTimeLogJob(e);
 				break;
@@ -74,33 +80,45 @@ public class ScheduleService {
 		}
 	}
 
-
-	private void restart() {
+	private void restart()
+	{
 		stop();
 		start();
 	}
 
-	private void stop() {
+	private void stop()
+	{
 		Log.add(DEBUG_TAG, "Stopping...");
-		try {
+		try
+		{
 			scheduler.shutdown();
-		} catch (SchedulerException e) {
+		}
+		catch (SchedulerException e)
+		{
 			Log.add(DEBUG_TAG, "Unable to stop scheduler");
 		}
 		scheduler = null;
 	}
 
-	private void start() {
+	private void start()
+	{
 		Log.add(DEBUG_TAG, "Starting...");
-		try {
+		try
+		{
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
-		} catch (SchedulerException e) {
+		}
+		catch (SchedulerException e)
+		{
 			Log.add(DEBUG_TAG, "Unable to create scheduler");
 		}
-		if (scheduler != null) {
-			try {
+		if (scheduler != null)
+		{
+			try
+			{
 				scheduler.start();
-			} catch (SchedulerException e) {
+			}
+			catch (SchedulerException e)
+			{
 				Log.add(DEBUG_TAG, "Unable to start scheduler");
 			}
 		}
@@ -109,12 +127,15 @@ public class ScheduleService {
 	/**
 	 * Read Logic from database and set up all the scheduling
 	 */
-	private void buildFromDatabase() {
+	private void buildFromDatabase()
+	{
 		Log.add(DEBUG_TAG, "Building schedule from database");
-		try {
+		try
+		{
 			scheduler.clear();
 			List l = DataBaseService.getInstance().readAll(DataBaseService.DataType.LOGIC);
-			for (Object o : l) {
+			for (Object o : l)
+			{
 				Logic lc = (Logic) o;
 				JobDetail job = newJob(InstructionJob.class)
 						.withIdentity(lc.getName() + "dbjob")
@@ -122,7 +143,8 @@ public class ScheduleService {
 						.usingJobData("id", lc.getLogic_id())
 						.build();
 				ScheduleBuilder sb = null;
-				switch (lc.getExecution_frequency().getType()) {
+				switch (lc.getExecution_frequency().getType())
+				{
 					case ExecutionFrequency.TYPE_IMMEDIATELY:
 						sb = simpleSchedule()
 								.withIntervalInSeconds(1);
@@ -140,7 +162,9 @@ public class ScheduleService {
 						.build();
 				addJob(job, trigger);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -150,7 +174,8 @@ public class ScheduleService {
 	 *
 	 * @param e
 	 */
-	private void startResourceLogJob(ScheduleEvent e) {
+	private void startResourceLogJob(ScheduleEvent e)
+	{
 		Log.add(DEBUG_TAG, "Starting resource log");
 		JobDetail job = newJob(ResourceLogJob.class)
 				.withIdentity(e.getIdentity(), SCHEDULER_GROUP)
@@ -160,20 +185,21 @@ public class ScheduleService {
 				.withIdentity(e.getIdentity() + "trigger", TRIGGER_GROUP)
 				.startNow();
 		SimpleScheduleBuilder schedule = simpleSchedule().repeatForever();
-		if (e.getInterval().containsKey(RepeatInterval.SECOND)) {
+		if (e.getInterval().containsKey(RepeatInterval.SECOND))
+		{
 			schedule.withIntervalInSeconds(e.getInterval().get(RepeatInterval.SECOND));
 		}
 		trigger.withSchedule(schedule);
 		addJob(job, trigger.build());
 	}
 
-
 	/**
 	 * Start a job to log the current time
 	 *
 	 * @param e
 	 */
-	private void startTimeLogJob(ScheduleEvent e) {
+	private void startTimeLogJob(ScheduleEvent e)
+	{
 		Log.add(DEBUG_TAG, "Starting time log job");
 		JobDetail job = newJob(TimeLogJob.class)
 				.withIdentity(e.getIdentity(), SCHEDULER_GROUP)
@@ -183,15 +209,16 @@ public class ScheduleService {
 				.withIdentity(e.getIdentity() + "trigger", TRIGGER_GROUP)
 				.startNow();
 		SimpleScheduleBuilder schedule = simpleSchedule().repeatForever();
-		if (e.getInterval().containsKey(RepeatInterval.SECOND)) {
+		if (e.getInterval().containsKey(RepeatInterval.SECOND))
+		{
 			schedule.withIntervalInSeconds(e.getInterval().get(RepeatInterval.SECOND));
 		}
 		trigger.withSchedule(schedule);
 		addJob(job, trigger.build());
 	}
 
-
-	private void startExtensionDailyTimerJob(ScheduleEvent e) {
+	private void startExtensionDailyTimerJob(ScheduleEvent e)
+	{
 		Log.add(DEBUG_TAG, "Starting time log job");
 		JobDetail job = newJob(e.getJob().getClass())
 				.withIdentity(e.getIdentity(), SCHEDULER_GROUP)
@@ -216,16 +243,20 @@ public class ScheduleService {
 	 * @param job
 	 * @param trigger
 	 */
-	private void addJob(JobDetail job, Trigger trigger) {
-		Log.add(DEBUG_TAG,"Add job: " + job.toString());
-		try {
-			if (scheduler != null) {
+	private void addJob(JobDetail job, Trigger trigger)
+	{
+		Log.add(DEBUG_TAG, "Add job: " + job.toString());
+		try
+		{
+			if (scheduler != null)
+			{
 				scheduler.scheduleJob(job, trigger);
 			}
-		} catch (SchedulerException e) {
+		}
+		catch (SchedulerException e)
+		{
 			Log.add(DEBUG_TAG, "Unable to add job.", e);
 		}
 	}
-
 
 }

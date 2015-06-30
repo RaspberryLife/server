@@ -11,7 +11,8 @@ import util.Log;
 /**
  * Created by Peter Mösenthin.
  */
-public class SerialMessageHandler {
+public class SerialMessageHandler
+{
 
 	public static final String DEBUG_TAG = SerialMessageHandler.class.getSimpleName();
 
@@ -25,24 +26,29 @@ public class SerialMessageHandler {
 	//----------------------------------------------------------------------------------------------
 
 	@Subscribe
-	public void handleSerialMessage(SerialMessageEvent message) {
+	public void handleSerialMessage(SerialMessageEvent message)
+	{
 		Log.add(DEBUG_TAG, "Received message " + message.getRawContent());
 		message.buildModel();
-		if(message.getMessageType() == SerialMessageEvent.Type.SEND){
+		if (message.getMessageType() == SerialMessageEvent.Type.SEND)
+		{
 			switchOnInstruction(message);
 		}
 	}
 
 	/**
 	 * Pass message to IID method
+	 *
 	 * @param message
 	 */
-	private void switchOnInstruction(SerialMessageEvent message){
-		switch (message.getInstructionId()){
+	private void switchOnInstruction(SerialMessageEvent message)
+	{
+		switch (message.getInstructionId())
+		{
 			case IID_DEBUG_BROADCAST:
 				broadcastDebug(message);
 				break;
-			case IID_HEARTBEAT :
+			case IID_HEARTBEAT:
 				readHeartbeat(message);
 				break;
 			case IID_MANAGE_ADDRESS:
@@ -57,9 +63,11 @@ public class SerialMessageHandler {
 
 	/**
 	 * Handle module heartbeat message
+	 *
 	 * @param message
 	 */
-	private void readHeartbeat(SerialMessageEvent message) {
+	private void readHeartbeat(SerialMessageEvent message)
+	{
 		String voltage = "";
 		String preColon = message.getParameters().get(2).substring(0, 1);
 		String postColon = message.getParameters().get(2).substring(2, 3);
@@ -76,14 +84,20 @@ public class SerialMessageHandler {
 
 	/**
 	 * Handle address request by modules
+	 *
 	 * @param message
 	 */
-	private void manageAddress(SerialMessageEvent message) {
-		if(message.getParameters().isEmpty()){ // Module is requesting
+	private void manageAddress(SerialMessageEvent message)
+	{
+		if (message.getParameters().isEmpty())
+		{ // Module is requesting
 			Log.add(DEBUG_TAG, "Module requested address");
-			if(message.getModuleType() == SerialTypeResolver.MODULE_OUTLET){
+			if (message.getModuleType() == SerialTypeResolver.MODULE_OUTLET)
+			{
 				Log.add(DEBUG_TAG, "Requesting module is of type OUTLET. Not generating address");
-			} else {
+			}
+			else
+			{
 				String address = SerialAddress.generate();
 				sendAddressMessage(message, address);
 				Module m = new Module();
@@ -91,23 +105,27 @@ public class SerialMessageHandler {
 				m.setType(SerialTypeResolver.matchDatabaseType(message.getModuleType()));
 				DataBaseService.getInstance().insert(m);
 			}
-		} else { // Module has address
+		}
+		else
+		{ // Module has address
 			String address = message.getParameters().get(0);
 			Log.add(DEBUG_TAG, "Module sent address: " + address);
-			if(DataBaseService.getInstance().moduleExists(address)){
+			if (DataBaseService.getInstance().moduleExists(address))
+			{
 				sendAddressMessage(message, address);
 				//TODO update database entry
 			}
 		}
 	}
 
-
 	/**
-	 *  Send a message containing the generated address to the requesting module
+	 * Send a message containing the generated address to the requesting module
+	 *
 	 * @param message
 	 * @param address
 	 */
-	private void sendAddressMessage(SerialMessageEvent message, String address){
+	private void sendAddressMessage(SerialMessageEvent message, String address)
+	{
 		SerialMessageEvent me = new SerialMessageEvent();
 		me.setModuleType(message.getModuleType());
 		me.setMessageType(SerialMessageEvent.Type.SEND);
@@ -120,15 +138,17 @@ public class SerialMessageHandler {
 
 	/**
 	 * Notify every client with a message from a module
+	 *
 	 * @param message
 	 */
-	private void broadcastDebug(SerialMessageEvent message) {
+	private void broadcastDebug(SerialMessageEvent message)
+	{
 		Log.add(DEBUG_TAG, "Received debug " + message.getRawContent());
 
 		// Client broadcast
 		String bc_message = "Serial connector received message: " + message.getRawContent();
 		NotificationEvent e = new NotificationEvent(
-				NotificationEvent.Type.CLIENT_BROADCAST,bc_message);
+				NotificationEvent.Type.CLIENT_BROADCAST, bc_message);
 		EventBusService.post(e);
 
 		// Module broadcast

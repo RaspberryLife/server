@@ -5,7 +5,8 @@ import data.model.Module;
 /**
  * Created by Peter Mösenthin.
  */
-public class SerialTypeResolver {
+public class SerialTypeResolver
+{
 
 	// Module type int
 	public static final int MODULE_OUTLET = 1;
@@ -22,8 +23,10 @@ public class SerialTypeResolver {
 	 *
 	 * @param message
 	 */
-	public static String matchDatabaseType(int type) {
-		switch (type) {
+	public static String matchDatabaseType(int type)
+	{
+		switch (type)
+		{
 			case SerialTypeResolver.MODULE_OUTLET:
 				return Module.TYPE_OUTLET;
 			case SerialTypeResolver.MODULE_TEMP:

@@ -1,47 +1,45 @@
 package system;
 
-
+import com.google.common.eventbus.Subscribe;
+import data.Config;
+import event.ScheduleEvent;
+import event.SystemEvent;
 import extension.FabLabExtension;
 import scheduling.RepeatInterval;
-import server.serial.SerialTypeResolver;
-import system.service.ClientService;
-import com.google.common.eventbus.Subscribe;
-import event.*;
-import system.service.DataBaseService;
-import system.service.EventBusService;
-import system.service.NotificationService;
-import system.service.ScheduleService;
 import server.RBLSocketServer;
-import server.web.RBLWebSocketServer;
 import server.serial.SerialConnector;
-import data.Config;
+import server.web.RBLWebSocketServer;
+import system.service.*;
 import util.Log;
 import util.NetworkUtil;
-
-import java.util.HashMap;
 
 /**
  * Created by Peter Mösenthin.
  */
-public class SystemManager {
+public class SystemManager
+{
 
 	public static final String DEBUG_TAG = SystemManager.class.getSimpleName();
 
 	private static SystemManager instance = new SystemManager();
 
-	public static void register() {
+	public static void register()
+	{
 		EventBusService.register(instance);
 	}
 
 	/**
 	 * Private constructor for event access only
 	 */
-	private SystemManager() {
+	private SystemManager()
+	{
 	}
 
 	@Subscribe
-	public void handleEvent(SystemEvent e) {
-		switch (e.getType()) {
+	public void handleEvent(SystemEvent e)
+	{
+		switch (e.getType())
+		{
 			case START_SYSTEM:
 				start();
 				break;
@@ -57,7 +55,8 @@ public class SystemManager {
 	/**
 	 * Starts the server
 	 */
-	private void start() {
+	private void start()
+	{
 		Log.printLogHeader();
 		// 1. Load config
 		loadConfig();
@@ -75,11 +74,13 @@ public class SystemManager {
 		initExtensions();
 	}
 
-	private void stop() {
+	private void stop()
+	{
 		Log.add(DEBUG_TAG, "Stopping ... (But not really)");
 	}
 
-	private void restart() {
+	private void restart()
+	{
 		stop();
 		start();
 	}
@@ -91,7 +92,8 @@ public class SystemManager {
 	/**
 	 * Load the server configurtion
 	 */
-	private void loadConfig() {
+	private void loadConfig()
+	{
 		Log.add(DEBUG_TAG, "Loading configuration");
 		Config.readConfig();
 		//Config.dumpConfig();
@@ -100,14 +102,16 @@ public class SystemManager {
 	/**
 	 * Start the eventbus service
 	 */
-	private void initEventBus() {
+	private void initEventBus()
+	{
 		EventBusService.init();
 	}
 
 	/**
 	 * start the socket server
 	 */
-	private void startSocketServer() {
+	private void startSocketServer()
+	{
 		RBLSocketServer.register();
 		EventBusService.post(new SystemEvent(SystemEvent.Type.START_SOCKET_SERVER));
 	}
@@ -115,7 +119,8 @@ public class SystemManager {
 	/**
 	 * Register and start the websocket server in the eventbus
 	 */
-	private void startWebSocketServer() {
+	private void startWebSocketServer()
+	{
 		RBLWebSocketServer.register();
 		EventBusService.post(new SystemEvent(SystemEvent.Type.START_WEB_SOCKET_SERVER));
 	}
@@ -123,7 +128,8 @@ public class SystemManager {
 	/**
 	 * Register the serial connector in the eventbus for module communication
 	 */
-	private void initSerialConnection() {
+	private void initSerialConnection()
+	{
 		SerialConnector.register();
 		EventBusService.post(new SystemEvent(SystemEvent.Type.START_SERIAL_CONNECTION));
 	}
@@ -131,14 +137,16 @@ public class SystemManager {
 	/**
 	 * Initialize the database
 	 */
-	private void initDatabase() {
+	private void initDatabase()
+	{
 		DataBaseService.getInstance().init();
 	}
 
 	/**
 	 * Register the scheduler in the eventbus and load additional jobs
 	 */
-	private void initScheduler() {
+	private void initScheduler()
+	{
 		ScheduleService.register();
 		EventBusService.post(new SystemEvent(SystemEvent.Type.START_SCHEDULER));
 
@@ -153,12 +161,13 @@ public class SystemManager {
 	/**
 	 * Register the NotificationService in the eventbus
 	 */
-	private void initNotificationService() {
+	private void initNotificationService()
+	{
 		NotificationService.register();
 	}
 
-
-	private void initExtensions() {
+	private void initExtensions()
+	{
 		FabLabExtension e = new FabLabExtension();
 		e.init();
 	}

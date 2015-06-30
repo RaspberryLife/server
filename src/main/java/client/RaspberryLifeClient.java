@@ -1,106 +1,119 @@
 package client;
 
-import protobuf.RblProto.*;
+import protobuf.RblProto.RBLMessage;
 
 /**
  * Created by Peter Mösenthin.
- *
+ * <p>
  * Abstract class for Client connections.
  */
-public abstract class RaspberryLifeClient {
+public abstract class RaspberryLifeClient
+{
 
-    private String id = "";
-    public boolean isAccepted = false;
-    private ConnectionListener connectionListener;
+	private String id = "";
+	public boolean isAccepted = false;
+	private ConnectionListener connectionListener;
 
+	//==========================================================================
+	// Getter & Setter
+	//==========================================================================
 
-    //==========================================================================
-    // Getter & Setter
-    //==========================================================================
+	public void setId(String id)
+	{
+		if (this.id == null || this.id.isEmpty())
+		{
+			this.id = id;
+		}
+	}
 
+	public String getId()
+	{
+		return id;
+	}
 
-    public void setId(String id) {
-        if(this.id == null || this.id.isEmpty()) {
-            this.id = id;
-        }
-    }
+	public void setConnectionListener(ConnectionListener listener)
+	{
+		if (listener != null)
+		{
+			this.connectionListener = listener;
+		}
+	}
 
-    public String getId() {
-        return id;
-    }
+	public ConnectionListener getConnectionListener()
+	{
+		return connectionListener;
+	}
 
-    public void setConnectionListener(ConnectionListener listener){
-        if(listener != null) {
-            this.connectionListener = listener;
-        }
-    }
+	//==========================================================================
+	// Connection state handling
+	//==========================================================================
 
-    public ConnectionListener getConnectionListener(){
-        return connectionListener;
-    }
+	/**
+	 * Abstract method to perform operations to close the client connection.
+	 */
+	protected abstract void onConnectionClosed();
 
-    //==========================================================================
-    // Connection state handling
-    //==========================================================================
+	/**
+	 * Abstract method to perform operations if the connection is denied.
+	 * E.g. bad authentication
+	 *
+	 * @param reason
+	 */
+	protected abstract void onConnectionDenied(String reason);
 
-    /**
-     * Abstract method to perform operations to close the client connection.
-     */
-    protected abstract void onConnectionClosed();
+	/**
+	 * Abstract method to perform operations to accept the connection.
+	 */
+	protected abstract void onConnectionAccepted();
 
-    /**
-     * Abstract method to perform operations if the connection is denied.
-     * E.g. bad authentication
-     * @param reason
-     */
-    protected abstract void onConnectionDenied(String reason);
+	/**
+	 * Perform operations to close the client connection.
+	 */
+	public void closeConnection()
+	{
+		if (connectionListener != null)
+		{
+			connectionListener.closed();
+		}
+		onConnectionClosed();
+	}
 
-    /**
-     * Abstract method to perform operations to accept the connection.
-     */
-    protected abstract void onConnectionAccepted();
+	/**
+	 * Perform operations if the connection is denied. E.g. bad authentication
+	 *
+	 * @param reason
+	 */
+	public void denyConnection(String reason)
+	{
+		if (connectionListener != null)
+		{
+			connectionListener.denied(reason);
+		}
+		onConnectionDenied(reason);
+	}
 
+	/**
+	 * Perform operations to accept the connection.
+	 */
+	public void acceptConnection()
+	{
+		isAccepted = true;
+		if (connectionListener != null)
+		{
+			connectionListener.accepted();
+		}
+		onConnectionAccepted();
+	}
 
-    /**
-     * Perform operations to close the client connection.
-     */
-    public void closeConnection(){
-        if(connectionListener != null) {
-            connectionListener.closed();
-        }
-        onConnectionClosed();
-    }
+	//==========================================================================
+	// Message handling
+	//==========================================================================
 
-    /**
-     * Perform operations if the connection is denied. E.g. bad authentication
-     * @param reason
-     */
-    public void denyConnection(String reason){
-        if(connectionListener != null) {
-            connectionListener.denied(reason);
-        }
-        onConnectionDenied(reason);
-    }
-
-    /**
-     * Perform operations to accept the connection.
-     */
-    public void acceptConnection(){
-        isAccepted = true;
-        if(connectionListener != null) {
-            connectionListener.accepted();
-        }
-        onConnectionAccepted();
-    }
-
-    //==========================================================================
-    // Message handling
-    //==========================================================================
-
-    /**
-     * Sends a message over the network.
-     * @param message
-     */
-    public abstract void sendMessage(RBLMessage message);
+	/**
+	 * Sends a message over the network.
+	 *
+	 * @param message
+	 */
+	public abstract void sendMessage(RBLMessage message);
 
 }
