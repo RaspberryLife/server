@@ -24,10 +24,16 @@ public class FabLabExtension implements Extension, Job
 
 	private static HashMap<Integer, Integer> moduleStates = new HashMap<>();
 
+	// 24h
+	public static final int DAILY_CHECK_HOUR = 19;
+	public static final int DAILY_CHECK_MINUTE = 49;
+
 	@Override
 	public void init()
 	{
 		EventBusService.register(this);
+		Log.add(DEBUG_TAG, "Initializing FabLabExtension: Notifying user about open windows daily at "
+				+ DAILY_CHECK_HOUR + ":" + DAILY_CHECK_MINUTE);
 		//startDailyCheckJob();
 		//test();
 	}
@@ -54,8 +60,8 @@ public class FabLabExtension implements Extension, Job
 		ScheduleEvent e = new ScheduleEvent(ScheduleEvent.Type.EXTENSION);
 		e.setJob(this);
 		e.setIdentity("FabLabExtensionJob");
-		e.getInterval().put(RepeatInterval.HOUR, 19);
-		e.getInterval().put(RepeatInterval.MINUTE, 49);
+		e.getInterval().put(RepeatInterval.HOUR, DAILY_CHECK_HOUR);
+		e.getInterval().put(RepeatInterval.MINUTE, DAILY_CHECK_MINUTE);
 		EventBusService.post(e);
 	}
 

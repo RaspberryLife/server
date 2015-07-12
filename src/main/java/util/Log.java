@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -23,7 +22,6 @@ public class Log
 
 	private static PrintWriter printWriter;
 	private static FileWriter fileWriter;
-	private static BufferedWriter bufferedWriter;
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	private static final Date logDate = new Date();
 
@@ -37,8 +35,8 @@ public class Log
 		{
 			e.printStackTrace();
 		}
-		Log.add(DEBUG_TAG, "Writing log to " + fileWriter.toString() + LOG_FILE);
-		bufferedWriter = new BufferedWriter(fileWriter);
+		Log.add(DEBUG_TAG, "Writing log to " + LOG_FILE);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 		printWriter = new PrintWriter(bufferedWriter);
 	}
 
@@ -60,39 +58,12 @@ public class Log
 		return sdf.format(logDate);
 	}
 
-	public static void add(String tag, String message, boolean showInConsole)
-	{
-		if (showInConsole)
-		{
-			add(tag, message);
-		}
-		else
-		{
-			//TODO write only to logfile
-		}
-	}
-
 	public static void add(String tag, String message, Exception e)
 	{
 		message += " Exception: "
 				+ e.getClass().getSimpleName() + " - "
 				+ e.getMessage();
 		add(tag, message);
-	}
-
-	public static void addClean(String message)
-	{
-		print(message);
-	}
-
-	public static void printLogHeader()
-	{
-		Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(System.currentTimeMillis());
-		addClean("########################################");
-		addClean("# RaspberryLife server                 #");
-		addClean("# " + c.getTime().toString() + "         #");
-		addClean("########################################");
 	}
 
 	private static void print(String text)

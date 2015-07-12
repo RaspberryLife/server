@@ -31,14 +31,24 @@ public class NotificationService
 
 	private void sendTestMail(final NotificationEvent e)
 	{
-		Thread notThread = new Thread(new Runnable()
+		final Thread notificationThread = new Thread(getRunnable(e));
+		notificationThread.start();
+	}
+
+	private Runnable getRunnable(final NotificationEvent e){
+		return new Runnable()
 		{
 			public void run()
 			{
+				// E-Mail Receiver
 				String email_address = Config.getConf().getString("email.admin");
+
+				//E-Mail Sender
 				String sendmail_address = Config.getConf().getString("email.sender.email");
 				String sendmail_pw = Config.getConf().getString("email.sender.pw");
+
 				Log.add(DEBUG_TAG, "Sending email to " + email_address);
+
 				Email email = new SimpleEmail();
 				email.setHostName("smtp.gmail.com");
 				email.setSmtpPort(587);
@@ -48,41 +58,45 @@ public class NotificationService
 				email.setSSL(true);
 				email.setSubject(e.getSubject());
 				//email.setSSLOnConnect(true);
+
 				try
 				{
 					email.setFrom("rbltestuser01@gmail.com", "RaspberryLife");
 				}
 				catch (EmailException e1)
 				{
-					e1.printStackTrace();
+					Log.add(DEBUG_TAG, "Could not set sender Information");
 				}
+
 				try
 				{
 					email.setMsg(e.getMessage());
 				}
 				catch (EmailException e1)
 				{
-					e1.printStackTrace();
+					Log.add(DEBUG_TAG, "Could not set E-Mail message");
 				}
+
 				try
 				{
 					email.addTo(email_address);
 				}
 				catch (EmailException e1)
 				{
-					e1.printStackTrace();
+					Log.add(DEBUG_TAG, "Could not set E-Mail receiver");
 				}
+
 				try
 				{
 					email.send();
 				}
 				catch (EmailException e1)
 				{
-					e1.printStackTrace();
+					Log.add(DEBUG_TAG, "Could not send E-Mail");
 				}
+
 			}
-		});
-		notThread.start();
+		};
 	}
 
 }

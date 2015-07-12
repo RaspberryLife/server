@@ -57,7 +57,6 @@ public class SystemManager
 	 */
 	private void start()
 	{
-		Log.printLogHeader();
 		// 1. Load config
 		loadConfig();
 		// 2. Init event bus
