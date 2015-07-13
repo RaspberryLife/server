@@ -30,7 +30,7 @@ public class SerialMessageEvent
 	private int moduleId;
 	private int messageSeq;
 	private int instructionId;
-	private List<String> parameters = new ArrayList<>();
+	private List<String> parameters = new ArrayList<String>();
 
 	public SerialMessageEvent(String content)
 	{

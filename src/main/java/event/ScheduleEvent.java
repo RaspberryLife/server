@@ -21,7 +21,7 @@ public class ScheduleEvent
 
 	private Type type;
 	private String identity;
-	private HashMap<RepeatInterval, Integer> interval = new HashMap<>();
+	private HashMap<RepeatInterval, Integer> interval = new HashMap<RepeatInterval, Integer>();
 	private Job job;
 
 	public ScheduleEvent(Type type)

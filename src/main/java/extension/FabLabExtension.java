@@ -22,7 +22,7 @@ public class FabLabExtension implements Extension, Job
 
 	public static final String DEBUG_TAG = FabLabExtension.class.getSimpleName();
 
-	private static HashMap<Integer, Integer> moduleStates = new HashMap<>();
+	private static HashMap<Integer, Integer> moduleStates = new HashMap<Integer, Integer>();
 
 	// 24h
 	public static final int DAILY_CHECK_HOUR = 19;
