@@ -2,6 +2,9 @@ package rbl;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import rbl.event.SystemEvent;
+import rbl.system.SystemManager;
+import rbl.system.service.EventBusService;
 import rbl.util.Log;
 
 /**
@@ -19,8 +22,8 @@ public class RaspberryLife
 	{
 		SpringApplication.run(RaspberryLife.class, args);
 		Log.init();
-		//SystemManager.register();
-		//EventBusService.post(new SystemEvent(SystemEvent.Type.START_SYSTEM));
+		SystemManager.register();
+		EventBusService.post(new SystemEvent(SystemEvent.Type.START_SYSTEM));
 	}
 
 }
