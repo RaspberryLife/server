@@ -10,12 +10,15 @@ import rbl.event.NotificationEvent;
 import rbl.event.ScheduleEvent;
 import rbl.event.SerialMessageEvent;
 import rbl.extension.Extension;
+import rbl.extension.fablab.response.FabLabStatus;
+import rbl.extension.fablab.response.WindowModule;
 import rbl.scheduling.RepeatInterval;
 import rbl.serial.SerialTypeResolver;
 import rbl.system.service.EventBusService;
 import rbl.util.Log;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Peter Mösenthin.
@@ -25,8 +28,7 @@ public class FabLabExtension implements Extension, Job
 {
 
 	public static final String DEBUG_TAG = FabLabExtension.class.getSimpleName();
-
-	private static HashMap<Integer, Integer> moduleStates = new HashMap<Integer, Integer>();
+	private static List<WindowModule> windowModules = new ArrayList<>();
 
 	// 24h
 	public static final int DAILY_CHECK_HOUR = 19;
@@ -42,9 +44,9 @@ public class FabLabExtension implements Extension, Job
 		test();
 	}
 
-	@RequestMapping("/rbl/extension/fablab/status")
+	@RequestMapping("/rbl/extension/fablab/modules")
 	public FabLabStatus status() {
-		return new FabLabStatus(moduleStates.toString());
+		return new FabLabStatus(windowModules);
 	}
 
 	@Subscribe
@@ -80,35 +82,45 @@ public class FabLabExtension implements Extension, Job
 		if (message.getInstructionId() == 1)
 		{ // Reed status update / new status
 			int param0 = Integer.parseInt(message.getParameters().get(0)); // 0 = open / 1 = closed
-			moduleStates.put(message.getModuleId(), param0);
-			updateDisplay(moduleStates.containsValue(0));
+			windowModules.add(new WindowModule(message.getModuleId(), param0));
+			updateDisplay(isAnyWindowOpen());
 		}
 	}
 
-	private void updateDisplay(boolean open)
-	{
-		if (moduleStates.containsValue(0))
-		{
-			SerialMessageEvent me = new SerialMessageEvent();
-			me.setMessageType(SerialMessageEvent.Type.SEND);
-			me.setModuleType(SerialTypeResolver.MODULE_STATUS_MONITOR);
-			me.setModuleId(1);
-			me.setInstructionId(1);
-			if (open)
+	@RequestMapping("/rbl/extension/fablab/anyWindowOpen")
+	private boolean isAnyWindowOpen(){
+		for(WindowModule wm : windowModules){
+			if(wm.getState() == 0) // 0 = open / 1 = closed
 			{
-				me.getParameters().add("2");
+				return true;
 			}
-			else
-			{
-				me.getParameters().add("1");
-			}
-			EventBusService.post(me);
 		}
+		return false;
+	}
+
+	private void updateDisplay(boolean windowOpen)
+	{
+		SerialMessageEvent me = new SerialMessageEvent();
+		me.setMessageType(SerialMessageEvent.Type.SEND);
+		me.setModuleType(SerialTypeResolver.MODULE_STATUS_MONITOR);
+		me.setModuleId(1);
+		me.setInstructionId(1);
+		if (windowOpen)
+		{
+			//min 1 Fenster auf
+			me.getParameters().add("2");
+		}
+		else
+		{
+			//kein Fenster auf
+			me.getParameters().add("1");
+		}
+		EventBusService.post(me);
 	}
 
 	private String getDisplayText()
 	{
-		return "Fensterstatus: " + moduleStates.toString();
+		return "Fensterstatus: " + windowModules.toString();
 	}
 
 	@Override
