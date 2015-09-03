@@ -30,16 +30,16 @@
 
         <!-- List of mapping files -->
 
-        <mapping class="data.model.Logic"/>
-        <mapping class="data.model.Actuator"/>
-        <mapping class="data.model.ExecutionFrequency"/>
-        <mapping class="data.model.Condition"/>
-        <mapping class="data.model.Module"/>
-        <mapping class="data.model.LogicReceiver"/>
-        <mapping class="data.model.LogicInitiator"/>
-        <mapping class="data.model.Instruction"/>
-        <mapping class="data.model.NotificationMessage"/>
-        <mapping class="data.model.User"/>
+        <mapping class="rbl.data.model.Logic"/>
+        <mapping class="rbl.data.model.Actuator"/>
+        <mapping class="rbl.data.model.ExecutionFrequency"/>
+        <mapping class="rbl.data.model.Condition"/>
+        <mapping class="rbl.data.model.Module"/>
+        <mapping class="rbl.data.model.LogicReceiver"/>
+        <mapping class="rbl.data.model.LogicInitiator"/>
+        <mapping class="rbl.data.model.Instruction"/>
+        <mapping class="rbl.data.model.NotificationMessage"/>
+        <mapping class="rbl.data.model.User"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -1,34 +1,51 @@
 apply plugin: 'java'
 apply plugin: 'application'
-mainClassName = 'RaspberryLife'
-// Build source with 'gradle distZip'
+apply plugin: 'idea'
 
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
+mainClassName = 'rbl.RaspberryLife'
 
-version = '1.1.7'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version = '1.1.8'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
     compile(
-            'org.scream3r:jssc:2.8.0', // Serial connection
-            'mysql:mysql-connector-java:5.1.33', // MySQL conenction
-            'org.webbitserver:webbit:0.4.15', // Websocket server
-            'com.google.protobuf:protobuf-java:2.6.1', // Protocol buffers
-            'com.google.guava:guava:18.0', // Guava libs (Event bus, etc)
-            'org.quartz-scheduler:quartz:2.2.1', // Scheduler
-            'log4j:log4j:1.2.17',
-            'commons-configuration:commons-configuration:1.7', // Configuration
-            'org.apache.commons:commons-email:1.1', // E-Mail
-            //Hibernate
-            'org.hibernate:hibernate-entitymanager:4.3.7.Final',
-            'org.hibernate:hibernate-core:4.3.7.Final',
-            'org.slf4j:slf4j-api:1.7.10',
-            'org.slf4j:slf4j-simple:1.7.10',
-            'org.hibernate:hibernate-annotations:3.5.6-Final',
+        'org.scream3r:jssc:2.8.0', // Serial connection
+        'mysql:mysql-connector-java:5.1.33', // MySQL conenction
+        'com.google.guava:guava:18.0', // Guava libs (Event bus, etc)
+        'org.quartz-scheduler:quartz:2.2.1', // Scheduler
+        'log4j:log4j:1.2.17',
+        'commons-configuration:commons-configuration:1.7', // Configuration
+        'org.apache.commons:commons-email:1.1', // E-Mail
+
+        //Hibernate
+        'org.hibernate:hibernate-entitymanager:4.3.7.Final',
+        'org.hibernate:hibernate-core:4.3.7.Final',
+        'org.hibernate:hibernate-annotations:3.5.6-Final',
+
+        //'org.slf4j:slf4j-api:1.7.10',
+        //'org.slf4j:slf4j-simple:1.7.10',
+
+        //Spring boot for rest service
+        'org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE'
     )
+    testCompile("junit:junit")
 }
