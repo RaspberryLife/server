@@ -101,7 +101,7 @@ public class SerialMessageHandler
 				String address = SerialAddress.generate();
 				sendAddressMessage(message, address);
 				Module m = new Module();
-				m.setSerial_address(address);
+				m.setSerialAddress(address);
 				m.setType(SerialTypeResolver.matchDatabaseType(message.getModuleType()));
 				DataBaseService.getInstance().insert(m);
 			}

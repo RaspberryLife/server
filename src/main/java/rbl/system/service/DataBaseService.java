@@ -1,12 +1,17 @@
 package rbl.system.service;
 
-import rbl.data.MySQLConnection;
-import rbl.data.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import rbl.data.MySQLConnection;
+import rbl.data.model.*;
+import rbl.data.restresponse.DatabaseInsertResponse;
 import rbl.util.Log;
 
 import java.util.List;
@@ -16,6 +21,7 @@ import java.util.List;
  * <p>
  * The DataBaseHelper is basically a wrapper to access the MySQL Database.
  */
+@RestController
 public class DataBaseService
 {
 	public final String DEBUG_TAG = DataBaseService.class.getSimpleName();
@@ -62,7 +68,7 @@ public class DataBaseService
 		Log.add(DEBUG_TAG, "Starting...");
 		if (dataBaseAvailable())
 		{
-			if (dataBaseSetUp())
+			if (checkIfDatabaseExistsAndCreateIfNot())
 			{
 				initSession(CreationMode.UPDATE);
 			}
@@ -84,7 +90,7 @@ public class DataBaseService
 	/**
 	 * Checks if a database exists and creates one if not.
 	 */
-	private boolean dataBaseSetUp()
+	private boolean checkIfDatabaseExistsAndCreateIfNot()
 	{
 		if (databaseConnection == null)
 		{
@@ -103,7 +109,7 @@ public class DataBaseService
 	}
 
 	/**
-	 * Checks if the serial can connect to a database.
+	 * Checks if the databaseservice can connect to a database.
 	 */
 	private boolean dataBaseAvailable()
 	{
@@ -125,6 +131,47 @@ public class DataBaseService
 			databaseConnection.close();
 		}
 	}
+
+	//----------------------------------------------------------------------------------------------
+	//                                      Rest
+	//----------------------------------------------------------------------------------------------
+
+	@RequestMapping(value = "/rbl/system/database/available", method = RequestMethod.GET)
+	public boolean rest_databaseAvailable(){
+		return dataBaseAvailable();
+	}
+
+	@RequestMapping(value = "/rbl/system/database/adminusers", method = RequestMethod.GET)
+	public List<User> rest_getUsers(){
+		if(dataBaseAvailable()){
+			String query = "from User where role=admin";
+			Session session = sessionFactory.openSession();
+			List adminList = session.createQuery(query).list();
+			session.close();
+			return adminList;
+		}else {
+			return null;
+		}
+	}
+
+	@RequestMapping(value = "/rbl/system/database/user", method = RequestMethod.POST)
+	public DatabaseInsertResponse rest_insertUser(
+			@RequestParam(value = "name") String name,
+			@RequestParam(value = "email") String email,
+			@RequestParam(value = "role", required = false) String role,
+			@RequestParam(value = "password", required = false) String password)
+	{
+		User u = new User();
+		u.setName(name);
+		u.setEmail(email);
+		u.setRole(role);
+		u.setPassword(password);
+
+		boolean insertOK = insert(u);
+
+		return new DatabaseInsertResponse(insertOK, "");
+	}
+
 
 	//----------------------------------------------------------------------------------------------
 	//                                      Hibernate
@@ -200,7 +247,7 @@ public class DataBaseService
 	 *
 	 * @param object
 	 */
-	public void insert(Object object)
+	public boolean insert(Object object)
 	{
 		try
 		{
@@ -211,10 +258,12 @@ public class DataBaseService
 
 			session.getTransaction().commit();
 			session.close();
+			return true;
 		}
 		catch (Exception e)
 		{
 			Log.add(DEBUG_TAG, "Could not write data");
+			return false;
 		}
 	}
 
@@ -259,7 +308,7 @@ public class DataBaseService
 	 * @param id
 	 * @return
 	 */
-	public List readId(DataType type, int id)
+	public List readById(DataType type, int id)
 	{
 		String query = "from ";
 		switch (type)
@@ -289,7 +338,7 @@ public class DataBaseService
 		List l = readAll(DataBaseService.DataType.MODULE);
 		for (Object o : l)
 		{
-			if (((Module) o).getSerial_address().equalsIgnoreCase(serialAddress))
+			if (((Module) o).getSerialAddress().equalsIgnoreCase(serialAddress))
 			{
 				return true;
 			}
@@ -303,8 +352,10 @@ public class DataBaseService
 
 	public void runTest()
 	{
-		writeTestLogic();
-		readLogic();
+		if(dataBaseAvailable()){
+			writeTestLogic();
+			readLogic();
+		}
 	}
 
 	public void writeTestLogic()
@@ -323,39 +374,39 @@ public class DataBaseService
 
 		Logic l1 = new Logic();
 		l1.setName("test_logic_666");
-		l1.setExecution_requirement(Logic.EXECUTION_REQUIREMENT_ALL);
+		l1.setExecutionRequirement(Logic.EXECUTION_REQUIREMENT_ALL);
 
 		ExecutionFrequency ef = new ExecutionFrequency();
 		ef.setType(ExecutionFrequency.TYPE_DAILY);
 		ef.setHour(17);
 		ef.setMinute(40);
 
-		l1.setExecution_frequency(ef);
+		l1.setExecutionFrequency(ef);
 
 		LogicInitiator li = new LogicInitiator();
 		li.setActuator(a);
 		Condition co = new Condition();
-		co.setField_id(1);
-		co.setThreshold_over(24);
+		co.setFieldId(1);
+		co.setThresholdOver(24);
 		li.setCondition(co);
 
 		LogicInitiator li1 = new LogicInitiator();
 		li1.setActuator(b);
 		Condition co1 = new Condition();
-		co1.setField_id(2);
-		co1.setThreshold_under(10);
+		co1.setFieldId(2);
+		co1.setThresholdUnder(10);
 		li1.setCondition(co1);
 
 		LogicReceiver lr = new LogicReceiver();
 		lr.setActuator(c);
 		Instruction i = new Instruction();
-		i.setField_id(12);
+		i.setFieldId(12);
 		i.setParameters("hallo du wurst");
 		lr.setInstruction(i);
 
-		l1.getLogic_initiator().add(li);
-		l1.getLogic_initiator().add(li1);
-		l1.getLogic_receiver().add(lr);
+		l1.getLogicInitiators().add(li);
+		l1.getLogicInitiators().add(li1);
+		l1.getLogicReceivers().add(lr);
 
 		insert(l1);
 	}
@@ -376,34 +427,34 @@ public class DataBaseService
 			String init = "[";
 			String rec = "[";
 
-			if (l.getLogic_initiator() != null && l.getLogic_initiator().size() > 0)
+			if (l.getLogicInitiators() != null && l.getLogicInitiators().size() > 0)
 			{
-				for (LogicInitiator lii : l.getLogic_initiator())
+				for (LogicInitiator lii : l.getLogicInitiators())
 				{
 					init += "(";
 					init += " Actuator: " + lii.getActuator().getName();
-					init += " Condition (fid): " + lii.getCondition().getField_id();
+					init += " Condition (fid): " + lii.getCondition().getFieldId();
 					init += ")";
 				}
 			}
 
 			init += "]";
-			if (l.getLogic_receiver() != null && l.getLogic_receiver().size() > 0)
+			if (l.getLogicReceivers() != null && l.getLogicReceivers().size() > 0)
 			{
-				for (LogicReceiver lrr : l.getLogic_receiver())
+				for (LogicReceiver lrr : l.getLogicReceivers())
 				{
 					rec += "(";
 					rec += " Actuator: " + lrr.getActuator().getName();
-					rec += " Instruction (fid)" + lrr.getInstruction().getField_id();
+					rec += " Instruction (fid)" + lrr.getInstruction().getFieldId();
 					rec += ")";
 				}
 			}
 			rec += "]";
 
 			String freq = "[";
-			freq += " Type: " + l.getExecution_frequency().getType();
-			freq += " Hour: " + l.getExecution_frequency().getHour();
-			freq += " Minute: " + l.getExecution_frequency().getMinute();
+			freq += " Type: " + l.getExecutionFrequency().getType();
+			freq += " Hour: " + l.getExecutionFrequency().getHour();
+			freq += " Minute: " + l.getExecutionFrequency().getMinute();
 			freq += "]";
 
 			Log.add(DEBUG_TAG,

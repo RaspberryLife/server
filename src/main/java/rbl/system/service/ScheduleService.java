@@ -143,7 +143,7 @@ public class ScheduleService
 						.usingJobData("id", lc.getLogic_id())
 						.build();
 				ScheduleBuilder sb = null;
-				switch (lc.getExecution_frequency().getType())
+				switch (lc.getExecutionFrequency().getType())
 				{
 					case ExecutionFrequency.TYPE_IMMEDIATELY:
 						sb = simpleSchedule()

@@ -13,7 +13,7 @@ public class LogicInitiator
 	@Id
 	@GeneratedValue
 	@Column(name = "logic_initiator_id")
-	private int logic_initiator_id;
+	private int logicInitiatorId;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
@@ -30,14 +30,14 @@ public class LogicInitiator
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
 
-	public int getLogic_initiator_id()
+	public int getLogicInitiatorId()
 	{
-		return logic_initiator_id;
+		return logicInitiatorId;
 	}
 
-	public void setLogic_initiator_id(int logic_initiator_id)
+	public void setLogicInitiatorId(int logicInitiatorId)
 	{
-		this.logic_initiator_id = logic_initiator_id;
+		this.logicInitiatorId = logicInitiatorId;
 	}
 
 	public Logic getLogic()

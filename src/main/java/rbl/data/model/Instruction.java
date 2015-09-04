@@ -13,35 +13,35 @@ public class Instruction
 	@Id
 	@GeneratedValue
 	@Column(name = "instruction_id")
-	private int instruction_id;
+	private int instructionId;
 
 	@Column(name = "field_id")
-	private int field_id;
+	private int fieldId;
 
 	@Column(name = "instruction_parameters")
 	private String parameters;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
-	private LogicInitiator logic_receiver;
+	private LogicInitiator logicInitiator;
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
 
-	public int getInstruction_id()
+	public int getInstructionId()
 	{
-		return instruction_id;
+		return instructionId;
 	}
 
-	public int getField_id()
+	public int getFieldId()
 	{
-		return field_id;
+		return fieldId;
 	}
 
-	public void setField_id(int field_id)
+	public void setFieldId(int fieldId)
 	{
-		this.field_id = field_id;
+		this.fieldId = fieldId;
 	}
 
 	public String getParameters()
@@ -54,14 +54,14 @@ public class Instruction
 		this.parameters = parameters;
 	}
 
-	public LogicInitiator getLogic_receiver()
+	public LogicInitiator getLogicInitiator()
 	{
-		return logic_receiver;
+		return logicInitiator;
 	}
 
-	public void setLogic_receiver(LogicInitiator logic_receiver)
+	public void setLogicInitiator(LogicInitiator logicInitiator)
 	{
-		this.logic_receiver = logic_receiver;
+		this.logicInitiator = logicInitiator;
 	}
 
 }

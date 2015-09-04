@@ -27,10 +27,10 @@ public class Actuator
 	private String type;
 
 	@OneToMany(mappedBy = "actuator", cascade = CascadeType.ALL)
-	private Set<LogicInitiator> logic_initiator;
+	private Set<LogicInitiator> logicInitiators;
 
 	@OneToMany(mappedBy = "actuator", cascade = CascadeType.ALL)
-	private Set<LogicReceiver> logic_receiver;
+	private Set<LogicReceiver> logicReceivers;
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
@@ -61,23 +61,23 @@ public class Actuator
 		this.type = type;
 	}
 
-	public Set<LogicInitiator> getLogic_initiator()
+	public Set<LogicInitiator> getLogicInitiators()
 	{
-		return logic_initiator;
+		return logicInitiators;
 	}
 
-	public void setLogic_initiator(Set<LogicInitiator> logic_initiator)
+	public void setLogicInitiators(Set<LogicInitiator> logicInitiators)
 	{
-		this.logic_initiator = logic_initiator;
+		this.logicInitiators = logicInitiators;
 	}
 
-	public Set<LogicReceiver> getLogic_receiver()
+	public Set<LogicReceiver> getLogicReceivers()
 	{
-		return logic_receiver;
+		return logicReceivers;
 	}
 
-	public void setLogic_receiver(Set<LogicReceiver> logic_receiver)
+	public void setLogicReceivers(Set<LogicReceiver> logicReceivers)
 	{
-		this.logic_receiver = logic_receiver;
+		this.logicReceivers = logicReceivers;
 	}
 }

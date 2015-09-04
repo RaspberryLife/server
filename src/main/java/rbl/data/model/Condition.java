@@ -13,56 +13,56 @@ public class Condition
 	@Id
 	@GeneratedValue
 	@Column(name = "condition_id")
-	private int condition_id;
+	private int conditionId;
 
 	@Column(name = "field_id")
-	private int field_id;
+	private int fieldId;
 
 	@Column(name = "threshold_over")
-	private int threshold_over;
+	private int thresholdOver;
 
 	@Column(name = "threshold_under")
-	private int threshold_under;
+	private int thresholdUnder;
 
 	@Column(name = "state")
 	private boolean state;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
-	private LogicInitiator logic_initiator;
+	private LogicInitiator logicInitiator;
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
 
-	public int getCondition_id()
+	public int getConditionId()
 	{
-		return condition_id;
+		return conditionId;
 	}
 
-	public int getField_id()
+	public int getFieldId()
 	{
-		return field_id;
+		return fieldId;
 	}
 
-	public void setField_id(int field_id)
+	public void setFieldId(int fieldId)
 	{
-		this.field_id = field_id;
+		this.fieldId = fieldId;
 	}
 
-	public int getThreshold_over()
+	public int getThresholdOver()
 	{
-		return threshold_over;
+		return thresholdOver;
 	}
 
-	public void setThreshold_over(int threshold_over)
+	public void setThresholdOver(int thresholdOver)
 	{
-		this.threshold_over = threshold_over;
+		this.thresholdOver = thresholdOver;
 	}
 
-	public int getThreshold_under()
+	public int getThresholdUnder()
 	{
-		return threshold_under;
+		return thresholdUnder;
 	}
 
 	public boolean isState()
@@ -75,18 +75,18 @@ public class Condition
 		this.state = state;
 	}
 
-	public void setThreshold_under(int threshold_under)
+	public void setThresholdUnder(int thresholdUnder)
 	{
-		this.threshold_under = threshold_under;
+		this.thresholdUnder = thresholdUnder;
 	}
 
-	public LogicInitiator getLogic_initiator()
+	public LogicInitiator getLogicInitiator()
 	{
-		return logic_initiator;
+		return logicInitiator;
 	}
 
-	public void setLogic_initiator(LogicInitiator logic_initiator)
+	public void setLogicInitiator(LogicInitiator logicInitiator)
 	{
-		this.logic_initiator = logic_initiator;
+		this.logicInitiator = logicInitiator;
 	}
 }

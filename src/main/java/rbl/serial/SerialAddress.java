@@ -29,7 +29,7 @@ public class SerialAddress
 				boolean available = false;
 				for (Object o : l)
 				{
-					available = ((Module) o).getSerial_address().equalsIgnoreCase(currentTry);
+					available = ((Module) o).getSerialAddress().equalsIgnoreCase(currentTry);
 				}
 				if (available)
 				{

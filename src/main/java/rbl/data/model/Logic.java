@@ -26,16 +26,16 @@ public class Logic
 	private String name;
 
 	@OneToOne(mappedBy = "logic", cascade = CascadeType.ALL)
-	private ExecutionFrequency execution_frequency;
+	private ExecutionFrequency executionFrequency;
 
 	@Column(name = "logic_execution_requirement")
-	private String execution_requirement;
+	private String executionRequirement;
 
 	@OneToMany(mappedBy = "logic", cascade = CascadeType.ALL)
-	private List<LogicInitiator> logic_initiator = new ArrayList<LogicInitiator>();
+	private List<LogicInitiator> logicInitiators = new ArrayList<LogicInitiator>();
 
 	@OneToMany(mappedBy = "logic", cascade = CascadeType.ALL)
-	private List<LogicReceiver> logic_receiver = new ArrayList<LogicReceiver>();
+	private List<LogicReceiver> logicReceivers = new ArrayList<LogicReceiver>();
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
@@ -61,43 +61,43 @@ public class Logic
 		this.name = name;
 	}
 
-	public ExecutionFrequency getExecution_frequency()
+	public ExecutionFrequency getExecutionFrequency()
 	{
-		return execution_frequency;
+		return executionFrequency;
 	}
 
-	public void setExecution_frequency(ExecutionFrequency execution_frequency)
+	public void setExecutionFrequency(ExecutionFrequency executionFrequency)
 	{
-		this.execution_frequency = execution_frequency;
+		this.executionFrequency = executionFrequency;
 	}
 
-	public String getExecution_requirement()
+	public String getExecutionRequirement()
 	{
-		return execution_requirement;
+		return executionRequirement;
 	}
 
-	public void setExecution_requirement(String execution_requirement)
+	public void setExecutionRequirement(String executionRequirement)
 	{
-		this.execution_requirement = execution_requirement;
+		this.executionRequirement = executionRequirement;
 	}
 
-	public List<LogicInitiator> getLogic_initiator()
+	public List<LogicInitiator> getLogicInitiators()
 	{
-		return logic_initiator;
+		return logicInitiators;
 	}
 
-	public void setLogic_initiator(List<LogicInitiator> logic_initiator)
+	public void setLogicInitiators(List<LogicInitiator> logicInitiators)
 	{
-		this.logic_initiator = logic_initiator;
+		this.logicInitiators = logicInitiators;
 	}
 
-	public List<LogicReceiver> getLogic_receiver()
+	public List<LogicReceiver> getLogicReceivers()
 	{
-		return logic_receiver;
+		return logicReceivers;
 	}
 
-	public void setLogic_receiver(List<LogicReceiver> logic_receiver)
+	public void setLogicReceivers(List<LogicReceiver> logicReceivers)
 	{
-		this.logic_receiver = logic_receiver;
+		this.logicReceivers = logicReceivers;
 	}
 }

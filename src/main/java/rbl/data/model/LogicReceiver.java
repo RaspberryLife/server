@@ -13,7 +13,7 @@ public class LogicReceiver
 	@Id
 	@GeneratedValue
 	@Column(name = "logic_receiver_id")
-	private int logic_receiver_id;
+	private int logicReceiverId;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
@@ -30,14 +30,14 @@ public class LogicReceiver
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
 
-	public int getLogic_receiver_id()
+	public int getLogicReceiverId()
 	{
-		return logic_receiver_id;
+		return logicReceiverId;
 	}
 
-	public void setLogic_receiver_id(int logic_receiver_id)
+	public void setLogicReceiverId(int logicReceiverId)
 	{
-		this.logic_receiver_id = logic_receiver_id;
+		this.logicReceiverId = logicReceiverId;
 	}
 
 	public Logic getLogic()

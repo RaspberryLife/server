@@ -20,7 +20,7 @@ public class ExecutionFrequency
 	@Id
 	@GeneratedValue
 	@Column(name = "execution_frequency_id")
-	private int execution_frequency_id;
+	private int executionFrequencyId;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
@@ -45,9 +45,9 @@ public class ExecutionFrequency
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
 
-	public int getExecution_frequency_id()
+	public int getExecutionFrequencyId()
 	{
-		return execution_frequency_id;
+		return executionFrequencyId;
 	}
 
 	public Logic getLogic()

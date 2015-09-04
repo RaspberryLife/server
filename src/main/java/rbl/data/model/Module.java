@@ -28,7 +28,7 @@ public class Module
 	private String type;
 
 	@Column(name = "serial_address")
-	private String serial_address;
+	private String serialAddress;
 
 	@Column(name = "name")
 	private String name;
@@ -52,14 +52,14 @@ public class Module
 		this.type = type;
 	}
 
-	public String getSerial_address()
+	public String getSerialAddress()
 	{
-		return serial_address;
+		return serialAddress;
 	}
 
-	public void setSerial_address(String serial_address)
+	public void setSerialAddress(String serialAddress)
 	{
-		this.serial_address = serial_address;
+		this.serialAddress = serialAddress;
 	}
 
 	public String getName()
