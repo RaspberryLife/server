@@ -35,6 +35,7 @@ dependencies {
         'log4j:log4j:1.2.17',
         'commons-configuration:commons-configuration:1.7', // Configuration
         'org.apache.commons:commons-email:1.1', // E-Mail
+        'com.google.code.gson:gson:2.3.1',
 
         //Hibernate
         'org.hibernate:hibernate-entitymanager:4.3.7.Final',

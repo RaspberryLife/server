@@ -1,5 +1,6 @@
 package rbl.system.service;
 
+import com.google.gson.Gson;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import rbl.data.MySQLConnection;
 import rbl.data.model.*;
-import rbl.data.restresponse.DatabaseInsertResponse;
 import rbl.util.Log;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Peter Mösenthin.
  * <p>
- * The DataBaseHelper is basically a wrapper to access the MySQL Database.
+ * The DataBaseService is basically a wrapper to access the Database.
  */
 @RestController
 public class DataBaseService
@@ -137,12 +137,12 @@ public class DataBaseService
 	//----------------------------------------------------------------------------------------------
 
 	@RequestMapping(value = "/rbl/system/database/available", method = RequestMethod.GET)
-	public boolean rest_databaseAvailable(){
+	public boolean databaseAvailable(){
 		return dataBaseAvailable();
 	}
 
 	@RequestMapping(value = "/rbl/system/database/adminusers", method = RequestMethod.GET)
-	public List<User> rest_getUsers(){
+	public List getAdminUsers(){
 		if(dataBaseAvailable()){
 			String query = "from User where role=admin";
 			Session session = sessionFactory.openSession();
@@ -154,8 +154,30 @@ public class DataBaseService
 		}
 	}
 
+	@RequestMapping(value = "/rbl/system/database/logiclist", method = RequestMethod.GET)
+	public List getLogicList(){
+		if(dataBaseAvailable()){
+			String query = "from Logic";
+			Session session = sessionFactory.openSession();
+			List list = session.createQuery(query).list();
+			session.close();
+			return list;
+		}else {
+			return null;
+		}
+	}
+
+	@RequestMapping(value = "/rbl/system/database/user2")
+	public void writeUser2(
+			@RequestParam(value = "user", required = false) String userJSON)
+	{
+		Gson gson = new Gson();
+		User user = gson.fromJson(userJSON, User.class);
+		write(user);
+	}
+
 	@RequestMapping(value = "/rbl/system/database/user", method = RequestMethod.POST)
-	public DatabaseInsertResponse rest_insertUser(
+	public void writeUser(
 			@RequestParam(value = "name") String name,
 			@RequestParam(value = "email") String email,
 			@RequestParam(value = "role", required = false) String role,
@@ -167,9 +189,7 @@ public class DataBaseService
 		u.setRole(role);
 		u.setPassword(password);
 
-		boolean insertOK = insert(u);
-
-		return new DatabaseInsertResponse(insertOK, "");
+		write(u);
 	}
 
 
@@ -247,7 +267,7 @@ public class DataBaseService
 	 *
 	 * @param object
 	 */
-	public boolean insert(Object object)
+	public boolean write(Object object)
 	{
 		try
 		{
@@ -408,7 +428,7 @@ public class DataBaseService
 		l1.getLogicInitiators().add(li1);
 		l1.getLogicReceivers().add(lr);
 
-		insert(l1);
+		write(l1);
 	}
 
 	public void readLogic()

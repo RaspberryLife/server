@@ -103,7 +103,7 @@ public class SerialMessageHandler
 				Module m = new Module();
 				m.setSerialAddress(address);
 				m.setType(SerialTypeResolver.matchDatabaseType(message.getModuleType()));
-				DataBaseService.getInstance().insert(m);
+				DataBaseService.getInstance().write(m);
 			}
 		}
 		else

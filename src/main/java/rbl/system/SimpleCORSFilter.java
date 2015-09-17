@@ -1,4 +1,4 @@
-package rbl.extension.fablab;
+package rbl.system;
 
 import org.springframework.stereotype.Component;
 
