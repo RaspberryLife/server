@@ -1,8 +1,7 @@
-package rbl.data.model;
+package rbl.data.model.logic;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Peter Mösenthin.
@@ -13,9 +12,9 @@ import java.util.List;
 public class Logic
 {
 
-	public static final String EXECUTION_REQUIREMENT_SINGLE = "SINGLE";
-	public static final String EXECUTION_REQUIREMENT_MAJORITY = "MAJORITY";
-	public static final String EXECUTION_REQUIREMENT_ALL = "ALL";
+	public static final String EXECUTION_REQUIREMENT_SINGLE = "single";
+	public static final String EXECUTION_REQUIREMENT_MAJORITY = "majority";
+	public static final String EXECUTION_REQUIREMENT_ALL = "all";
 
 	@Id
 	@GeneratedValue
@@ -32,14 +31,28 @@ public class Logic
 	private String executionRequirement;
 
 	@OneToMany(mappedBy = "logic", cascade = CascadeType.ALL)
-	private List<LogicInitiator> logicInitiators = new ArrayList<LogicInitiator>();
+	private Set<Trigger> triggers;
 
 	@OneToMany(mappedBy = "logic", cascade = CascadeType.ALL)
-	private List<LogicReceiver> logicReceivers = new ArrayList<LogicReceiver>();
+	private Set<Action> actions;
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
+
+	public Logic()
+	{
+	}
+
+	public Logic(String name, ExecutionFrequency executionFrequency, String executionRequirement,
+			Set<Trigger> triggers, Set<Action> actions)
+	{
+		this.name = name;
+		this.executionFrequency = executionFrequency;
+		this.executionRequirement = executionRequirement;
+		this.triggers = triggers;
+		this.actions = actions;
+	}
 
 	public int getLogic_id()
 	{
@@ -81,23 +94,35 @@ public class Logic
 		this.executionRequirement = executionRequirement;
 	}
 
-	public List<LogicInitiator> getLogicInitiators()
+	public Set<Trigger> getTriggers()
 	{
-		return logicInitiators;
+		return triggers;
 	}
 
-	public void setLogicInitiators(List<LogicInitiator> logicInitiators)
+	public void setTriggers(Set<Trigger> triggers)
 	{
-		this.logicInitiators = logicInitiators;
+		this.triggers = triggers;
 	}
 
-	public List<LogicReceiver> getLogicReceivers()
+	public Set<Action> getActions()
 	{
-		return logicReceivers;
+		return actions;
 	}
 
-	public void setLogicReceivers(List<LogicReceiver> logicReceivers)
+	public void setActions(Set<Action> actions)
 	{
-		this.logicReceivers = logicReceivers;
+		this.actions = actions;
+	}
+
+	@Override public String toString()
+	{
+		return "Logic{" +
+				"logic_id=" + logic_id +
+				", name='" + name + '\'' +
+				", executionFrequency=" + executionFrequency +
+				", executionRequirement='" + executionRequirement + '\'' +
+				", triggers=" + triggers +
+				", actions=" + actions +
+				'}';
 	}
 }

@@ -41,7 +41,7 @@ public class FabLabExtension implements Extension, Job
 		Log.add(DEBUG_TAG, "Initializing FabLabExtension: Notifying user about open windows daily at "
 				+ DAILY_CHECK_HOUR + ":" + DAILY_CHECK_MINUTE);
 		startDailyCheckJob();
-		test();
+		//test();
 	}
 
 	@RequestMapping("/rbl/extension/fablab/modules")

@@ -1,4 +1,4 @@
-package rbl.data.model;
+package rbl.data.model.logic;
 
 import javax.persistence.*;
 
@@ -26,10 +26,6 @@ public class Condition
 
 	@Column(name = "state")
 	private boolean state;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
-	private LogicInitiator logicInitiator;
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
@@ -78,15 +74,5 @@ public class Condition
 	public void setThresholdUnder(int thresholdUnder)
 	{
 		this.thresholdUnder = thresholdUnder;
-	}
-
-	public LogicInitiator getLogicInitiator()
-	{
-		return logicInitiator;
-	}
-
-	public void setLogicInitiator(LogicInitiator logicInitiator)
-	{
-		this.logicInitiator = logicInitiator;
 	}
 }

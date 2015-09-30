@@ -1,8 +1,8 @@
 package rbl.system.service;
 
 import com.google.common.eventbus.Subscribe;
-import rbl.data.model.ExecutionFrequency;
-import rbl.data.model.Logic;
+import rbl.data.model.logic.ExecutionFrequency;
+import rbl.data.model.logic.Logic;
 import rbl.event.ScheduleEvent;
 import rbl.event.SystemEvent;
 import org.quartz.*;

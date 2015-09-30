@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import rbl.data.MySQLConnection;
-import rbl.data.model.*;
+import rbl.data.model.Module;
+import rbl.data.model.User;
+import rbl.data.model.logic.Logic;
 import rbl.util.Log;
 
 import java.util.List;
@@ -136,11 +138,19 @@ public class DataBaseService
 	//                                      Rest
 	//----------------------------------------------------------------------------------------------
 
+	/**
+	 * Check if a database is availiable to the server
+	 * @return
+	 */
 	@RequestMapping(value = "/rbl/system/database/available", method = RequestMethod.GET)
 	public boolean databaseAvailable(){
 		return dataBaseAvailable();
 	}
 
+	/**
+	 * Request a list of Admin users
+	 * @return
+	 */
 	@RequestMapping(value = "/rbl/system/database/adminusers", method = RequestMethod.GET)
 	public List getAdminUsers(){
 		if(dataBaseAvailable()){
@@ -154,6 +164,61 @@ public class DataBaseService
 		}
 	}
 
+	//get list of all actuators
+	public List<Module> getActuators () {
+		return null;
+	}
+
+	@RequestMapping(value = "/rbl/system/database/logic", method = RequestMethod.POST)
+	public void addLogic(
+			@RequestParam(value = "logic") String logic){
+		Log.add(DEBUG_TAG, "Writing new logic");
+		Log.add(DEBUG_TAG, logic);
+
+		Gson gson = new Gson();
+
+		Logic l = gson.fromJson(logic, Logic.class);
+
+		write(l);
+
+		Log.add(DEBUG_TAG, l.toString());
+//
+//		Logic l = new Logic();
+//
+//		l.setName(name);
+//
+//		l.setExecutionRequirement(executionRequirement);
+//
+//		ExecutionFrequency e = new ExecutionFrequency();
+//		e.setType(ExecutionFrequency.TYPE_DAILY);
+//		e.setHour(17);
+//		e.setMinute(50);
+//		l.setExecutionFrequency(e);
+//
+//		Set<Action> actionSet = new HashSet<>();
+//		actionSet.add(new Action(0,"notify","du hund!"));
+//		l.setActions(actionSet);
+//
+//		Set<Trigger> triggerSet = new HashSet<>();
+//
+//		Module m = new Module();
+//		m.setName("window1");
+//		m.setSerialAddress("2840923842");
+//		m.setType(Module.TYPE_PIR);
+//
+//		Condition c = new Condition();
+//		c.setFieldId(3);
+//		c.setThresholdOver(5);
+//
+//		triggerSet.add(new Trigger(m,c));
+//		l.setTriggers(triggerSet);
+
+	}
+
+	/**
+	 * Retrieve a list of all logics
+	 * @return
+	 */
 	@RequestMapping(value = "/rbl/system/database/logiclist", method = RequestMethod.GET)
 	public List getLogicList(){
 		if(dataBaseAvailable()){
@@ -167,15 +232,13 @@ public class DataBaseService
 		}
 	}
 
-	@RequestMapping(value = "/rbl/system/database/user2")
-	public void writeUser2(
-			@RequestParam(value = "user", required = false) String userJSON)
-	{
-		Gson gson = new Gson();
-		User user = gson.fromJson(userJSON, User.class);
-		write(user);
-	}
-
+	/**
+	 * Add a user with the specified params
+	 * @param name
+	 * @param email
+	 * @param role
+	 * @param password
+	 */
 	@RequestMapping(value = "/rbl/system/database/user", method = RequestMethod.POST)
 	public void writeUser(
 			@RequestParam(value = "name") String name,
@@ -269,20 +332,27 @@ public class DataBaseService
 	 */
 	public boolean write(Object object)
 	{
-		try
+		if(dataBaseAvailable())
 		{
-			Session session = sessionFactory.openSession();
-			session.beginTransaction();
+			initSession(CreationMode.UPDATE);
+			try
+			{
+				Session session = sessionFactory.openSession();
+				session.beginTransaction();
 
-			session.save(object);
+				session.save(object);
 
-			session.getTransaction().commit();
-			session.close();
-			return true;
-		}
-		catch (Exception e)
-		{
-			Log.add(DEBUG_TAG, "Could not write data");
+				session.getTransaction().commit();
+				session.close();
+				return true;
+			}
+			catch (Exception e)
+			{
+				Log.add(DEBUG_TAG, "Could not write data");
+				e.printStackTrace();
+				return false;
+			}
+		} else {
 			return false;
 		}
 	}
@@ -364,130 +434,6 @@ public class DataBaseService
 			}
 		}
 		return false;
-	}
-
-	//----------------------------------------------------------------------------------------------
-	//                                      TEST
-	//----------------------------------------------------------------------------------------------
-
-	public void runTest()
-	{
-		if(dataBaseAvailable()){
-			writeTestLogic();
-			readLogic();
-		}
-	}
-
-	public void writeTestLogic()
-	{
-		Actuator a = new Actuator();
-		a.setType(Actuator.TYPE_CLIENT);
-		a.setName("peters_nexus5");
-
-		Actuator b = new Actuator();
-		b.setType(Actuator.TYPE_MODULE);
-		b.setName("Heizung-Wohnzimmer");
-
-		Actuator c = new Actuator();
-		c.setType(Actuator.TYPE_SYSTEM);
-		c.setName("server_1.1.2");
-
-		Logic l1 = new Logic();
-		l1.setName("test_logic_666");
-		l1.setExecutionRequirement(Logic.EXECUTION_REQUIREMENT_ALL);
-
-		ExecutionFrequency ef = new ExecutionFrequency();
-		ef.setType(ExecutionFrequency.TYPE_DAILY);
-		ef.setHour(17);
-		ef.setMinute(40);
-
-		l1.setExecutionFrequency(ef);
-
-		LogicInitiator li = new LogicInitiator();
-		li.setActuator(a);
-		Condition co = new Condition();
-		co.setFieldId(1);
-		co.setThresholdOver(24);
-		li.setCondition(co);
-
-		LogicInitiator li1 = new LogicInitiator();
-		li1.setActuator(b);
-		Condition co1 = new Condition();
-		co1.setFieldId(2);
-		co1.setThresholdUnder(10);
-		li1.setCondition(co1);
-
-		LogicReceiver lr = new LogicReceiver();
-		lr.setActuator(c);
-		Instruction i = new Instruction();
-		i.setFieldId(12);
-		i.setParameters("hallo du wurst");
-		lr.setInstruction(i);
-
-		l1.getLogicInitiators().add(li);
-		l1.getLogicInitiators().add(li1);
-		l1.getLogicReceivers().add(lr);
-
-		write(l1);
-	}
-
-	public void readLogic()
-	{
-		for (Object o : readAll(DataType.LOGIC))
-		{
-			Logic l = (Logic) o;
-			printLogic(l);
-		}
-	}
-
-	public void printLogic(Logic l)
-	{
-		try
-		{
-			String init = "[";
-			String rec = "[";
-
-			if (l.getLogicInitiators() != null && l.getLogicInitiators().size() > 0)
-			{
-				for (LogicInitiator lii : l.getLogicInitiators())
-				{
-					init += "(";
-					init += " Actuator: " + lii.getActuator().getName();
-					init += " Condition (fid): " + lii.getCondition().getFieldId();
-					init += ")";
-				}
-			}
-
-			init += "]";
-			if (l.getLogicReceivers() != null && l.getLogicReceivers().size() > 0)
-			{
-				for (LogicReceiver lrr : l.getLogicReceivers())
-				{
-					rec += "(";
-					rec += " Actuator: " + lrr.getActuator().getName();
-					rec += " Instruction (fid)" + lrr.getInstruction().getFieldId();
-					rec += ")";
-				}
-			}
-			rec += "]";
-
-			String freq = "[";
-			freq += " Type: " + l.getExecutionFrequency().getType();
-			freq += " Hour: " + l.getExecutionFrequency().getHour();
-			freq += " Minute: " + l.getExecutionFrequency().getMinute();
-			freq += "]";
-
-			Log.add(DEBUG_TAG,
-					"Found logic: " + l.getName()
-							+ " Id: " + l.getLogic_id()
-							+ " Frequency: " + freq
-							+ " Initiator: " + init
-							+ " Receiver: " + rec);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 }

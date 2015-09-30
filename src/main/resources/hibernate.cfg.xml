@@ -8,7 +8,7 @@
         <!-- Database setup -->
         <property name="hibernate.connection.url">jdbc:mysql://localhost/rbl_data</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.password">penis</property>
 
         <!-- Automatically create database structure on session init -->
         <property name="hibernate.hbm2ddl.auto">create</property>
@@ -30,16 +30,13 @@
 
         <!-- List of mapping files -->
 
-        <mapping class="rbl.data.model.Logic"/>
-        <mapping class="rbl.data.model.Actuator"/>
-        <mapping class="rbl.data.model.ExecutionFrequency"/>
-        <mapping class="rbl.data.model.Condition"/>
+        <mapping class="rbl.data.model.logic.Logic"/>
+        <mapping class="rbl.data.model.logic.ExecutionFrequency"/>
+        <mapping class="rbl.data.model.logic.Condition"/>
         <mapping class="rbl.data.model.Module"/>
-        <mapping class="rbl.data.model.LogicReceiver"/>
-        <mapping class="rbl.data.model.LogicInitiator"/>
-        <mapping class="rbl.data.model.Instruction"/>
-        <mapping class="rbl.data.model.NotificationMessage"/>
         <mapping class="rbl.data.model.User"/>
+        <mapping class="rbl.data.model.logic.Trigger"/>
+        <mapping class="rbl.data.model.logic.Action"/>
 
     </session-factory>
 </hibernate-configuration>

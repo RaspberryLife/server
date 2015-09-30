@@ -10,7 +10,7 @@
         <port>3306</port>
         <db>rbl_data</db>
         <user>root</user>
-        <password>YOUR DATABASE PASSWORD</password>
+        <password>penis</password>
     </database>
     <socket>
         <java_port>6666</java_port>

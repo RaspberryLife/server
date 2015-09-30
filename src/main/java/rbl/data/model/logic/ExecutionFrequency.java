@@ -1,4 +1,4 @@
-package rbl.data.model;
+package rbl.data.model.logic;
 
 import javax.persistence.*;
 
@@ -10,24 +10,24 @@ import javax.persistence.*;
 public class ExecutionFrequency
 {
 
-	public static final int TYPE_IMMEDIATELY = 0;
-	public static final int TYPE_MINUTELY = 1;
-	public static final int TYPE_HOURLY = 2;
-	public static final int TYPE_DAILY = 3;
-	public static final int TYPE_WEEKLY = 4;
-	public static final int TYPE_MONTHLY = 5;
+	public static final String TYPE_IMMEDIATELY = "immediately";
+	public static final String TYPE_MINUTELY = "minutely";
+	public static final String TYPE_HOURLY = "hourly";
+	public static final String TYPE_DAILY = "daily";
+	public static final String TYPE_WEEKLY = "weekly";
+	public static final String TYPE_MONTHLY = "monthly";
 
 	@Id
 	@GeneratedValue
 	@Column(name = "execution_frequency_id")
 	private int executionFrequencyId;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private Logic logic;
 
 	@Column(name = "type")
-	private int type;
+	private String type;
 
 	@Column(name = "minute")
 	private int minute;
@@ -50,22 +50,12 @@ public class ExecutionFrequency
 		return executionFrequencyId;
 	}
 
-	public Logic getLogic()
-	{
-		return logic;
-	}
-
-	public void setLogic(Logic logic)
-	{
-		this.logic = logic;
-	}
-
-	public int getType()
+	public String getType()
 	{
 		return type;
 	}
 
-	public void setType(int type)
+	public void setType(String type)
 	{
 		this.type = type;
 	}
@@ -108,5 +98,17 @@ public class ExecutionFrequency
 	public void setWeek(int week)
 	{
 		this.week = week;
+	}
+
+	@Override public String toString()
+	{
+		return "ExecutionFrequency{" +
+				"executionFrequencyId=" + executionFrequencyId +
+				", type='" + type + '\'' +
+				", minute=" + minute +
+				", hour=" + hour +
+				", day=" + day +
+				", week=" + week +
+				'}';
 	}
 }

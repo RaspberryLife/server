@@ -1,6 +1,9 @@
 package rbl.data.model;
 
+import rbl.data.model.logic.Trigger;
+
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by Peter Mösenthin.
@@ -70,5 +73,15 @@ public class Module
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	@Override public String toString()
+	{
+		return "Module{" +
+				"id=" + id +
+				", type='" + type + '\'' +
+				", serialAddress='" + serialAddress + '\'' +
+				", name='" + name + '\'' +
+				'}';
 	}
 }
