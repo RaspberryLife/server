@@ -30,17 +30,6 @@ public class DatabaseRestController
 	}
 
 	/**
-	 * Check if a database is availiable to the server
-	 *
-	 * @return
-	 */
-	@RequestMapping(value = "/rbl/system/database/available", method = RequestMethod.GET)
-	public boolean databaseAvailable()
-	{
-		return db.dataBaseAvailable();
-	}
-
-	/**
 	 * Request a list of Admin users
 	 *
 	 * @return
@@ -119,7 +108,7 @@ public class DatabaseRestController
 	 * @param password
 	 */
 	@RequestMapping(value = "/rbl/system/database/user", method = RequestMethod.POST)
-	public void writeUser(
+	public User writeUser(
 			@RequestParam(value = "name") String name,
 			@RequestParam(value = "email") String email,
 			@RequestParam(value = "role", required = false) String role,
@@ -132,6 +121,7 @@ public class DatabaseRestController
 		u.setPassword(password);
 
 		db.write(u);
+		return u;
 	}
 
 	@RequestMapping(value = "/rbl/system/database/updatemodule", method = RequestMethod.POST)

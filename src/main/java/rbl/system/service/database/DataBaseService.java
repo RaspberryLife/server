@@ -84,10 +84,14 @@ public class DataBaseService
 		Module m1 = new Module();
 		m1.setSerialAddress(SerialAddress.generate());
 		m1.setType(Module.TYPE_REED);
+		m1.setName("fenster1");
+		m1.setRoom("fablab");
 
 		Module m2 = new Module();
 		m2.setSerialAddress(SerialAddress.generate());
 		m2.setType(Module.TYPE_REED);
+		m2.setName("fenster2");
+		m2.setRoom("fablab");
 
 		write(m1);
 		write(m2);

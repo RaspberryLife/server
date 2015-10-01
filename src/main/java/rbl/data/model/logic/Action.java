@@ -29,6 +29,10 @@ public class Action
 	@Column(name = "message")
 	private String message;
 
+	public Action()
+	{
+	}
+
 	public Action(int user_id, String type, String message)
 	{
 		this.user_id = user_id;

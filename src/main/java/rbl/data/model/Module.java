@@ -39,6 +39,9 @@ public class Module
 	@Column(name = "room")
 	private String room;
 
+	@Column(name = "state")
+	private String state;
+
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
@@ -101,5 +104,15 @@ public class Module
 	public void setRoom(String room)
 	{
 		this.room = room;
+	}
+
+	public String getState()
+	{
+		return state;
+	}
+
+	public void setState(String state)
+	{
+		this.state = state;
 	}
 }

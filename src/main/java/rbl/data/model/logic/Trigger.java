@@ -28,6 +28,10 @@ public class Trigger
 	@PrimaryKeyJoinColumn
 	private Condition condition;
 
+	public Trigger()
+	{
+	}
+
 	public Trigger(Logic logic, Module module, Condition condition)
 	{
 		this.logic = logic;

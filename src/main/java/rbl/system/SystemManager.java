@@ -2,6 +2,9 @@ package rbl.system;
 
 import com.google.common.eventbus.Subscribe;
 import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import rbl.data.Config;
 import rbl.event.ScheduleEvent;
 import rbl.event.SystemEvent;
@@ -17,6 +20,7 @@ import rbl.util.NetworkUtil;
 /**
  * Created by Peter Mösenthin.
  */
+@RestController
 public class SystemManager
 {
 
@@ -181,6 +185,13 @@ public class SystemManager
 	{
 		//FabLabExtension e = new FabLabExtension();
 		//e.init();
+	}
+
+
+	@RequestMapping(value = "/rbl/system/available", method = RequestMethod.GET)
+	public boolean available()
+	{
+		return true;
 	}
 
 }
