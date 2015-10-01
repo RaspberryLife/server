@@ -100,4 +100,6 @@ $RECYCLE.BIN/
 # KDE directory preferences
 .directory
 
+server-*
 rbl_server.log
+
