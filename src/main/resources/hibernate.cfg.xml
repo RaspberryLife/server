@@ -27,8 +27,11 @@
 
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
+		<property name="format_sql">true</property>
+		<property name="use_sql_comments">true</property>
 
-        <!-- List of mapping files -->
+
+		<!-- List of mapping files -->
 
         <mapping class="rbl.data.model.logic.Logic"/>
         <mapping class="rbl.data.model.logic.ExecutionFrequency"/>

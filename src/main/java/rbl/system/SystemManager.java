@@ -1,10 +1,10 @@
 package rbl.system;
 
 import com.google.common.eventbus.Subscribe;
+import org.apache.log4j.Logger;
 import rbl.data.Config;
 import rbl.event.ScheduleEvent;
 import rbl.event.SystemEvent;
-import rbl.extension.fablab.FabLabExtension;
 import rbl.scheduling.RepeatInterval;
 import rbl.serial.SerialConnector;
 import rbl.system.service.DataBaseService;
@@ -21,6 +21,7 @@ public class SystemManager
 {
 
 	public static final String DEBUG_TAG = SystemManager.class.getSimpleName();
+	static Logger log = Logger.getLogger(SystemManager.class.getName());
 
 	private static SystemManager instance = new SystemManager();
 
@@ -93,6 +94,37 @@ public class SystemManager
 	{
 		Log.add(DEBUG_TAG, "Loading configuration");
 		Config.readConfig();
+//		ClassLoader classLoader = Config.class.getClassLoader();
+//		// or use:
+//		// ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+//		// depending on what's appropriate in your case.
+//		Enumeration<URL> roots = null;
+//		try
+//		{
+//			roots = classLoader.getResources("log4j.properties");
+//		}
+//		catch (IOException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		while (roots.hasMoreElements()) {
+//			final URL url = roots.nextElement();
+//			Log.add(DEBUG_TAG, url.toString());
+//			log.info(url.toString());
+//			try {
+//				PropertyConfigurator.configure(url.toString());
+//			} catch (Exception e){
+//				e.printStackTrace();
+//			}
+//		}
+//		try {
+//			Log.add(DEBUG_TAG, getClass().getClassLoader().getResource("resources/log4j.properties").toString());
+//			File file = new File(getClass().getClassLoader().getResource("log4j.properties").getFile());
+//			PropertyConfigurator.configure(file.getAbsolutePath());
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+		//Log.add(DEBUG_TAG, );
 		//Config.dumpConfig();
 	}
 
@@ -147,8 +179,8 @@ public class SystemManager
 
 	private void initExtensions()
 	{
-		FabLabExtension e = new FabLabExtension();
-		e.init();
+		//FabLabExtension e = new FabLabExtension();
+		//e.init();
 	}
 
 }

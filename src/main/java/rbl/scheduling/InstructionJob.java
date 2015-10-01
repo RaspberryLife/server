@@ -19,11 +19,6 @@ public class InstructionJob implements Job
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException
 	{
-		/*
-        int id = (Integer) context.get("id");
-        Logic l  = (Logic) DataBaseService.getInstance().readId(DataBaseService.DataType.LOGIC, id);
-        LogicInitiator li = l.getLogic_initiator().get(0);
-        LogicReceiver lr = l.getLogic_receiver().get(0);
-        */
+		// Get action id, load it from database and execute it
 	}
 }

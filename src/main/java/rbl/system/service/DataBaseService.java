@@ -14,6 +14,7 @@ import rbl.data.MySQLConnection;
 import rbl.data.model.Module;
 import rbl.data.model.User;
 import rbl.data.model.logic.Logic;
+import rbl.serial.SerialAddress;
 import rbl.util.Log;
 
 import java.util.List;
@@ -77,12 +78,28 @@ public class DataBaseService
 			else
 			{
 				initSession(CreationMode.CREATE);
+				writeDemoObjects();
 			}
 		}
 		else
 		{
 			Log.add(DEBUG_TAG, "No database connection available");
 		}
+	}
+
+	private void writeDemoObjects()
+	{
+		Module m1 = new Module();
+		m1.setSerialAddress(SerialAddress.generate());
+		m1.setType(Module.TYPE_REED);
+
+		Module m2 = new Module();
+		m2.setSerialAddress(SerialAddress.generate());
+		m2.setType(Module.TYPE_REED);
+
+		write(m1);
+		write(m2);
+
 	}
 
 	//----------------------------------------------------------------------------------------------
@@ -164,11 +181,6 @@ public class DataBaseService
 		}
 	}
 
-	//get list of all actuators
-	public List<Module> getActuators () {
-		return null;
-	}
-
 	@RequestMapping(value = "/rbl/system/database/logic", method = RequestMethod.POST)
 	public void addLogic(
 			@RequestParam(value = "logic") String logic){
@@ -212,7 +224,6 @@ public class DataBaseService
 //
 //		triggerSet.add(new Trigger(m,c));
 //		l.setTriggers(triggerSet);
-
 	}
 
 	/**
@@ -253,6 +264,27 @@ public class DataBaseService
 		u.setPassword(password);
 
 		write(u);
+	}
+
+
+	@RequestMapping(value = "/rbl/system/database/updatemodule", method = RequestMethod.POST)
+	public void updateModule(
+			@RequestParam(value = "id") int id,
+			@RequestParam(value = "name") String name,
+			@RequestParam(value = "room") String room)
+	{
+		Module module = (Module) readById(DataType.MODULE, id);
+		if (module != null){
+			module.setName(name);
+			module.setRoom(room);
+			write(module);
+		}
+	}
+
+	@RequestMapping(value = "/rbl/system/database/modules", method = RequestMethod.GET)
+	public List getModules()
+	{
+		return readAll(DataType.MODULE);
 	}
 
 
@@ -332,9 +364,7 @@ public class DataBaseService
 	 */
 	public boolean write(Object object)
 	{
-		if(dataBaseAvailable())
-		{
-			initSession(CreationMode.UPDATE);
+			//initSession(CreationMode.UPDATE);
 			try
 			{
 				Session session = sessionFactory.openSession();
@@ -352,9 +382,6 @@ public class DataBaseService
 				e.printStackTrace();
 				return false;
 			}
-		} else {
-			return false;
-		}
 	}
 
 	//----------------------------------------------------------------------------------------------
@@ -369,6 +396,7 @@ public class DataBaseService
 	 */
 	public List readAll(DataType type)
 	{
+		//initSession(CreationMode.UPDATE);
 		String query = null;
 		switch (type)
 		{
@@ -398,8 +426,9 @@ public class DataBaseService
 	 * @param id
 	 * @return
 	 */
-	public List readById(DataType type, int id)
+	public Object readById(DataType type, int id)
 	{
+		//initSession(CreationMode.UPDATE);
 		String query = "from ";
 		switch (type)
 		{
@@ -418,9 +447,9 @@ public class DataBaseService
 		}
 		query += " where id=" + id;
 		Session session = sessionFactory.openSession();
-		List list = session.createQuery(query).list();
+		Object o  = session.createQuery(query).uniqueResult();
 		session.close();
-		return list;
+		return o;
 	}
 
 	public boolean moduleExists(String serialAddress)

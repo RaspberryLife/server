@@ -36,13 +36,31 @@ public class Module
 	@Column(name = "name")
 	private String name;
 
+	@Column(name = "room")
+	private String room;
+
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
 
+	public Module()
+	{
+	}
+
+	public Module(String name, String room)
+	{
+		this.name = name;
+		this.room = room;
+	}
+
 	public int getId()
 	{
 		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 
 	public String getType()
@@ -75,13 +93,13 @@ public class Module
 		this.name = name;
 	}
 
-	@Override public String toString()
+	public String getRoom()
 	{
-		return "Module{" +
-				"id=" + id +
-				", type='" + type + '\'' +
-				", serialAddress='" + serialAddress + '\'' +
-				", name='" + name + '\'' +
-				'}';
+		return room;
+	}
+
+	public void setRoom(String room)
+	{
+		this.room = room;
 	}
 }
