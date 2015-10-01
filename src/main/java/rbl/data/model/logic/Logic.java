@@ -1,6 +1,8 @@
 package rbl.data.model.logic;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,25 +18,14 @@ public class Logic
 	public static final String EXECUTION_REQUIREMENT_MAJORITY = "majority";
 	public static final String EXECUTION_REQUIREMENT_ALL = "all";
 
-	@Id
-	@GeneratedValue
-	@Column(name = "logic_id")
 	private int logic_id;
 
-	@Column(name = "logic_name")
+
 	private String name;
 
-	@OneToOne(mappedBy = "logic", cascade = CascadeType.ALL)
 	private ExecutionFrequency executionFrequency;
 
-	@Column(name = "logic_execution_requirement")
 	private String executionRequirement;
-
-	@OneToMany(mappedBy = "logic", cascade = CascadeType.ALL)
-	private Set<Trigger> triggers;
-
-	@OneToMany(mappedBy = "logic", cascade = CascadeType.ALL)
-	private Set<Action> actions;
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
@@ -44,16 +35,9 @@ public class Logic
 	{
 	}
 
-	public Logic(String name, ExecutionFrequency executionFrequency, String executionRequirement,
-			Set<Trigger> triggers, Set<Action> actions)
-	{
-		this.name = name;
-		this.executionFrequency = executionFrequency;
-		this.executionRequirement = executionRequirement;
-		this.triggers = triggers;
-		this.actions = actions;
-	}
-
+	@Id
+	@GeneratedValue
+	@Column(name = "logic_id")
 	public int getLogic_id()
 	{
 		return logic_id;
@@ -64,6 +48,7 @@ public class Logic
 		this.logic_id = logic_id;
 	}
 
+	@Column(name = "logic_name")
 	public String getName()
 	{
 		return name;
@@ -74,6 +59,7 @@ public class Logic
 		this.name = name;
 	}
 
+	@OneToOne(mappedBy = "logic", cascade = CascadeType.ALL)
 	public ExecutionFrequency getExecutionFrequency()
 	{
 		return executionFrequency;
@@ -84,6 +70,7 @@ public class Logic
 		this.executionFrequency = executionFrequency;
 	}
 
+	@Column(name = "logic_execution_requirement")
 	public String getExecutionRequirement()
 	{
 		return executionRequirement;
@@ -94,25 +81,6 @@ public class Logic
 		this.executionRequirement = executionRequirement;
 	}
 
-	public Set<Trigger> getTriggers()
-	{
-		return triggers;
-	}
-
-	public void setTriggers(Set<Trigger> triggers)
-	{
-		this.triggers = triggers;
-	}
-
-	public Set<Action> getActions()
-	{
-		return actions;
-	}
-
-	public void setActions(Set<Action> actions)
-	{
-		this.actions = actions;
-	}
 
 	@Override public String toString()
 	{
@@ -121,8 +89,6 @@ public class Logic
 				", name='" + name + '\'' +
 				", executionFrequency=" + executionFrequency +
 				", executionRequirement='" + executionRequirement + '\'' +
-				", triggers=" + triggers +
-				", actions=" + actions +
 				'}';
 	}
 }

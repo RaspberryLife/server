@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import rbl.data.model.Module;
 import rbl.data.model.User;
 import rbl.data.model.logic.Logic;
-import rbl.data.model.logic.Trigger;
 import rbl.util.Log;
 
 import java.util.List;
@@ -50,9 +49,9 @@ public class DatabaseRestController
 		Gson gson = new Gson();
 
 		Logic l = gson.fromJson(logic, Logic.class);
-		for(Trigger t : l.getTriggers()){
-			t.setModule((Module) db.getById(DataBaseService.DataType.MODULE, t.getModule().getId()));
-		}
+//		for(Trigger t : l.getTriggers()){
+//			t.setModule((Module) db.getById(DataBaseService.DataType.MODULE, t.getModule().getId()));
+//		}
 		db.write(l);
 
 		//Log.add(DEBUG_TAG, l.toString());
@@ -93,10 +92,13 @@ public class DatabaseRestController
 	 *
 	 * @return
 	 */
-	@RequestMapping(value = "/rbl/system/database/logiclist", method = RequestMethod.GET)
+	@RequestMapping(value = "/rbl/system/database/logics", method = RequestMethod.GET)
 	public List getLogicList()
 	{
-		return db.getList(DataBaseService.DataType.LOGIC);
+
+		List logics = db.getList(DataBaseService.DataType.LOGIC);
+		Log.add(DEBUG_TAG, logics.toString());
+		return logics;
 	}
 
 	/**

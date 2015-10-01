@@ -38,7 +38,6 @@ public class DataBaseService
 	{
 		LOGIC,
 		USER,
-		MESSAGE,
 		MODULE,
 	}
 
@@ -158,9 +157,6 @@ public class DataBaseService
 			case USER:
 				query = "from User";
 				break;
-			case MESSAGE:
-				query = "from NotificationMessage";
-				break;
 			case MODULE:
 				query = "from Module";
 				break;
@@ -188,9 +184,6 @@ public class DataBaseService
 				break;
 			case USER:
 				query += "User";
-				break;
-			case MESSAGE:
-				query += "NotificationMessage";
 				break;
 			case MODULE:
 				query += "Module";
