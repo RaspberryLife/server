@@ -7,7 +7,7 @@ import rbl.event.ScheduleEvent;
 import rbl.event.SystemEvent;
 import rbl.scheduling.RepeatInterval;
 import rbl.serial.SerialConnector;
-import rbl.system.service.DataBaseService;
+import rbl.system.service.database.DataBaseService;
 import rbl.system.service.EventBusService;
 import rbl.system.service.NotificationService;
 import rbl.system.service.ScheduleService;

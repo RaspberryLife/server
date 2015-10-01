@@ -4,7 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import rbl.data.model.Module;
 import rbl.event.NotificationEvent;
 import rbl.event.SerialMessageEvent;
-import rbl.system.service.DataBaseService;
+import rbl.system.service.database.DataBaseService;
 import rbl.system.service.EventBusService;
 import rbl.util.Log;
 
@@ -131,7 +131,7 @@ public class SerialMessageHandler
 		me.setMessageType(SerialMessageEvent.Type.SEND);
 		me.setModuleId(message.getModuleId());
 		me.setInstructionId(IID_MANAGE_ADDRESS);
-		//List modules = DataBaseService.getInstance().readAll(DataBaseService.DataType.MODULE);
+		//List modules = DataBaseService.getInstance().getList(DataBaseService.DataType.MODULE);
 		me.getParameters().add(address);
 		EventBusService.post(me);
 	}

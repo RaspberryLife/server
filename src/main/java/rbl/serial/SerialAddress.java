@@ -1,7 +1,7 @@
 package rbl.serial;
 
 import rbl.data.model.Module;
-import rbl.system.service.DataBaseService;
+import rbl.system.service.database.DataBaseService;
 import rbl.util.Log;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class SerialAddress
 	 */
 	public static String generate()
 	{
-		List knownModules = DataBaseService.getInstance().readAll(DataBaseService.DataType.MODULE);
+		List knownModules = DataBaseService.getInstance().getList(DataBaseService.DataType.MODULE);
 
 		// No module present yet
 		if(knownModules == null || knownModules.size() == 0){

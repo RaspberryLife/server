@@ -11,6 +11,7 @@ import rbl.scheduling.InstructionJob;
 import rbl.scheduling.RepeatInterval;
 import rbl.scheduling.ResourceLogJob;
 import rbl.scheduling.TimeLogJob;
+import rbl.system.service.database.DataBaseService;
 import rbl.util.Log;
 
 import java.util.List;
@@ -133,7 +134,7 @@ public class ScheduleService
 		try
 		{
 			scheduler.clear();
-			List l = DataBaseService.getInstance().readAll(DataBaseService.DataType.LOGIC);
+			List l = DataBaseService.getInstance().getList(DataBaseService.DataType.LOGIC);
 			for (Object o : l)
 			{
 				Logic lc = (Logic) o;
