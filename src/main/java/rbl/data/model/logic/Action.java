@@ -26,9 +26,11 @@ public class Action
 	private String actionMessage;
 
 
-	@ManyToOne
-	@JoinColumn(name="logicId",insertable=false, updatable=false)
-	private Logic actionLogic = new Logic();
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="logicId",
+			insertable=false, updatable=false,
+			nullable=false)
+	private Logic actionLogic;
 
 	public Logic getActionLogic()
 	{

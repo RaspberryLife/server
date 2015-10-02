@@ -1,12 +1,21 @@
 package rbl.system.service.database;
 
+import com.google.gson.Gson;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.json.simple.parser.JSONParser;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import rbl.data.MySQLConnection;
 import rbl.data.model.Module;
+import rbl.data.model.logic.Action;
+import rbl.data.model.logic.Logic;
+import rbl.data.model.logic.Trigger;
 import rbl.serial.SerialAddress;
 import rbl.util.Log;
 
@@ -17,6 +26,7 @@ import java.util.List;
  * <p>
  * The DataBaseService is basically a wrapper to access the Database.
  */
+@RestController
 public class DataBaseService
 {
 	public final String DEBUG_TAG = DataBaseService.class.getSimpleName();
@@ -95,6 +105,9 @@ public class DataBaseService
 		write(m1);
 		write(m2);
 
+		Logic l = new Logic();
+
+
 	}
 
 	//----------------------------------------------------------------------------------------------
@@ -106,8 +119,9 @@ public class DataBaseService
 	 *
 	 * @param object
 	 */
-	public boolean write(Object object)
+	public void write(Object object)
 	{
+		Integer id = null;
 		try
 		{
 			Session session = getSessionFactory().openSession();
@@ -118,13 +132,11 @@ public class DataBaseService
 			session.getTransaction().commit();
 			session.flush();
 			session.close();
-			return true;
 		}
 		catch (Exception e)
 		{
 			Log.add(DEBUG_TAG, "Could not write data");
 			e.printStackTrace();
-			return false;
 		}
 	}
 
@@ -132,6 +144,40 @@ public class DataBaseService
 	//                                      READ
 	//----------------------------------------------------------------------------------------------
 
+
+	@RequestMapping(value = "/rbl/system/database/logic", method = RequestMethod.POST)
+	public void addLogic(
+			@RequestParam(value = "logic") String logic)
+	{
+		Gson gson = new Gson();
+		Logic gsonLogic = gson.fromJson(logic, Logic.class);
+
+		Integer id = null;
+		try
+		{
+			Session session = getSessionFactory().openSession();
+			session.beginTransaction();
+
+			id = (Integer) session.save(gsonLogic);
+
+			session.getTransaction().commit();
+			session.flush();
+			session.close();
+		}
+		catch (Exception e)
+		{
+			Log.add(DEBUG_TAG, "Could not write data");
+			e.printStackTrace();
+		}
+		gsonLogic.setLogicId(id);
+
+
+		write(gsonLogic);
+
+		//db.write(gsonLogic);
+
+		Log.add(DEBUG_TAG, "write logic: " + gsonLogic.toString());
+	}
 
 	public List getAdminList(){
 		String query = "from User where userRole=admin";

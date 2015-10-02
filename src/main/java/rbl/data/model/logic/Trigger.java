@@ -29,9 +29,11 @@ public class Trigger
 	@Column(name = "state")
 	private boolean triggerState;
 
-	@ManyToOne
-	@JoinColumn(name="logicId",insertable=false, updatable=false)
-	private Logic triggerLogic = new Logic();
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="logicId",
+			insertable=false, updatable=false,
+			nullable=false)
+	private Logic triggerLogic;
 
 	public Trigger()
 	{

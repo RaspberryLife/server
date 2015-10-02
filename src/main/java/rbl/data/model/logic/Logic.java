@@ -25,9 +25,9 @@ public class Logic
 	public static final String EXECUTION_FREQUENCY_MONTHLY = "monthly";
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "logicId")
-	private int logicId;
+	private int logicId = 0;
 
 	@Column(name = "logicName")
 	private String logicName;

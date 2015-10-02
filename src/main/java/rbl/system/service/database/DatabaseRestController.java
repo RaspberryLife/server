@@ -1,7 +1,5 @@
 package rbl.system.service.database;
 
-import com.google.gson.Gson;
-import org.json.simple.parser.JSONParser;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,57 +38,9 @@ public class DatabaseRestController
 		return db.getAdminList();
 	}
 
-	@RequestMapping(value = "/rbl/system/database/logic", method = RequestMethod.POST)
-	public void addLogic(
-			@RequestParam(value = "logic") String logic)
-	{
-		JSONParser parser = new JSONParser();
-
-		Gson gson = new Gson();
-		Logic gsonLogic = gson.fromJson(logic, Logic.class);
-
-		Log.add(DEBUG_TAG, gsonLogic.getLogicTriggers().getClass().getSimpleName());
-
-//		JsonElement logicElement = new JsonParser().parse(logic);
-//		JsonObject logicobject = logicElement.getAsJsonObject();
-//		JsonArray triggers = logicobject.getAsJsonArray("logicTriggers");
-//
-//		for(JsonElement j : triggers){
-//			Log.add(DEBUG_TAG, "add trigger");
-//			JsonObject t = j.getAsJsonObject();
-//			Trigger trigger = new Trigger();
-//			trigger.setTriggerModuleId(t.get("triggerModuleId").getAsInt());
-//			trigger.setTriggerFieldId(t.get("triggerFieldId").getAsInt());
-//			trigger.setTriggerState(t.get("triggerState").getAsBoolean());
-//			Log.add(DEBUG_TAG, trigger.toString());
-//			gsonLogic.getLogicTriggers().add(trigger);
-//		}
 
 
-//		try
-//		{
-//			Object o = parser.parse(logic);
-//			JSONObject jsonLogic = (JSONObject)o;
-//			Log.add(DEBUG_TAG, jsonLogic.toString());
-//			Log.add(DEBUG_TAG,jsonLogic.get("logicTriggers").toString());
-//
-//			JSONArray triggers = (JSONArray) jsonLogic.get("logicTriggers");
-//			JSONArray actions = (JSONArray) jsonLogic.get("logicActions");
-//			gso
-//			for( Object trigger : triggers){
-//				Trigger t = gson.fromJson(trigger.toString(), Trigger.class);
-//				gsonLogic.getLogicTriggers().add(t);
-//			}
-//		}
-//		catch (ParseException e)
-//		{
-//			e.printStackTrace();
-//		}
 
-
-		Log.add(DEBUG_TAG, "write logic: " + gsonLogic.toString());
-		db.write(gsonLogic);
-	}
 
 	/**
 	 * Retrieve a list of all logics
