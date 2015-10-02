@@ -1,12 +1,15 @@
 package rbl.system.service.database;
 
+import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import rbl.data.model.Module;
 import rbl.data.model.User;
+import rbl.data.model.logic.Action;
 import rbl.data.model.logic.Logic;
+import rbl.data.model.logic.Trigger;
 import rbl.util.Log;
 
 import java.util.List;
@@ -39,7 +42,41 @@ public class DatabaseRestController
 	}
 
 
+	@RequestMapping(value = "/rbl/system/database/logic", method = RequestMethod.POST)
+	public void addLogic(
+			@RequestParam(value = "logic") String jsonLogic)
+	{
+		Gson gson = new Gson();
+		Logic gsonLogic = gson.fromJson(jsonLogic, Logic.class);
 
+		Logic logic = new Logic();
+		logic.setLogicName(gsonLogic.getLogicName());
+		logic.setExecType(gsonLogic.getExecType());
+		logic.setExecHour(gsonLogic.getExecHour());
+		logic.setExecMinute(gsonLogic.getExecMinute());
+
+		for(Trigger t : gsonLogic.getLogicTriggers()){
+			Trigger trigger = new Trigger ();
+			trigger.setTriggerLogic(logic);
+
+			trigger.setTriggerFieldId(t.getTriggerFieldId());
+			trigger.setTriggerState(t.isTriggerState());
+
+			logic.getLogicTriggers().add(trigger);
+		}
+
+		for(Action a : gsonLogic.getLogicActions()){
+			Action action = new Action();
+			action.setActionLogic(logic);
+
+			action.setActionMessage(a.getActionMessage());
+			action.setActionUserId(a.getActionUserId());
+			action.setActionType(a.getActionType());
+
+			logic.getLogicActions().add(action);
+		}
+		db.write(logic);
+	}
 
 
 	/**
@@ -51,6 +88,10 @@ public class DatabaseRestController
 	public List<Logic>  getLogicList()
 	{
 		List<Logic> logics = (List<Logic>)db.getList(DataBaseService.DataType.LOGIC);
+
+		logics.forEach(logic -> logic.getLogicTriggers().forEach(trigger -> trigger.setTriggerLogic(null)));
+		logics.forEach(logic -> logic.getLogicActions().forEach(trigger -> trigger.setActionLogic(null)));
+
 		Log.add(DEBUG_TAG,"get logics: " +  logics.toString() + " ");
 		return logics;
 	}

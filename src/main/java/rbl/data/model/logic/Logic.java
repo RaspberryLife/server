@@ -166,8 +166,8 @@ public class Logic
 				", execHour=" + execHour +
 				", execDay=" + execDay +
 				", execWeek=" + execWeek +
-				", logicActions=" + logicActions +
-				", logicTriggers=" + logicTriggers +
+				", logicActions=" + logicActions.toString() +
+				", logicTriggers=" + logicTriggers.toString() +
 				'}';
 	}
 

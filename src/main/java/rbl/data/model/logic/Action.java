@@ -84,14 +84,4 @@ public class Action
 		this.actionMessage = message;
 	}
 
-	@Override public String toString()
-	{
-		return "Action{" +
-				"actionId=" + actionId +
-				", actionUserId=" + actionUserId +
-				", actionType='" + actionType + '\'' +
-				", actionMessage='" + actionMessage + '\'' +
-				", logic=" + actionLogic +
-				'}';
-	}
 }
