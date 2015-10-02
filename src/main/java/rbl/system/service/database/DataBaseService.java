@@ -149,34 +149,53 @@ public class DataBaseService
 	public void addLogic(
 			@RequestParam(value = "logic") String logic)
 	{
-		Gson gson = new Gson();
-		Logic gsonLogic = gson.fromJson(logic, Logic.class);
+//		Gson gson = new Gson();
+//		Logic gsonLogic = gson.fromJson(logic, Logic.class);
+//
+//		Integer id = null;
+//		try
+//		{
+//			Session session = getSessionFactory().openSession();
+//			session.beginTransaction();
+//
+//			id = (Integer) session.save(gsonLogic);
+//
+//			session.getTransaction().commit();
+//			session.flush();
+//			session.close();
+//		}
+//		catch (Exception e)
+//		{
+//			Log.add(DEBUG_TAG, "Could not write data");
+//			e.printStackTrace();
+//		}
+//		gsonLogic.setLogicId(id);
+//
+//
+//		write(gsonLogic);
 
-		Integer id = null;
-		try
-		{
-			Session session = getSessionFactory().openSession();
-			session.beginTransaction();
+		Logic l = new Logic();
+		l.setLogicName("test");
+		l.setExecType(Logic.EXECUTION_FREQUENCY_DAILY);
+		l.setExecHour(17);
+		l.setExecMinute(57);
 
-			id = (Integer) session.save(gsonLogic);
+		Trigger t = new Trigger ();
+		t.setTriggerLogic(l);
+		t.setTriggerFieldId(1);
+		t.setTriggerState(false);
 
-			session.getTransaction().commit();
-			session.flush();
-			session.close();
-		}
-		catch (Exception e)
-		{
-			Log.add(DEBUG_TAG, "Could not write data");
-			e.printStackTrace();
-		}
-		gsonLogic.setLogicId(id);
+		Action a = new Action();
+		a.setActionLogic(l);
+		a.setActionMessage("§dasddasd");
+		a.setActionUserId(0);
 
+		l.getLogicActions().add(a);
+		l.getLogicTriggers().add(t);
 
-		write(gsonLogic);
+		write(l);
 
-		//db.write(gsonLogic);
-
-		Log.add(DEBUG_TAG, "write logic: " + gsonLogic.toString());
+		//Log.add(DEBUG_TAG, "write logic: " + gsonLogic.toString());
 	}
 
 	public List getAdminList(){
