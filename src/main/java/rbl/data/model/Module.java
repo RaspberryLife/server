@@ -1,15 +1,12 @@
 package rbl.data.model;
 
-import rbl.data.model.logic.Trigger;
-
 import javax.persistence.*;
-import java.util.Set;
 
 /**
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name = "rbl_module")
+@Table(name = "rblModule")
 public class Module
 {
 
@@ -24,23 +21,23 @@ public class Module
 
 	@Id
 	@GeneratedValue
-	@Column(name = "module_id")
-	private int id;
+	@Column(name = "moduleId")
+	private int moduleId;
 
-	@Column(name = "module_type")
-	private String type;
+	@Column(name = "moduleType")
+	private String moduleType;
 
-	@Column(name = "serial_address")
+	@Column(name = "serialAddress")
 	private String serialAddress;
 
-	@Column(name = "name")
-	private String name;
+	@Column(name = "moduleName")
+	private String moduleName;
 
-	@Column(name = "room")
-	private String room;
+	@Column(name = "moduleRoom")
+	private String moduleRoom;
 
-	@Column(name = "state")
-	private String state;
+	@Column(name = "moduleState")
+	private String moduleState;
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
@@ -50,30 +47,30 @@ public class Module
 	{
 	}
 
-	public Module(String name, String room)
+	public Module(String moduleName, String moduleRoom)
 	{
-		this.name = name;
-		this.room = room;
+		this.moduleName = moduleName;
+		this.moduleRoom = moduleRoom;
 	}
 
-	public int getId()
+	public int getModuleId()
 	{
-		return id;
+		return moduleId;
 	}
 
-	public void setId(int id)
+	public void setModuleId(int id)
 	{
-		this.id = id;
+		this.moduleId = id;
 	}
 
-	public String getType()
+	public String getModuleType()
 	{
-		return type;
+		return moduleType;
 	}
 
-	public void setType(String type)
+	public void setModuleType(String type)
 	{
-		this.type = type;
+		this.moduleType = type;
 	}
 
 	public String getSerialAddress()
@@ -86,33 +83,45 @@ public class Module
 		this.serialAddress = serialAddress;
 	}
 
-	public String getName()
+	public String getModuleName()
 	{
-		return name;
+		return moduleName;
 	}
 
-	public void setName(String name)
+	public void setModuleName(String name)
 	{
-		this.name = name;
+		this.moduleName = name;
 	}
 
-	public String getRoom()
+	public String getModuleRoom()
 	{
-		return room;
+		return moduleRoom;
 	}
 
-	public void setRoom(String room)
+	public void setModuleRoom(String room)
 	{
-		this.room = room;
+		this.moduleRoom = room;
 	}
 
-	public String getState()
+	public String getModuleState()
 	{
-		return state;
+		return moduleState;
 	}
 
-	public void setState(String state)
+	public void setModuleState(String state)
 	{
-		this.state = state;
+		this.moduleState = state;
+	}
+
+	@Override public String toString()
+	{
+		return "Module{" +
+				"moduleId=" + moduleId +
+				", moduleType='" + moduleType + '\'' +
+				", serialAddress='" + serialAddress + '\'' +
+				", moduleName='" + moduleName + '\'' +
+				", moduleRoom='" + moduleRoom + '\'' +
+				", moduleState='" + moduleState + '\'' +
+				'}';
 	}
 }

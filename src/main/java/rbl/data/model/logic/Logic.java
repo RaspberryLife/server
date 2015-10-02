@@ -1,8 +1,7 @@
 package rbl.data.model.logic;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name = "rbl_logic")
+@Table(name = "rblLogic")
 public class Logic
 {
 
@@ -18,14 +17,45 @@ public class Logic
 	public static final String EXECUTION_REQUIREMENT_MAJORITY = "majority";
 	public static final String EXECUTION_REQUIREMENT_ALL = "all";
 
-	private int logic_id;
+	public static final String EXECUTION_FREQUENCY_IMMEDIATELY = "immediately";
+	public static final String EXECUTION_FREQUENCY_MINUTELY = "minutely";
+	public static final String EXECUTION_FREQUENCY_HOURLY = "hourly";
+	public static final String EXECUTION_FREQUENCY_DAILY = "daily";
+	public static final String EXECUTION_FREQUENCY_WEEKLY = "weekly";
+	public static final String EXECUTION_FREQUENCY_MONTHLY = "monthly";
 
+	@Id
+	@GeneratedValue
+	@Column(name = "logicId")
+	private int logicId;
 
-	private String name;
+	@Column(name = "logicName")
+	private String logicName;
 
-	private ExecutionFrequency executionFrequency;
+	@Column(name = "execRequirement")
+	private String execRequirement;
 
-	private String executionRequirement;
+	@Column(name = "execType")
+	private String execType;
+
+	@Column(name = "execMinute")
+	private int execMinute;
+
+	@Column(name = "execHour")
+	private int execHour;
+
+	@Column(name = "execDay")
+	private int execDay;
+
+	@Column(name = "execWeek")
+	private int execWeek;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy= "actionLogic", cascade = CascadeType.ALL)
+	private Set<Action> logicActions = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy= "triggerLogic", cascade = CascadeType.ALL)
+	private Set<Trigger> logicTriggers = new HashSet<>();
+
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
@@ -35,60 +65,120 @@ public class Logic
 	{
 	}
 
-	@Id
-	@GeneratedValue
-	@Column(name = "logic_id")
-	public int getLogic_id()
+	public int getLogicId()
 	{
-		return logic_id;
+		return logicId;
 	}
 
-	public void setLogic_id(int logic_id)
+	public void setLogicId(int id)
 	{
-		this.logic_id = logic_id;
+		this.logicId = id;
 	}
 
-	@Column(name = "logic_name")
-	public String getName()
+	public String getLogicName()
 	{
-		return name;
+		return logicName;
 	}
 
-	public void setName(String name)
+	public void setLogicName(String name)
 	{
-		this.name = name;
+		this.logicName = name;
 	}
 
-	@OneToOne(mappedBy = "logic", cascade = CascadeType.ALL)
-	public ExecutionFrequency getExecutionFrequency()
+	public String getExecType()
 	{
-		return executionFrequency;
+		return execType;
 	}
 
-	public void setExecutionFrequency(ExecutionFrequency executionFrequency)
+	public void setExecType(String exectype)
 	{
-		this.executionFrequency = executionFrequency;
+		this.execType = exectype;
 	}
 
-	@Column(name = "logic_execution_requirement")
-	public String getExecutionRequirement()
+	public int getExecMinute()
 	{
-		return executionRequirement;
+		return execMinute;
 	}
 
-	public void setExecutionRequirement(String executionRequirement)
+	public void setExecMinute(int execminute)
 	{
-		this.executionRequirement = executionRequirement;
+		this.execMinute = execminute;
 	}
 
+	public int getExecHour()
+	{
+		return execHour;
+	}
+
+	public void setExecHour(int exechour)
+	{
+		this.execHour = exechour;
+	}
+
+	public int getExecDay()
+	{
+		return execDay;
+	}
+
+	public void setExecDay(int execday)
+	{
+		this.execDay = execday;
+	}
+
+	public int getExecWeek()
+	{
+		return execWeek;
+	}
+
+	public void setExecWeek(int execweek)
+	{
+		this.execWeek = execweek;
+	}
+
+	public Set<Action> getLogicActions()
+	{
+		return logicActions;
+	}
+
+	public void setLogicActions(Set<Action> logicActions)
+	{
+		this.logicActions = logicActions;
+	}
+
+	public Set<Trigger> getLogicTriggers()
+	{
+		return logicTriggers;
+	}
+
+	public void setLogicTriggers(Set<Trigger> logicTriggers)
+	{
+		this.logicTriggers = logicTriggers;
+	}
 
 	@Override public String toString()
 	{
 		return "Logic{" +
-				"logic_id=" + logic_id +
-				", name='" + name + '\'' +
-				", executionFrequency=" + executionFrequency +
-				", executionRequirement='" + executionRequirement + '\'' +
+				"logicId=" + logicId +
+				", logicName='" + logicName + '\'' +
+				", execRequirement='" + execRequirement + '\'' +
+				", execType='" + execType + '\'' +
+				", execMinute=" + execMinute +
+				", execHour=" + execHour +
+				", execDay=" + execDay +
+				", execWeek=" + execWeek +
+				", logicActions=" + logicActions +
+				", logicTriggers=" + logicTriggers +
 				'}';
 	}
+
+	public String getExecRequirement()
+	{
+		return execRequirement;
+	}
+
+	public void setExecRequirement(String executionRequirement)
+	{
+		this.execRequirement = executionRequirement;
+	}
+
 }

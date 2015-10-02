@@ -1,6 +1,7 @@
 package rbl.system.service.database;
 
 import com.google.gson.Gson;
+import org.json.simple.parser.JSONParser;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,48 +44,52 @@ public class DatabaseRestController
 	public void addLogic(
 			@RequestParam(value = "logic") String logic)
 	{
-		Log.add(DEBUG_TAG, "Writing new logic");
-		Log.add(DEBUG_TAG, logic);
+		JSONParser parser = new JSONParser();
 
 		Gson gson = new Gson();
+		Logic gsonLogic = gson.fromJson(logic, Logic.class);
 
-		Logic l = gson.fromJson(logic, Logic.class);
-//		for(Trigger t : l.getTriggers()){
-//			t.setModule((Module) db.getById(DataBaseService.DataType.MODULE, t.getModule().getId()));
+		Log.add(DEBUG_TAG, gsonLogic.getLogicTriggers().getClass().getSimpleName());
+
+//		JsonElement logicElement = new JsonParser().parse(logic);
+//		JsonObject logicobject = logicElement.getAsJsonObject();
+//		JsonArray triggers = logicobject.getAsJsonArray("logicTriggers");
+//
+//		for(JsonElement j : triggers){
+//			Log.add(DEBUG_TAG, "add trigger");
+//			JsonObject t = j.getAsJsonObject();
+//			Trigger trigger = new Trigger();
+//			trigger.setTriggerModuleId(t.get("triggerModuleId").getAsInt());
+//			trigger.setTriggerFieldId(t.get("triggerFieldId").getAsInt());
+//			trigger.setTriggerState(t.get("triggerState").getAsBoolean());
+//			Log.add(DEBUG_TAG, trigger.toString());
+//			gsonLogic.getLogicTriggers().add(trigger);
 //		}
-		db.write(l);
 
-		//Log.add(DEBUG_TAG, l.toString());
-		//
-		//		Logic l = new Logic();
-		//
-		//		l.setName(name);
-		//
-		//		l.setExecutionRequirement(executionRequirement);
-		//
-		//		ExecutionFrequency e = new ExecutionFrequency();
-		//		e.setType(ExecutionFrequency.TYPE_DAILY);
-		//		e.setHour(17);
-		//		e.setMinute(50);
-		//		l.setExecutionFrequency(e);
-		//
-		//		Set<Action> actionSet = new HashSet<>();
-		//		actionSet.add(new Action(0,"notify","du hund!"));
-		//		l.setActions(actionSet);
-		//
-		//		Set<Trigger> triggerSet = new HashSet<>();
-		//
-		//		Module m = new Module();
-		//		m.setName("window1");
-		//		m.setSerialAddress("2840923842");
-		//		m.setType(Module.TYPE_PIR);
-		//
-		//		Condition c = new Condition();
-		//		c.setFieldId(3);
-		//		c.setThresholdOver(5);
-		//
-		//		triggerSet.add(new Trigger(m,c));
-		//		l.setTriggers(triggerSet);
+
+//		try
+//		{
+//			Object o = parser.parse(logic);
+//			JSONObject jsonLogic = (JSONObject)o;
+//			Log.add(DEBUG_TAG, jsonLogic.toString());
+//			Log.add(DEBUG_TAG,jsonLogic.get("logicTriggers").toString());
+//
+//			JSONArray triggers = (JSONArray) jsonLogic.get("logicTriggers");
+//			JSONArray actions = (JSONArray) jsonLogic.get("logicActions");
+//			gso
+//			for( Object trigger : triggers){
+//				Trigger t = gson.fromJson(trigger.toString(), Trigger.class);
+//				gsonLogic.getLogicTriggers().add(t);
+//			}
+//		}
+//		catch (ParseException e)
+//		{
+//			e.printStackTrace();
+//		}
+
+
+		Log.add(DEBUG_TAG, "write logic: " + gsonLogic.toString());
+		db.write(gsonLogic);
 	}
 
 	/**
@@ -93,11 +98,10 @@ public class DatabaseRestController
 	 * @return
 	 */
 	@RequestMapping(value = "/rbl/system/database/logics", method = RequestMethod.GET)
-	public List getLogicList()
+	public List<Logic>  getLogicList()
 	{
-
-		List logics = db.getList(DataBaseService.DataType.LOGIC);
-		Log.add(DEBUG_TAG, logics.toString());
+		List<Logic> logics = (List<Logic>)db.getList(DataBaseService.DataType.LOGIC);
+		Log.add(DEBUG_TAG,"get logics: " +  logics.toString() + " ");
 		return logics;
 	}
 
@@ -117,10 +121,10 @@ public class DatabaseRestController
 			@RequestParam(value = "password", required = false) String password)
 	{
 		User u = new User();
-		u.setName(name);
-		u.setEmail(email);
-		u.setRole(role);
-		u.setPassword(password);
+		u.setUserName(name);
+		u.setUserEmail(email);
+		u.setUserRole(role);
+		u.setUserPassword(password);
 
 		db.write(u);
 		return u;
@@ -135,8 +139,8 @@ public class DatabaseRestController
 		Module module = (Module) db.getById(DataBaseService.DataType.MODULE, id);
 		if (module != null)
 		{
-			module.setName(name);
-			module.setRoom(room);
+			module.setModuleName(name);
+			module.setModuleRoom(room);
 			db.write(module);
 		}
 	}
@@ -146,5 +150,8 @@ public class DatabaseRestController
 	{
 		return db.getList(DataBaseService.DataType.MODULE);
 	}
+
+
+
 
 }

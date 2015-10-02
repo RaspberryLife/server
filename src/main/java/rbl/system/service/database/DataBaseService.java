@@ -82,15 +82,15 @@ public class DataBaseService
 	{
 		Module m1 = new Module();
 		m1.setSerialAddress(SerialAddress.generate());
-		m1.setType(Module.TYPE_REED);
-		m1.setName("fenster1");
-		m1.setRoom("fablab");
+		m1.setModuleType(Module.TYPE_REED);
+		m1.setModuleName("fenster1");
+		m1.setModuleRoom("fablab");
 
 		Module m2 = new Module();
 		m2.setSerialAddress(SerialAddress.generate());
-		m2.setType(Module.TYPE_REED);
-		m2.setName("fenster2");
-		m2.setRoom("fablab");
+		m2.setModuleType(Module.TYPE_REED);
+		m2.setModuleName("fenster2");
+		m2.setModuleRoom("fablab");
 
 		write(m1);
 		write(m2);
@@ -116,6 +116,7 @@ public class DataBaseService
 			session.save(object);
 
 			session.getTransaction().commit();
+			session.flush();
 			session.close();
 			return true;
 		}
@@ -133,7 +134,7 @@ public class DataBaseService
 
 
 	public List getAdminList(){
-		String query = "from User where role=admin";
+		String query = "from User where userRole=admin";
 		Session session = getSessionFactory().openSession();
 		List adminList = session.createQuery(query).list();
 		session.close();

@@ -1,62 +1,133 @@
 package rbl.data.model.logic;
 
-import rbl.data.model.Module;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name = "rbl_trigger")
+@Table(name = "rblTrigger")
 public class Trigger
 {
 	@Id
 	@GeneratedValue
-	@Column(name = "actuator_id")
-	private int trigger_id;
+	@Column(name = "triggerId")
+	private int triggerId;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
-	private Module module;
+	@Column(name = "moduleId")
+	private int triggerModuleId;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
-	private Condition condition;
+	@Column(name = "fieldId")
+	private int triggerFieldId;
+
+	@Column(name = "thresholdOver")
+	private int triggerThresholdOver;
+
+	@Column(name = "thresholdUnder")
+	private int triggerThresholdUnder;
+
+	@Column(name = "state")
+	private boolean triggerState;
+
+	@ManyToOne
+	@JoinColumn(name="logicId",insertable=false, updatable=false)
+	private Logic triggerLogic = new Logic();
 
 	public Trigger()
 	{
 	}
 
-	public int getTrigger_id()
+	public Trigger(int triggerModuleId, int triggerFieldId, int triggerThresholdOver, int triggerThresholdUnder,
+			boolean triggerState)
 	{
-		return trigger_id;
+		this.triggerModuleId = triggerModuleId;
+		this.triggerFieldId = triggerFieldId;
+		this.triggerThresholdOver = triggerThresholdOver;
+		this.triggerThresholdUnder = triggerThresholdUnder;
+		this.triggerState = triggerState;
 	}
 
-	public void setTrigger_id(int trigger_id)
+	public int getTriggerId()
 	{
-		this.trigger_id = trigger_id;
+		return triggerId;
 	}
 
-	public Module getModule()
+	public void setTriggerId(int id)
 	{
-		return module;
+		this.triggerId = id;
 	}
 
-	public void setModule(Module module)
+	public int getTriggerModuleId()
 	{
-		this.module = module;
+		return triggerModuleId;
 	}
 
-	public Condition getCondition()
+	public void setTriggerModuleId(int moduleId)
 	{
-		return condition;
+		this.triggerModuleId = moduleId;
 	}
 
-	public void setCondition(Condition condition)
+	public int getTriggerFieldId()
 	{
-		this.condition = condition;
+		return triggerFieldId;
+	}
+
+	public void setTriggerFieldId(int fieldId)
+	{
+		this.triggerFieldId = fieldId;
+	}
+
+	public int getTriggerThresholdOver()
+	{
+		return triggerThresholdOver;
+	}
+
+	public void setTriggerThresholdOver(int thresholdOver)
+	{
+		this.triggerThresholdOver = thresholdOver;
+	}
+
+	public int getTriggerThresholdUnder()
+	{
+		return triggerThresholdUnder;
+	}
+
+	public void setTriggerThresholdUnder(int thresholdUnder)
+	{
+		this.triggerThresholdUnder = thresholdUnder;
+	}
+
+	public boolean isTriggerState()
+	{
+		return triggerState;
+	}
+
+	public void setTriggerState(boolean state)
+	{
+		this.triggerState = state;
+	}
+
+
+	public Logic getTriggerLogic()
+	{
+		return triggerLogic;
+	}
+
+	public void setTriggerLogic(Logic logics)
+	{
+		this.triggerLogic = logics;
+	}
+
+
+	@Override public String toString()
+	{
+		return "Trigger{" +
+				"triggerId=" + triggerId +
+				", triggerModuleId=" + triggerModuleId +
+				", triggerFieldId=" + triggerFieldId +
+				", triggerThresholdOver=" + triggerThresholdOver +
+				", triggerThresholdUnder=" + triggerThresholdUnder +
+				", triggerState=" + triggerState +
+				'}';
 	}
 }

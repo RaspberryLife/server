@@ -6,66 +6,92 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name = "rbl_action")
+@Table(name = "rblAction")
 public class Action
 {
 	public static String TYPE_NOTIFY = "notify";
 
 	@Id
 	@GeneratedValue
-	@Column(name = "action_id")
-	private int action_id;
+	@Column(name = "actionId")
+	private int actionId;
 
-	@Column(name = "user_id")
-	private int user_id;
+	@Column(name = "actionUserId")
+	private int actionUserId;
 
-	@Column(name = "type")
-	private String type;
+	@Column(name = "actionType")
+	private String actionType;
 
-	@Column(name = "message")
-	private String message;
+	@Column(name = "actionMessage")
+	private String actionMessage;
+
+
+	@ManyToOne
+	@JoinColumn(name="logicId",insertable=false, updatable=false)
+	private Logic actionLogic = new Logic();
+
+	public Logic getActionLogic()
+	{
+		return actionLogic;
+	}
+
+	public void setActionLogic(Logic logics)
+	{
+		this.actionLogic = logics;
+	}
 
 	public Action()
 	{
 	}
 
-	public int getAction_id()
+	public int getActionId()
 	{
-		return action_id;
+		return actionId;
 	}
 
-	public void setAction_id(int action_id)
+	public void setActionId(int id)
 	{
-		this.action_id = action_id;
+		this.actionId = id;
 	}
 
-	public int getUser_id()
+	public int getActionUserId()
 	{
-		return user_id;
+		return actionUserId;
 	}
 
-	public void setUser_id(int user_id)
+	public void setActionUserId(int user_id)
 	{
-		this.user_id = user_id;
+		this.actionUserId = user_id;
 	}
 
-	public String getType()
+	public String getActionType()
 	{
-		return type;
+		return actionType;
 	}
 
-	public void setType(String type)
+	public void setActionType(String type)
 	{
-		this.type = type;
+		this.actionType = type;
 	}
 
-	public String getMessage()
+	public String getActionMessage()
 	{
-		return message;
+		return actionMessage;
 	}
 
-	public void setMessage(String message)
+	public void setActionMessage(String message)
 	{
-		this.message = message;
+		this.actionMessage = message;
+	}
+
+	@Override public String toString()
+	{
+		return "Action{" +
+				"actionId=" + actionId +
+				", actionUserId=" + actionUserId +
+				", actionType='" + actionType + '\'' +
+				", actionMessage='" + actionMessage + '\'' +
+				", logic=" + actionLogic +
+				'}';
 	}
 }

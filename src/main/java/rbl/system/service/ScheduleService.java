@@ -1,7 +1,6 @@
 package rbl.system.service;
 
 import com.google.common.eventbus.Subscribe;
-import rbl.data.model.logic.ExecutionFrequency;
 import rbl.data.model.logic.Logic;
 import rbl.event.ScheduleEvent;
 import rbl.event.SystemEvent;
@@ -139,25 +138,25 @@ public class ScheduleService
 			{
 				Logic lc = (Logic) o;
 				JobDetail job = newJob(InstructionJob.class)
-						.withIdentity(lc.getName() + "dbjob")
-						.withDescription(lc.getName() + "dbjob")
-						.usingJobData("id", lc.getLogic_id())
+						.withIdentity(lc.getLogicName() + "dbjob")
+						.withDescription(lc.getLogicName() + "dbjob")
+						.usingJobData("id", lc.getLogicId())
 						.build();
 				ScheduleBuilder sb = null;
-				switch (lc.getExecutionFrequency().getType())
+				switch (lc.getExecType())
 				{
-					case ExecutionFrequency.TYPE_IMMEDIATELY:
+					case Logic.EXECUTION_FREQUENCY_IMMEDIATELY:
 						sb = simpleSchedule()
 								.withIntervalInSeconds(1);
 						break;
-					case ExecutionFrequency.TYPE_MINUTELY:
+					case Logic.EXECUTION_FREQUENCY_MINUTELY:
 						sb = simpleSchedule()
 								.withIntervalInMinutes(1);
 						break;
 				}
 
 				Trigger trigger = newTrigger()
-						.withIdentity(lc.getName() + " logic", TRIGGER_GROUP)
+						.withIdentity(lc.getLogicName() + " logic", TRIGGER_GROUP)
 						.withSchedule(sb)
 						.startNow()
 						.build();

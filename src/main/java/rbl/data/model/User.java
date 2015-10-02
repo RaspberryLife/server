@@ -6,89 +6,89 @@ import javax.persistence.*;
  * Created by Peter Mösenthin.
  */
 @Entity
-@Table(name = "rbl_user")
+@Table(name = "rblUser")
 public class User
 {
 
 	@Id
 	@GeneratedValue
 	@Column(name = "user_id")
-	private int id;
+	private int userId;
 
-	@Column(name = "name")
-	private String name;
+	@Column(name = "userName")
+	private String userName;
 
-	@Column(name = "email")
-	private String email;
+	@Column(name = "userEmail")
+	private String userEmail;
 
-	@Column(name = "password")
-	private String password;
+	@Column(name = "userPassword")
+	private String userPassword;
 
-	@Column(name = "role")
-	private String role;
+	@Column(name = "userRole")
+	private String userRole;
 
 	//----------------------------------------------------------------------------------------------
 	//                                      GETTER & SETTER
 	//----------------------------------------------------------------------------------------------
 
-	public String getRole()
+	public String getUserRole()
 	{
-		return role;
+		return userRole;
 	}
 
-	public void setRole(String role)
+	public void setUserRole(String role)
 	{
-		this.role = role;
+		this.userRole = role;
 	}
 
-	public int getId()
+	public int getUserId()
 	{
-		return id;
+		return userId;
 	}
 
-	public void setId(int id)
+	public void setUserId(int id)
 	{
-		this.id = id;
+		this.userId = id;
 	}
 
-	public String getName()
+	public String getUserName()
 	{
-		return name;
+		return userName;
 	}
 
-	public void setName(String name)
+	public void setUserName(String name)
 	{
-		this.name = name;
+		this.userName = name;
 	}
 
-	public String getEmail()
+	public String getUserEmail()
 	{
-		return email;
+		return userEmail;
 	}
 
-	public void setEmail(String email)
+	public void setUserEmail(String email)
 	{
-		this.email = email;
+		this.userEmail = email;
 	}
 
-	public String getPassword()
+	public String getUserPassword()
 	{
-		return password;
+		return userPassword;
 	}
 
-	public void setPassword(String password)
+	public void setUserPassword(String password)
 	{
-		this.password = password;
+		this.userPassword = password;
 	}
 
 	@Override public String toString()
 	{
 		return "User{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", email='" + email + '\'' +
-				", password='" + password + '\'' +
-				", role='" + role + '\'' +
+				"userId=" + userId +
+				", userName='" + userName + '\'' +
+				", userEmail='" + userEmail + '\'' +
+				", userPassword='" + userPassword + '\'' +
+				", userRole='" + userRole + '\'' +
 				'}';
 	}
 }
