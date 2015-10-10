@@ -2,33 +2,36 @@
 
 <!-- rbl_config.xml -->
 <config>
-    <server>
-        <id>rbh_server_master</id>
-    </server>
-    <database>
-        <host>localhost</host>
-        <port>3306</port>
-        <db>rbl_data</db>
-        <user>root</user>
-        <password>penis</password>
-    </database>
-    <socket>
-        <java_port>6666</java_port>
-        <web_port>6680</web_port>
-    </socket>
-    <serial>
-        <baudrate>9600</baudrate>
-        <data_bits>8</data_bits>
-        <stop_bits>1</stop_bits>
-        <parity>0</parity>
-        <message_byte_length>34</message_byte_length>
-        <override_port></override_port>
-    </serial>
-    <email>
-        <admin>ADMIN EMAIL</admin>
-        <sender>
-            <email>YOUR GMAIL ACCOUNT</email>
-            <pw>YOUR GMAIL PASSWORD</pw>
-        </sender>
-    </email>
+	<server>
+		<id>rbh_server_master</id>
+	</server>
+	<database>
+		<host>localhost</host>
+		<port>3306</port>
+		<db>rbl_data</db>
+		<user>root</user>
+		<password>penis</password>
+	</database>
+	<socket>
+		<java_port>6666</java_port>
+		<web_port>6680</web_port>
+	</socket>
+	<serial>
+		<baudrate>9600</baudrate>
+		<data_bits>8</data_bits>
+		<stop_bits>1</stop_bits>
+		<parity>0</parity>
+		<message_byte_length>34</message_byte_length>
+		<override_port></override_port>
+	</serial>
+	<email>
+		<admin>ADMIN EMAIL</admin>
+		<sender>
+			<email>YOUR GMAIL ACCOUNT</email>
+			<pw>YOUR GMAIL PASSWORD</pw>
+		</sender>
+	</email>
+	<test>
+		<db>true</db>
+	</test>
 </config>

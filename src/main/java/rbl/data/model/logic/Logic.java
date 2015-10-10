@@ -35,8 +35,8 @@ public class Logic
 	@Column(name = "execRequirement")
 	private String execRequirement;
 
-	@Column(name = "execType")
-	private String execType;
+	@Column(name = "execFrequency")
+	private String execFrequency;
 
 	@Column(name = "execMinute")
 	private int execMinute;
@@ -85,14 +85,14 @@ public class Logic
 		this.logicName = name;
 	}
 
-	public String getExecType()
+	public String getExecFrequency()
 	{
-		return execType;
+		return execFrequency;
 	}
 
-	public void setExecType(String exectype)
+	public void setExecFrequency(String exectype)
 	{
-		this.execType = exectype;
+		this.execFrequency = exectype;
 	}
 
 	public int getExecMinute()
@@ -161,7 +161,7 @@ public class Logic
 				"logicId=" + logicId +
 				", logicName='" + logicName + '\'' +
 				", execRequirement='" + execRequirement + '\'' +
-				", execType='" + execType + '\'' +
+				", execFrequency='" + execFrequency + '\'' +
 				", execMinute=" + execMinute +
 				", execHour=" + execHour +
 				", execDay=" + execDay +

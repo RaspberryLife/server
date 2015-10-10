@@ -1,4 +1,4 @@
-package rbl.system.service;
+package rbl.scheduling;
 
 import com.google.common.eventbus.Subscribe;
 import rbl.data.model.logic.Logic;
@@ -6,15 +6,15 @@ import rbl.event.ScheduleEvent;
 import rbl.event.SystemEvent;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
-import rbl.scheduling.InstructionJob;
-import rbl.scheduling.RepeatInterval;
-import rbl.scheduling.ResourceLogJob;
-import rbl.scheduling.TimeLogJob;
-import rbl.system.service.database.DataBaseService;
+import rbl.event.EventBusService;
+import rbl.data.DataBaseService;
 import rbl.util.Log;
 
 import java.util.List;
 
+import static org.quartz.CronScheduleBuilder.dailyAtHourAndMinute;
+import static org.quartz.CronScheduleBuilder.monthlyOnDayAndHourAndMinute;
+import static org.quartz.CronScheduleBuilder.weeklyOnDayAndHourAndMinute;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -133,40 +133,81 @@ public class ScheduleService
 		try
 		{
 			scheduler.clear();
-			List l = DataBaseService.getInstance().getList(DataBaseService.DataType.LOGIC);
-			for (Object o : l)
-			{
-				Logic lc = (Logic) o;
-				JobDetail job = newJob(InstructionJob.class)
-						.withIdentity(lc.getLogicName() + "dbjob")
-						.withDescription(lc.getLogicName() + "dbjob")
-						.usingJobData("id", lc.getLogicId())
-						.build();
-				ScheduleBuilder sb = null;
-				switch (lc.getExecType())
-				{
-					case Logic.EXECUTION_FREQUENCY_IMMEDIATELY:
-						sb = simpleSchedule()
-								.withIntervalInSeconds(1);
-						break;
-					case Logic.EXECUTION_FREQUENCY_MINUTELY:
-						sb = simpleSchedule()
-								.withIntervalInMinutes(1);
-						break;
-				}
+			List logics = DataBaseService.getInstance().getList(DataBaseService.DataType.LOGIC);
+			Log.add(DEBUG_TAG, "Found " + logics.size() +  " logics");
 
-				Trigger trigger = newTrigger()
-						.withIdentity(lc.getLogicName() + " logic", TRIGGER_GROUP)
-						.withSchedule(sb)
-						.startNow()
-						.build();
-				addJob(job, trigger);
-			}
+			logics.forEach((o) -> addLogicJob((Logic) o));
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private void addLogicJob(Logic logic){
+
+		if(Logic.EXECUTION_FREQUENCY_IMMEDIATELY == logic.getExecFrequency()){
+			return;
+		}
+
+		ScheduleBuilder sb = getScheduleForLogic(logic);
+
+		addJob(
+				getJobDetailForLogic(logic),
+				getLogicTrigger(logic, sb)
+		);
+	}
+
+	private ScheduleBuilder getScheduleForLogic(Logic logic){
+		ScheduleBuilder sb = null;
+
+		switch (logic.getExecFrequency())
+		{
+			case Logic.EXECUTION_FREQUENCY_MINUTELY:
+				sb = simpleSchedule()
+						.withIntervalInMinutes(1).repeatForever();
+				break;
+
+			case Logic.EXECUTION_FREQUENCY_DAILY:
+				sb = dailyAtHourAndMinute(logic.getExecHour(), logic.getExecMinute());
+				break;
+
+			case Logic.EXECUTION_FREQUENCY_WEEKLY:
+				sb = weeklyOnDayAndHourAndMinute(
+						logic.getExecDay(),
+						logic.getExecHour(),
+						logic.getExecMinute()
+				);
+				break;
+
+			case Logic.EXECUTION_FREQUENCY_MONTHLY:
+				monthlyOnDayAndHourAndMinute(
+						logic.getExecDay(),
+						logic.getExecHour(),
+						logic.getExecMinute()
+				);
+				break;
+		}
+
+		return sb;
+	}
+
+	private JobDetail getJobDetailForLogic(Logic logic)
+	{
+		return newJob(LogicExecutionJob.class)
+				.withIdentity("logic_id" + logic.getLogicId() + "_dbjob")
+				.withDescription(logic.getLogicName() + "_dbjob")
+				.usingJobData("id", logic.getLogicId())
+				.build();
+	}
+
+	private Trigger getLogicTrigger(Logic logic, ScheduleBuilder scheduleBuilder)
+	{
+		return newTrigger()
+				.withIdentity("logic_id" + logic.getLogicId() + "_trigger", TRIGGER_GROUP)
+				.withSchedule(scheduleBuilder)
+				.startNow()
+				.build();
 	}
 
 	/**

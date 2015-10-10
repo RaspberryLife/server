@@ -5,7 +5,7 @@ import rbl.data.Config;
 import rbl.event.SerialMessageEvent;
 import rbl.event.SystemEvent;
 import jssc.*;
-import rbl.system.service.EventBusService;
+import rbl.event.EventBusService;
 import rbl.util.Log;
 
 /**

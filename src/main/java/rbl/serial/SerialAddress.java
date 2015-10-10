@@ -1,7 +1,7 @@
 package rbl.serial;
 
 import rbl.data.model.Module;
-import rbl.system.service.database.DataBaseService;
+import rbl.data.DataBaseService;
 import rbl.util.Log;
 
 import java.util.List;

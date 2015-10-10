@@ -2,6 +2,7 @@ package rbl.system.service;
 
 import com.google.common.eventbus.Subscribe;
 import rbl.data.Config;
+import rbl.event.EventBusService;
 import rbl.event.NotificationEvent;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;

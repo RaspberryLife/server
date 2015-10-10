@@ -10,10 +10,10 @@ import rbl.event.ScheduleEvent;
 import rbl.event.SystemEvent;
 import rbl.scheduling.RepeatInterval;
 import rbl.serial.SerialConnector;
-import rbl.system.service.database.DataBaseService;
-import rbl.system.service.EventBusService;
+import rbl.data.DataBaseService;
+import rbl.event.EventBusService;
 import rbl.system.service.NotificationService;
-import rbl.system.service.ScheduleService;
+import rbl.scheduling.ScheduleService;
 import rbl.util.Log;
 import rbl.util.NetworkUtil;
 
@@ -170,7 +170,7 @@ public class SystemManager
 		scheduleEvent.setIdentity("resource_check");
 
 		EventBusService.post(scheduleEvent);
-		//EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
+		EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
 	}
 
 	/**

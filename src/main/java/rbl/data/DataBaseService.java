@@ -1,20 +1,12 @@
-package rbl.system.service.database;
+package rbl.data;
 
-import com.google.gson.Gson;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rbl.data.MySQLConnection;
 import rbl.data.model.Module;
-import rbl.data.model.logic.Action;
-import rbl.data.model.logic.Logic;
-import rbl.data.model.logic.Trigger;
 import rbl.serial.SerialAddress;
 import rbl.util.Log;
 
@@ -89,24 +81,18 @@ public class DataBaseService
 
 	private void writeDemoObjects()
 	{
-		Module m1 = new Module();
-		m1.setSerialAddress(SerialAddress.generate());
-		m1.setModuleType(Module.TYPE_REED);
-		m1.setModuleName("fenster1");
-		m1.setModuleRoom("fablab");
+		boolean testdb = Config.getConf().getBoolean("test.db");
+		if(testdb){
 
-		Module m2 = new Module();
-		m2.setSerialAddress(SerialAddress.generate());
-		m2.setModuleType(Module.TYPE_REED);
-		m2.setModuleName("fenster2");
-		m2.setModuleRoom("fablab");
-
-		write(m1);
-		write(m2);
-
-		Logic l = new Logic();
-
-
+			for (int i = 1; i < 8; i++){
+				Module module = new Module();
+				module.setSerialAddress(SerialAddress.generate());
+				module.setModuleType(Module.TYPE_REED);
+				module.setModuleName("fenster" + i);
+				module.setModuleRoom("fablab");
+				write(module);
+			}
+		}
 	}
 
 	//----------------------------------------------------------------------------------------------

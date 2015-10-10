@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import rbl.event.SerialMessageEvent;
-import rbl.system.service.EventBusService;
+import rbl.event.EventBusService;
 
 import java.util.List;
 

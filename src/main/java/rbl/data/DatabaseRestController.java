@@ -1,4 +1,4 @@
-package rbl.system.service.database;
+package rbl.data;
 
 import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +10,8 @@ import rbl.data.model.User;
 import rbl.data.model.logic.Action;
 import rbl.data.model.logic.Logic;
 import rbl.data.model.logic.Trigger;
+import rbl.event.EventBusService;
+import rbl.event.ScheduleEvent;
 import rbl.util.Log;
 
 import java.util.List;
@@ -49,9 +51,12 @@ public class DatabaseRestController
 		Gson gson = new Gson();
 		Logic gsonLogic = gson.fromJson(jsonLogic, Logic.class);
 
+		Log.add(DEBUG_TAG, "Received logic " + gsonLogic.toString());
+
 		Logic logic = new Logic();
 		logic.setLogicName(gsonLogic.getLogicName());
-		logic.setExecType(gsonLogic.getExecType());
+		logic.setExecFrequency(gsonLogic.getExecFrequency());
+		logic.setExecRequirement(gsonLogic.getExecRequirement());
 		logic.setExecHour(gsonLogic.getExecHour());
 		logic.setExecMinute(gsonLogic.getExecMinute());
 
@@ -75,7 +80,9 @@ public class DatabaseRestController
 
 			logic.getLogicActions().add(action);
 		}
+		Log.add(DEBUG_TAG, "Writing logic " + logic.toString());
 		db.write(logic);
+		EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
 	}
 
 

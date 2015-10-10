@@ -14,7 +14,7 @@ import rbl.extension.fablab.response.FabLabStatus;
 import rbl.extension.fablab.response.WindowModule;
 import rbl.scheduling.RepeatInterval;
 import rbl.serial.SerialTypeResolver;
-import rbl.system.service.EventBusService;
+import rbl.event.EventBusService;
 import rbl.util.Log;
 
 import java.util.ArrayList;

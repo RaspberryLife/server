@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import rbl.event.SystemEvent;
 import rbl.system.SystemManager;
-import rbl.system.service.EventBusService;
+import rbl.event.EventBusService;
 import rbl.util.Log;
 
 /**

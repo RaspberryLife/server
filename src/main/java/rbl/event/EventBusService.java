@@ -1,4 +1,4 @@
-package rbl.system.service;
+package rbl.event;
 
 import com.google.common.eventbus.EventBus;
 
