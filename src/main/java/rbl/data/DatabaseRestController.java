@@ -64,8 +64,11 @@ public class DatabaseRestController
 			Trigger trigger = new Trigger ();
 			trigger.setTriggerLogic(logic);
 
+			trigger.setTriggerModuleId(t.getTriggerModuleId());
 			trigger.setTriggerFieldId(t.getTriggerFieldId());
 			trigger.setTriggerState(t.isTriggerState());
+			trigger.setTriggerThresholdOver(t.getTriggerThresholdOver());
+			trigger.setTriggerThresholdUnder(t.getTriggerThresholdUnder());
 
 			logic.getLogicTriggers().add(trigger);
 		}
@@ -80,6 +83,7 @@ public class DatabaseRestController
 
 			logic.getLogicActions().add(action);
 		}
+
 		Log.add(DEBUG_TAG, "Writing logic " + logic.toString());
 		db.write(logic);
 		EventBusService.post(new ScheduleEvent(ScheduleEvent.Type.REBUILD_DATABASE));
@@ -92,14 +96,18 @@ public class DatabaseRestController
 	 * @return
 	 */
 	@RequestMapping(value = "/rbl/system/database/logics", method = RequestMethod.GET)
-	public List<Logic>  getLogicList()
+	public List  getLogicList()
 	{
-		List<Logic> logics = (List<Logic>)db.getList(DataBaseService.DataType.LOGIC);
-
-		logics.forEach(logic -> logic.getLogicTriggers().forEach(trigger -> trigger.setTriggerLogic(null)));
-		logics.forEach(logic -> logic.getLogicActions().forEach(trigger -> trigger.setActionLogic(null)));
-
-		Log.add(DEBUG_TAG,"get logics: " +  logics.toString() + " ");
+		List<Object> logics = db.getList(DataBaseService.DataType.LOGIC);
+		Log.add(DEBUG_TAG,"Get logics: Found: " + logics.size());
+		logics.forEach(logic -> {
+			((Logic) logic).getLogicTriggers().forEach(
+					trigger -> trigger.setTriggerLogic(null)
+			);
+			((Logic) logic).getLogicActions().forEach(
+					action -> action.setActionLogic(null)
+			);
+		});
 		return logics;
 	}
 
@@ -148,8 +156,5 @@ public class DatabaseRestController
 	{
 		return db.getList(DataBaseService.DataType.MODULE);
 	}
-
-
-
 
 }

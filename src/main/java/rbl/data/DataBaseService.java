@@ -143,7 +143,8 @@ public class DataBaseService
 	 * @param type
 	 * @return
 	 */
-	public List getList(DataType type)
+	@SuppressWarnings("unchecked") //sehr traurig
+	public List<Object> getList(DataType type)
 	{
 		String query = null;
 		switch (type)

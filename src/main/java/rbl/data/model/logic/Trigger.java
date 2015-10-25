@@ -118,4 +118,15 @@ public class Trigger
 		this.triggerLogic = logics;
 	}
 
+	@Override public String toString()
+	{
+		return "Trigger{" +
+				"triggerId=" + triggerId +
+				", triggerModuleId=" + triggerModuleId +
+				", triggerFieldId=" + triggerFieldId +
+				", triggerThresholdOver=" + triggerThresholdOver +
+				", triggerThresholdUnder=" + triggerThresholdUnder +
+				", triggerState=" + triggerState +
+				'}';
+	}
 }
